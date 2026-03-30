@@ -1,0 +1,1301 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>The Orthos System — Reclaim Your Posture</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;1,400&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+/* ── Reset & Base ── */
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+:root {
+  --cream: #f7f3ee;
+  --cream-dark: #ede8e0;
+  --cream-mid: #f0ebe3;
+  --ink: #1a1714;
+  --ink-soft: #3d3830;
+  --ink-muted: #7a7268;
+  --ink-faint: #b0a99e;
+  --gold: #b8935a;
+  --gold-light: #d4b07a;
+  --gold-pale: #f5ead8;
+  --green: #3a6b4a;
+  --green-pale: #eaf3ed;
+  --amber-pale: #fdf4e3;
+  --red-pale: #fdf0f0;
+  --red: #a83232;
+  --border: rgba(26,23,20,0.12);
+  --border-strong: rgba(26,23,20,0.22);
+  --serif: 'Playfair Display', Georgia, serif;
+  --sans: 'DM Sans', system-ui, sans-serif;
+  --radius: 14px;
+  --radius-sm: 8px;
+}
+
+html { scroll-behavior: smooth; }
+
+body {
+  background: var(--cream);
+  font-family: var(--sans);
+  color: var(--ink);
+  font-size: 15px;
+  line-height: 1.6;
+  /* Subtle grain texture */
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='300' height='300'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.75' numOctaves='4' stitchTiles='stitch'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3C/filter%3E%3Crect width='300' height='300' filter='url(%23n)' opacity='0.03'/%3E%3C/svg%3E");
+}
+
+/* ── Layout ── */
+.wrap { max-width: 680px; margin: 0 auto; padding: 0 20px 80px; }
+
+/* ── Top bar ── */
+.topbar {
+  text-align: center;
+  padding: 14px 20px;
+  font-size: 11px;
+  font-weight: 500;
+  letter-spacing: .12em;
+  text-transform: uppercase;
+  color: var(--ink-muted);
+  border-bottom: 1px solid var(--border);
+  margin-bottom: 40px;
+}
+.topbar span { color: var(--gold); }
+
+/* ── Hero ── */
+.hero {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+  margin-bottom: 48px;
+  padding: 36px;
+  background: var(--cream-dark);
+  border-radius: var(--radius);
+  border: 1px solid var(--border);
+  position: relative;
+  overflow: hidden;
+}
+.hero::before {
+  content: '';
+  position: absolute;
+  top: -60px; right: -60px;
+  width: 220px; height: 220px;
+  border-radius: 50%;
+  background: radial-gradient(circle, var(--gold-pale) 0%, transparent 70%);
+  pointer-events: none;
+}
+.hero-video {
+  aspect-ratio: 16/10;
+  background: var(--ink);
+  border-radius: var(--radius-sm);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  overflow: hidden;
+  cursor: pointer;
+}
+.hero-video-bg {
+  position: absolute; inset: 0;
+  background: linear-gradient(135deg, #2a2420 0%, #1a1410 100%);
+}
+.hero-video-label {
+  position: absolute;
+  bottom: 10px; left: 12px;
+  font-size: 10px;
+  font-weight: 500;
+  letter-spacing: .08em;
+  text-transform: uppercase;
+  color: rgba(255,255,255,0.5);
+}
+.play-btn {
+  position: relative;
+  width: 52px; height: 52px;
+  border-radius: 50%;
+  background: rgba(255,255,255,0.12);
+  border: 1.5px solid rgba(255,255,255,0.3);
+  display: flex; align-items: center; justify-content: center;
+  cursor: pointer;
+  transition: background .2s, transform .2s;
+  backdrop-filter: blur(4px);
+}
+.play-btn:hover { background: rgba(255,255,255,0.2); transform: scale(1.06); }
+.play-btn svg { width: 18px; height: 18px; fill: #fff; margin-left: 3px; }
+
+.hero-text { display: flex; flex-direction: column; gap: 10px; }
+.hero-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  background: var(--gold-pale);
+  color: var(--gold);
+  font-size: 10px;
+  font-weight: 500;
+  letter-spacing: .1em;
+  text-transform: uppercase;
+  padding: 4px 10px;
+  border-radius: 20px;
+  border: 1px solid rgba(184,147,90,0.25);
+  width: fit-content;
+}
+.hero-name {
+  font-family: var(--serif);
+  font-size: 26px;
+  line-height: 1.2;
+  color: var(--ink);
+}
+.hero-name em { color: var(--gold); font-style: italic; }
+.hero-meta { display: flex; flex-direction: column; gap: 6px; }
+.hero-meta-row {
+  display: flex;
+  align-items: flex-start;
+  gap: 8px;
+  font-size: 13px;
+  color: var(--ink-soft);
+}
+.hero-meta-row .dot {
+  width: 5px; height: 5px;
+  border-radius: 50%;
+  background: var(--gold);
+  margin-top: 7px;
+  flex-shrink: 0;
+}
+.hero-quote {
+  font-family: var(--serif);
+  font-style: italic;
+  font-size: 15px;
+  color: var(--ink-soft);
+  line-height: 1.5;
+  border-left: 2px solid var(--gold);
+  padding-left: 14px;
+  margin-top: 4px;
+}
+
+/* ── Section divider ── */
+.section-divide {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  margin: 40px 0 32px;
+}
+.section-divide::before, .section-divide::after {
+  content: '';
+  flex: 1;
+  height: 1px;
+  background: var(--border);
+}
+.section-divide-inner {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+}
+.section-divide-label {
+  font-size: 10px;
+  letter-spacing: .16em;
+  text-transform: uppercase;
+  color: var(--ink-faint);
+  font-weight: 500;
+}
+.section-divide-title {
+  font-family: var(--serif);
+  font-size: 22px;
+  color: var(--ink);
+  letter-spacing: -.01em;
+}
+
+/* ── Accordions ── */
+.acc-group { display: flex; flex-direction: column; gap: 10px; margin-bottom: 16px; }
+
+.acc {
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  overflow: hidden;
+  background: #fff;
+  transition: box-shadow .25s;
+}
+.acc:focus-within, .acc:hover { box-shadow: 0 4px 24px rgba(26,23,20,0.07); }
+
+.acc-hdr {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  padding: 18px 22px;
+  cursor: pointer;
+  user-select: none;
+  background: #fff;
+  transition: background .15s;
+}
+.acc-hdr:hover { background: var(--cream-mid); }
+
+.acc-step-badge {
+  width: 36px; height: 36px;
+  border-radius: 50%;
+  border: 1.5px solid var(--border-strong);
+  display: flex; align-items: center; justify-content: center;
+  flex-shrink: 0;
+  font-family: var(--serif);
+  font-size: 15px;
+  color: var(--ink-muted);
+  background: var(--cream);
+  transition: border-color .2s, color .2s;
+}
+.acc.is-open .acc-step-badge {
+  border-color: var(--gold);
+  color: var(--gold);
+  background: var(--gold-pale);
+}
+
+.acc-hdr-text { flex: 1; }
+.acc-hdr-step { font-size: 10px; font-weight: 500; letter-spacing: .1em; text-transform: uppercase; color: var(--ink-faint); }
+.acc-hdr-title { font-family: var(--serif); font-size: 19px; color: var(--ink); line-height: 1.2; }
+
+.acc-chevron {
+  width: 28px; height: 28px;
+  border-radius: 50%;
+  border: 1px solid var(--border);
+  display: flex; align-items: center; justify-content: center;
+  flex-shrink: 0;
+  transition: transform .3s, background .2s;
+}
+.acc-chevron svg { width: 12px; height: 12px; stroke: var(--ink-muted); fill: none; transition: stroke .2s; }
+.acc.is-open .acc-chevron { transform: rotate(180deg); background: var(--cream-dark); }
+
+.acc-body {
+  overflow: hidden;
+  max-height: 0;
+  transition: max-height .4s cubic-bezier(0.4,0,0.2,1);
+}
+.acc-body-inner {
+  padding: 4px 22px 22px;
+  border-top: 1px solid var(--border);
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+/* ── Inner accordion ── */
+.inner-acc {
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  overflow: hidden;
+}
+.inner-acc-hdr {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 12px 16px;
+  background: var(--cream-mid);
+  cursor: pointer;
+  user-select: none;
+  font-size: 13px;
+  font-weight: 500;
+  color: var(--ink-soft);
+  transition: background .15s;
+}
+.inner-acc-hdr:hover { background: var(--cream-dark); }
+.inner-chev { transition: transform .25s; flex-shrink: 0; }
+.inner-chev svg { width: 11px; height: 11px; stroke: var(--ink-muted); fill: none; }
+.inner-acc.is-open .inner-chev { transform: rotate(180deg); }
+.inner-acc-body {
+  overflow: hidden;
+  max-height: 0;
+  transition: max-height .35s cubic-bezier(0.4,0,0.2,1);
+}
+.inner-acc-body-inner {
+  padding: 14px 16px;
+  border-top: 1px solid var(--border);
+}
+
+/* ── Muscle table ── */
+.muscle-table { width: 100%; border-collapse: collapse; font-size: 13px; }
+.muscle-table thead th {
+  font-size: 10px;
+  font-weight: 500;
+  letter-spacing: .1em;
+  text-transform: uppercase;
+  color: var(--ink-faint);
+  text-align: left;
+  padding: 6px 10px;
+  border-bottom: 1px solid var(--border);
+}
+.muscle-table tbody td {
+  padding: 9px 10px;
+  border-bottom: 1px solid var(--border);
+  color: var(--ink-soft);
+  vertical-align: top;
+}
+.muscle-table tbody tr:last-child td { border-bottom: none; }
+.muscle-table tbody td:first-child { font-weight: 500; color: var(--ink); }
+.muscle-table tbody tr:hover td { background: var(--cream); }
+
+/* ── Reset list ── */
+.reset-list { display: flex; flex-direction: column; gap: 10px; }
+.reset-item {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  padding: 12px 14px;
+  background: var(--cream);
+  border-radius: var(--radius-sm);
+  border: 1px solid var(--border);
+}
+.reset-num {
+  width: 24px; height: 24px;
+  border-radius: 50%;
+  background: var(--ink);
+  color: #fff;
+  font-size: 11px;
+  font-weight: 500;
+  display: flex; align-items: center; justify-content: center;
+  flex-shrink: 0;
+}
+.reset-item-text { font-size: 13px; color: var(--ink-soft); line-height: 1.5; }
+.reset-item-text strong { color: var(--ink); display: block; margin-bottom: 2px; font-weight: 500; }
+
+/* ── Video grid ── */
+.section-sublabel {
+  font-size: 10px;
+  font-weight: 500;
+  letter-spacing: .12em;
+  text-transform: uppercase;
+  color: var(--ink-faint);
+  margin-bottom: 4px;
+}
+.video-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+.video-card {
+  aspect-ratio: 16/10;
+  background: var(--ink);
+  border-radius: var(--radius-sm);
+  overflow: hidden;
+  position: relative;
+  cursor: pointer;
+}
+.video-card-bg {
+  position: absolute; inset: 0;
+  background: linear-gradient(135deg, #2e2a26 0%, #1a1714 100%);
+}
+.video-card-overlay {
+  position: absolute; inset: 0;
+  display: flex; flex-direction: column;
+  align-items: center; justify-content: center;
+  gap: 6px;
+}
+.video-play-sm {
+  width: 34px; height: 34px;
+  border-radius: 50%;
+  background: rgba(255,255,255,0.15);
+  border: 1px solid rgba(255,255,255,0.3);
+  display: flex; align-items: center; justify-content: center;
+  transition: background .2s, transform .2s;
+}
+.video-card:hover .video-play-sm { background: rgba(255,255,255,0.25); transform: scale(1.08); }
+.video-play-sm svg { width: 12px; height: 12px; fill: #fff; margin-left: 2px; }
+.video-card-label {
+  font-size: 10px;
+  font-weight: 500;
+  color: rgba(255,255,255,0.5);
+  letter-spacing: .06em;
+  text-transform: uppercase;
+}
+
+/* ── Supplement cards ── */
+.supp-list { display: flex; flex-direction: column; gap: 12px; }
+.supp-card {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  padding: 14px 16px;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  background: var(--cream);
+  transition: border-color .2s, box-shadow .2s;
+}
+.supp-card:hover { border-color: var(--border-strong); box-shadow: 0 2px 12px rgba(26,23,20,0.06); }
+.supp-vid {
+  width: 68px; height: 50px;
+  background: var(--ink);
+  border-radius: 6px;
+  overflow: hidden;
+  position: relative;
+  flex-shrink: 0;
+  cursor: pointer;
+}
+.supp-vid-bg { position: absolute; inset: 0; background: linear-gradient(135deg, #2e2a26, #1a1714); }
+.supp-vid-play {
+  position: absolute; inset: 0;
+  display: flex; align-items: center; justify-content: center;
+}
+.supp-vid-play-btn {
+  width: 24px; height: 24px;
+  border-radius: 50%;
+  background: rgba(255,255,255,0.15);
+  border: 1px solid rgba(255,255,255,0.3);
+  display: flex; align-items: center; justify-content: center;
+}
+.supp-vid-play-btn svg { width: 9px; height: 9px; fill: #fff; margin-left: 1px; }
+.supp-info { flex: 1; }
+.supp-name {
+  font-family: var(--serif);
+  font-size: 16px;
+  color: var(--ink);
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+.supp-tag {
+  font-family: var(--sans);
+  font-size: 9px;
+  font-weight: 500;
+  letter-spacing: .1em;
+  text-transform: uppercase;
+  color: var(--gold);
+  background: var(--gold-pale);
+  border: 1px solid rgba(184,147,90,0.25);
+  padding: 2px 7px;
+  border-radius: 20px;
+}
+.supp-desc { font-size: 12px; color: var(--ink-muted); margin-top: 3px; line-height: 1.4; }
+
+.supp-image-ph {
+  border: 1.5px dashed var(--border-strong);
+  border-radius: var(--radius-sm);
+  height: 60px;
+  display: flex; align-items: center; justify-content: center;
+  gap: 8px;
+  font-size: 12px;
+  color: var(--ink-faint);
+  background: var(--cream);
+}
+.supp-image-ph svg { width: 16px; height: 16px; stroke: var(--ink-faint); fill: none; }
+
+/* ── Device section ── */
+.device-card {
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  overflow: hidden;
+  background: var(--cream);
+}
+.device-video {
+  width: 100%;
+  aspect-ratio: 16/8;
+  background: var(--ink);
+  position: relative;
+  cursor: pointer;
+  display: flex; align-items: center; justify-content: center;
+}
+.device-video-bg { position: absolute; inset: 0; background: linear-gradient(135deg, #2a2420 0%, #0f0d0b 100%); }
+.device-info { padding: 16px 18px; }
+.device-title {
+  font-family: var(--serif);
+  font-size: 20px;
+  color: var(--ink);
+  margin-bottom: 6px;
+}
+.device-desc { font-size: 13px; color: var(--ink-soft); line-height: 1.5; }
+.device-features {
+  margin-top: 12px;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 8px;
+}
+.device-feature {
+  display: flex;
+  align-items: flex-start;
+  gap: 7px;
+  font-size: 12px;
+  color: var(--ink-soft);
+}
+.device-feature::before {
+  content: '';
+  width: 5px; height: 5px;
+  border-radius: 50%;
+  background: var(--gold);
+  margin-top: 5px;
+  flex-shrink: 0;
+}
+
+/* ── CTA Button ── */
+.cta-wrap { padding-top: 4px; }
+.cta-btn {
+  display: block;
+  width: 100%;
+  padding: 16px 24px;
+  background: var(--ink);
+  color: #fff;
+  border: none;
+  border-radius: var(--radius-sm);
+  font-family: var(--sans);
+  font-size: 14px;
+  font-weight: 500;
+  letter-spacing: .04em;
+  cursor: pointer;
+  position: relative;
+  overflow: hidden;
+  transition: background .2s, transform .15s;
+  text-align: center;
+}
+.cta-btn::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(135deg, transparent 40%, rgba(255,255,255,0.05) 100%);
+  pointer-events: none;
+}
+.cta-btn:hover { background: #2e2a26; transform: translateY(-1px); }
+.cta-btn:active { transform: translateY(0); }
+.cta-btn span { display: flex; align-items: center; justify-content: center; gap: 10px; }
+.cta-arrow { font-size: 16px; transition: transform .2s; }
+.cta-btn:hover .cta-arrow { transform: translateX(3px); }
+.cta-subtext {
+  text-align: center;
+  font-size: 11px;
+  color: var(--ink-faint);
+  margin-top: 7px;
+}
+
+/* ── Quiz ── */
+.quiz-sect {
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  overflow: hidden;
+  background: #fff;
+  margin-top: 8px;
+}
+.quiz-hdr {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 18px 22px;
+  cursor: pointer;
+  user-select: none;
+  background: #fff;
+  transition: background .15s;
+}
+.quiz-hdr:hover { background: var(--cream-mid); }
+.quiz-hdr-left { display: flex; flex-direction: column; gap: 2px; }
+.quiz-hdr-label { font-size: 10px; font-weight: 500; letter-spacing: .12em; text-transform: uppercase; color: var(--ink-faint); }
+.quiz-hdr-title { font-family: var(--serif); font-size: 19px; color: var(--ink); }
+.quiz-body {
+  overflow: hidden;
+  max-height: 0;
+  transition: max-height .4s cubic-bezier(0.4,0,0.2,1);
+}
+.quiz-body-inner {
+  padding: 4px 22px 22px;
+  border-top: 1px solid var(--border);
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+.quiz-intro { font-size: 13px; color: var(--ink-soft); line-height: 1.55; padding: 4px 0 2px; }
+.quiz-progress { display: flex; gap: 5px; align-items: center; }
+.quiz-progress-label { font-size: 11px; color: var(--ink-faint); margin-left: 4px; white-space: nowrap; }
+.q-dot { flex: 1; height: 3px; border-radius: 2px; background: var(--cream-dark); transition: background .3s; }
+.q-dot.done { background: var(--ink); }
+.q-dot.active { background: var(--gold); }
+.quiz-question { font-family: var(--serif); font-size: 17px; color: var(--ink); line-height: 1.35; }
+.quiz-options { display: flex; flex-direction: column; gap: 8px; }
+.quiz-opt {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 12px 16px;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  background: var(--cream);
+  cursor: pointer;
+  font-size: 13px;
+  color: var(--ink-soft);
+  transition: border-color .15s, background .15s, transform .1s;
+  text-align: left;
+  width: 100%;
+}
+.quiz-opt:hover { border-color: var(--border-strong); background: var(--cream-dark); }
+.quiz-opt.sel {
+  border-color: var(--gold);
+  background: var(--gold-pale);
+  color: var(--ink);
+  font-weight: 500;
+}
+.quiz-opt-radio {
+  width: 16px; height: 16px;
+  border-radius: 50%;
+  border: 1.5px solid var(--border-strong);
+  flex-shrink: 0;
+  display: flex; align-items: center; justify-content: center;
+  transition: border-color .15s;
+}
+.quiz-opt.sel .quiz-opt-radio {
+  border-color: var(--gold);
+  background: var(--gold);
+}
+.quiz-opt.sel .quiz-opt-radio::after {
+  content: '';
+  width: 6px; height: 6px;
+  border-radius: 50%;
+  background: #fff;
+}
+.quiz-nav {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 10px;
+}
+.quiz-nav-btn {
+  padding: 9px 18px;
+  border: 1px solid var(--border-strong);
+  border-radius: var(--radius-sm);
+  background: #fff;
+  color: var(--ink);
+  font-family: var(--sans);
+  font-size: 13px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: background .15s, border-color .15s;
+}
+.quiz-nav-btn:hover { background: var(--cream-dark); }
+.quiz-nav-btn:disabled { opacity: .3; cursor: default; }
+.quiz-nav-btn.primary {
+  background: var(--ink);
+  color: #fff;
+  border-color: transparent;
+}
+.quiz-nav-btn.primary:hover { background: #2e2a26; }
+.quiz-nav-btn.primary:disabled { background: var(--ink); opacity: .3; }
+
+/* Result cards */
+.result-card {
+  border-radius: var(--radius-sm);
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  animation: fadeUp .4s ease both;
+}
+@keyframes fadeUp { from { opacity:0; transform:translateY(8px); } to { opacity:1; transform:translateY(0); } }
+.result-card.mild { background: var(--green-pale); border: 1px solid rgba(58,107,74,0.25); }
+.result-card.bad  { background: var(--amber-pale); border: 1px solid rgba(184,147,90,0.3); }
+.result-card.sev  { background: var(--red-pale); border: 1px solid rgba(168,50,50,0.25); }
+.result-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 10px;
+  font-weight: 600;
+  letter-spacing: .1em;
+  text-transform: uppercase;
+  padding: 3px 10px;
+  border-radius: 20px;
+  width: fit-content;
+}
+.result-card.mild .result-badge { background: rgba(58,107,74,0.12); color: var(--green); }
+.result-card.bad  .result-badge { background: rgba(184,147,90,0.18); color: #7a5a20; }
+.result-card.sev  .result-badge { background: rgba(168,50,50,0.1); color: var(--red); }
+.result-title { font-family: var(--serif); font-size: 18px; color: var(--ink); line-height: 1.25; }
+.result-desc { font-size: 13px; color: var(--ink-soft); line-height: 1.55; }
+.retake-btn {
+  padding: 9px;
+  width: 100%;
+  border: 1px solid var(--border-strong);
+  border-radius: var(--radius-sm);
+  background: #fff;
+  color: var(--ink-soft);
+  font-family: var(--sans);
+  font-size: 13px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: background .15s;
+}
+.retake-btn:hover { background: var(--cream-dark); }
+
+/* ── Final CTA block ── */
+.final-cta {
+  margin-top: 40px;
+  padding: 36px;
+  background: var(--ink);
+  border-radius: var(--radius);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 16px;
+  text-align: center;
+  position: relative;
+  overflow: hidden;
+}
+.final-cta::before {
+  content: '';
+  position: absolute;
+  bottom: -80px; right: -80px;
+  width: 260px; height: 260px;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(184,147,90,0.15) 0%, transparent 70%);
+  pointer-events: none;
+}
+.final-cta-label { font-size: 10px; letter-spacing: .16em; text-transform: uppercase; color: var(--gold); font-weight: 500; }
+.final-cta-title { font-family: var(--serif); font-size: 28px; color: #fff; line-height: 1.2; }
+.final-cta-title em { color: var(--gold-light); font-style: italic; }
+.final-cta-desc { font-size: 13px; color: rgba(255,255,255,0.55); line-height: 1.5; max-width: 380px; }
+.final-cta-btn {
+  padding: 16px 36px;
+  background: var(--gold);
+  color: var(--ink);
+  border: none;
+  border-radius: var(--radius-sm);
+  font-family: var(--sans);
+  font-size: 14px;
+  font-weight: 500;
+  letter-spacing: .04em;
+  cursor: pointer;
+  transition: background .2s, transform .15s;
+  display: flex; align-items: center; gap: 10px;
+  margin-top: 4px;
+}
+.final-cta-btn:hover { background: var(--gold-light); transform: translateY(-1px); }
+.final-guarantee {
+  font-size: 11px;
+  color: rgba(255,255,255,0.35);
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+/* ── Footer ── */
+.footer {
+  margin-top: 40px;
+  padding-top: 24px;
+  border-top: 1px solid var(--border);
+  text-align: center;
+  font-size: 11px;
+  color: var(--ink-faint);
+  line-height: 1.7;
+}
+
+/* ── Responsive ── */
+@media (max-width: 560px) {
+  .hero { grid-template-columns: 1fr; }
+  .hero::before { display: none; }
+  .device-features { grid-template-columns: 1fr; }
+  .final-cta { padding: 28px 22px; }
+  .final-cta-title { font-size: 22px; }
+}
+
+/* ── Animations ── */
+@keyframes slideDown { from { opacity:0; transform:translateY(-6px); } to { opacity:1; transform:translateY(0); } }
+.acc-body-inner, .inner-acc-body-inner { animation: none; }
+.acc.is-open .acc-body-inner { animation: slideDown .25s ease both; }
+</style>
+</head>
+<body>
+
+<div class="topbar">As featured in <span>Spine Health Journal</span> &nbsp;·&nbsp; Trusted by over 14,000 patients</div>
+
+<div class="wrap">
+
+  <!-- ── Hero ── -->
+  <div class="hero">
+    <div class="hero-video">
+      <video autoplay muted loop playsinline style="width:100%;height:100%;object-fit:contain;display:block;">
+        <source src="assets/hero.mp4" type="video/mp4">
+      </video>
+    </div>
+    <div class="hero-text">
+      <div class="hero-badge">
+        <svg width="10" height="10" viewBox="0 0 10 10" fill="currentColor"><circle cx="5" cy="5" r="5"/></svg>
+        Real Patient Story
+      </div>
+      <div class="hero-name">Eghagha J., <em>47</em></div>
+      <div class="hero-meta">
+        <div class="hero-meta-row"><div class="dot"></div><span>Software Engineer, 13 years</span></div>
+        <div class="hero-meta-row"><div class="dot"></div><span>Chronic upper back pain &amp; forward head posture</span></div>
+        <div class="hero-meta-row"><div class="dot"></div><span>Spent $6,200 on PT before finding Orthos</span></div>
+      </div>
+      <div class="hero-quote">"After 6 weeks I could stand at the whiteboard without pain for the first time in years."</div>
+    </div>  
+  </div>
+
+  <!-- ── System intro ── -->
+  <div class="section-divide">
+    <div class="section-divide-inner">
+      <div class="section-divide-label">The Protocol</div>
+      <div class="section-divide-title">The Orthos System</div>
+    </div>
+  </div>
+
+  <div class="acc-group">
+
+    <!-- ── Step 1: Exercise ── -->
+    <div class="acc" id="acc-s1">
+      <div class="acc-hdr" onclick="toggleAcc('s1')" role="button" aria-expanded="false">
+        <div class="acc-step-badge">1</div>
+        <div class="acc-hdr-text">
+          <div class="acc-hdr-step">Step One</div>
+          <div class="acc-hdr-title">Exercise</div>
+        </div>
+        <div class="acc-chevron">
+          <svg viewBox="0 0 12 12" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="2 4 6 8 10 4"/></svg>
+        </div>
+      </div>
+      <div class="acc-body" id="body-s1">
+        <div class="acc-body-inner">
+
+          <!-- Inner: Muscles -->
+          <div class="inner-acc" id="iacc-m1">
+            <div class="inner-acc-hdr" onclick="toggleInner('m1')">
+              <span>What must be done → Strengthen these muscles</span>
+              <div class="inner-chev">
+                <svg viewBox="0 0 12 12" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="2 4 6 8 10 4"/></svg>
+              </div>
+            </div>
+            <div class="inner-acc-body" id="ibody-m1">
+              <div class="inner-acc-body-inner">
+                <p style="font-size:13px;color:var(--ink-soft);margin-bottom:12px;line-height:1.5">Good posture isn't about "standing straight" — it's about having enough muscular strength and endurance to hold proper alignment effortlessly. These are the key muscle groups:</p>
+                <table class="muscle-table">
+                  <thead><tr><th>Muscle group</th><th>Role in posture</th><th>Common symptom if weak</th></tr></thead>
+                  <tbody>
+                    <tr><td>Deep cervical flexors</td><td>Align the head over the spine</td><td>Forward head posture, neck pain</td></tr>
+                    <tr><td>Thoracic extensors</td><td>Support the mid-back curve</td><td>Rounded shoulders, kyphosis</td></tr>
+                    <tr><td>Glutes &amp; hip flexors</td><td>Stabilize pelvic tilt</td><td>Lower back pain, anterior tilt</td></tr>
+                    <tr><td>Core stabilisers</td><td>Support the lumbar spine</td><td>Low back fatigue, disc pressure</td></tr>
+                    <tr><td>Serratus anterior</td><td>Anchor shoulder blades to ribs</td><td>Winging scapula, shoulder pain</td></tr>
+                    <tr><td>Posterior chain</td><td>Full spinal erection &amp; balance</td><td>Fatigue when standing upright</td></tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+
+          <!-- Inner: 21 Day Reset -->
+          <div class="inner-acc" id="iacc-r1">
+            <div class="inner-acc-hdr" onclick="toggleInner('r1')">
+              <span>The 21-Day Postural Reset Program</span>
+              <div class="inner-chev">
+                <svg viewBox="0 0 12 12" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="2 4 6 8 10 4"/></svg>
+              </div>
+            </div>
+            <div class="inner-acc-body" id="ibody-r1">
+              <div class="inner-acc-body-inner">
+                <div class="reset-list">
+                  <div class="reset-item">
+                    <div class="reset-num">1</div>
+                    <div class="reset-item-text">
+                      <strong>Daily Exercise Protocol (12–18 min/day)</strong>
+                      Targeted activation sequences for each postural muscle group. Progresses from mobility work in week 1 to strength-building in weeks 2–3.
+                    </div>
+                  </div>
+                  <div class="reset-item">
+                    <div class="reset-num">2</div>
+                    <div class="reset-item-text">
+                      <strong>Postural Habit Cues</strong>
+                      Timed reminders and micro-exercises you do at your desk, in the car, or while standing. Designed to rewire the neuromuscular patterns that hold bad posture in place.
+                    </div>
+                  </div>
+                  <div class="reset-item">
+                    <div class="reset-num">3</div>
+                    <div class="reset-item-text">
+                      <strong>Progress Checkpoints at Day 7, 14 &amp; 21</strong>
+                      Self-assessment tests to measure your improvement — head position, shoulder mobility, and lower back extension range.
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Video grid -->
+          <div>
+            <div class="section-sublabel">Sample exercise videos</div>
+            <div class="video-grid">
+              <div class="video-card">
+                <video autoplay muted loop playsinline style="position:absolute;inset:0;width:100%;height:100%;object-fit:contain;">
+                  <source src="assets/exercise_1.mp4" type="video/mp4">
+                </video>
+              </div>
+              <div class="video-card">
+                <video autoplay muted loop playsinline style="position:absolute;inset:0;width:100%;height:100%;object-fit:contain;">
+                  <source src="assets/exercise_2.mp4" type="video/mp4">
+                </video>
+              </div>
+              <div class="video-card">
+                <video autoplay muted loop playsinline style="position:absolute;inset:0;width:100%;height:100%;object-fit:contain;">
+                  <source src="assets/exercise_3.mp4" type="video/mp4">
+                </video>
+              </div>
+              <div class="video-card">
+                <video autoplay muted loop playsinline style="position:absolute;inset:0;width:100%;height:100%;object-fit:contain;">
+                  <source src="assets/exercise_4.mp4" type="video/mp4">
+                </video>
+              </div>
+            </div>
+          </div>
+
+          <div class="cta-wrap">
+            <button class="cta-btn" onclick="ctaClick()">
+              <span>Get the Orthos System <span class="cta-arrow">→</span></span>
+            </button>
+            <div class="cta-subtext">30-day money-back guarantee · Free shipping</div>
+          </div>
+
+        </div>
+      </div>
+    </div>
+
+    <!-- ── Step 2: Supplements ── -->
+    <div class="acc" id="acc-s2">
+      <div class="acc-hdr" onclick="toggleAcc('s2')" role="button" aria-expanded="false">
+        <div class="acc-step-badge">2</div>
+        <div class="acc-hdr-text">
+          <div class="acc-hdr-step">Step Two</div>
+          <div class="acc-hdr-title">Supplements</div>
+        </div>
+        <div class="acc-chevron">
+          <svg viewBox="0 0 12 12" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="2 4 6 8 10 4"/></svg>
+        </div>
+      </div>
+      <div class="acc-body" id="body-s2">
+        <div class="acc-body-inner">
+
+          <p style="font-size:13px;color:var(--ink-soft);line-height:1.55">Most postural problems have a nutritional component that exercise alone can't fix. These three supplements directly support the bone, muscle, and connective tissue structures that keep you upright.</p>
+
+          <div class="supp-list">
+
+            <div class="supp-card" style="flex-direction:column;align-items:stretch;padding:0;overflow:hidden;">
+              <div class="video-card" style="border-radius:var(--radius-sm) var(--radius-sm) 0 0;margin:0;">
+                <video autoplay muted loop playsinline style="position:absolute;inset:0;width:100%;height:100%;object-fit:contain;">
+                  <source src="assets/calcium_p.mp4" type="video/mp4">
+                </video>
+              </div>
+              <div class="supp-info" style="padding:12px 16px;">
+                <div class="supp-name">Vitamin D₃ + K₂ <span class="supp-tag">Core</span></div>
+                <div class="supp-desc">Directs calcium into bones (not arteries). Essential for bone density and the skeletal framework that posture depends on. Most adults over 40 are deficient.</div>
+              </div>
+            </div>
+
+            <img src="assets/complete_s.png" style="width:100%;aspect-ratio:16/10;object-fit:contain;border-radius:var(--radius-sm);display:block;background:#ffffff;">
+
+            <div class="supp-card" style="flex-direction:column;align-items:stretch;padding:0;overflow:hidden;">
+              <div class="video-card" style="border-radius:var(--radius-sm) var(--radius-sm) 0 0;margin:0;">
+                <video autoplay muted loop playsinline style="position:absolute;inset:0;width:100%;height:100%;object-fit:contain;">
+                  <source src="assets/magnesium_g.mp4" type="video/mp4">
+                </video>
+              </div>
+              <div class="supp-info" style="padding:12px 16px;">
+                <div class="supp-name">Magnesium Glycinate <span class="supp-tag">Core</span></div>
+                <div class="supp-desc">Relaxes chronically tight postural muscles and reduces the neurological tension that pulls the spine out of alignment. Also improves sleep quality for recovery.</div>
+              </div>
+            </div>
+
+            <img src="assets/collagen.png" style="width:100%;aspect-ratio:16/10;object-fit:contain;border-radius:var(--radius-sm);display:block;background:#ffffff;">
+
+            <div class="supp-card" style="flex-direction:column;align-items:stretch;padding:0;overflow:hidden;">
+              <div class="video-card" style="border-radius:var(--radius-sm) var(--radius-sm) 0 0;margin:0;">
+                <video autoplay muted loop playsinline style="position:absolute;inset:0;width:100%;height:100%;object-fit:contain;">
+                  <source src="assets/collagen.mp4" type="video/mp4">
+                </video>
+              </div>
+              <div class="supp-info" style="padding:12px 16px;">
+                <div class="supp-name">Collagen Peptides <span class="supp-tag">Support</span></div>
+                <div class="supp-desc">Rebuilds the ligaments, tendons, and intervertebral discs that hold the spine's structure. Type II collagen is specific to cartilage and joint integrity.</div>
+              </div>
+            </div>
+
+          </div>
+
+          <div class="cta-wrap">
+            <button class="cta-btn" onclick="ctaClick()">
+              <span>Get the Orthos System <span class="cta-arrow">→</span></span>
+            </button>
+            <div class="cta-subtext">30-day money-back guarantee · Free shipping</div>
+          </div>
+
+        </div>
+      </div>
+    </div>
+
+    <!-- ── Step 3: Device ── -->
+    <div class="acc" id="acc-s3">
+      <div class="acc-hdr" onclick="toggleAcc('s3')" role="button" aria-expanded="false">
+        <div class="acc-step-badge">3</div>
+        <div class="acc-hdr-text">
+          <div class="acc-hdr-step">Step Three</div>
+          <div class="acc-hdr-title">Device</div>
+        </div>
+        <div class="acc-chevron">
+          <svg viewBox="0 0 12 12" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="2 4 6 8 10 4"/></svg>
+        </div>
+      </div>
+      <div class="acc-body" id="body-s3">
+        <div class="acc-body-inner">
+
+          <div class="device-card">
+            <div class="device-video">
+              <div class="device-video-bg"></div>
+              <div class="play-btn" style="position:relative">
+                <svg viewBox="0 0 16 16"><path d="M4 2l10 6-10 6V2z"/></svg>
+              </div>
+            </div>
+            <div class="device-info">
+              <div class="device-title">The Orthos Postural Trainer</div>
+              <div class="device-desc">A biofeedback wearable that attaches to your upper back and vibrates gently the moment you begin to slouch — before the habit pattern locks in. Pairs with the Orthos app to track your improvement over time.</div>
+              <div class="device-features">
+                <div class="device-feature">Discreet under clothing</div>
+                <div class="device-feature">14-day battery life</div>
+                <div class="device-feature">Clinician-calibrated thresholds</div>
+                <div class="device-feature">Real-time posture scoring</div>
+                <div class="device-feature">Waterproof (IPX5)</div>
+                <div class="device-feature">Free companion app</div>
+              </div>
+            </div>
+          </div>
+
+          <div class="cta-wrap">
+            <button class="cta-btn" onclick="ctaClick()">
+              <span>Get the Orthos System <span class="cta-arrow">→</span></span>
+            </button>
+            <div class="cta-subtext">30-day money-back guarantee · Free shipping</div>
+          </div>
+
+        </div>
+      </div>
+    </div>
+
+  </div><!-- /acc-group -->
+
+  <!-- ── Quiz ── -->
+  <div class="quiz-sect" id="quiz-sect">
+    <div class="quiz-hdr" onclick="toggleQuiz()" role="button" aria-expanded="false">
+      <div class="quiz-hdr-left">
+        <div class="quiz-hdr-label">Free Assessment</div>
+        <div class="quiz-hdr-title">Quiz Yourself</div>
+      </div>
+      <div class="acc-chevron" id="quiz-chev">
+        <svg viewBox="0 0 12 12" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="2 4 6 8 10 4"/></svg>
+      </div>
+    </div>
+    <div class="quiz-body" id="quiz-body">
+      <div class="quiz-body-inner">
+        <div id="quiz-screen">
+          <p class="quiz-intro">Answer 7 quick questions to find out how serious your postural issues are — and what level of intervention you may need.</p>
+          <div class="quiz-progress" id="qprog"></div>
+          <div class="quiz-question" id="qq"></div>
+          <div class="quiz-options" id="qopts"></div>
+          <div class="quiz-nav">
+            <button class="quiz-nav-btn" id="qprev" onclick="qnav(-1)" disabled>← Back</button>
+            <span style="font-size:11px;color:var(--ink-faint)" id="qct"></span>
+            <button class="quiz-nav-btn primary" id="qnext" onclick="qnav(1)" disabled>Next →</button>
+          </div>
+        </div>
+        <div id="qres" style="display:none;flex-direction:column;gap:12px"></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ── Final CTA ── -->
+  <div class="final-cta">
+    <div class="final-cta-label">Start Today</div>
+    <div class="final-cta-title">Ready to fix your posture <em>for good?</em></div>
+    <div class="final-cta-desc">The Orthos System combines targeted exercise, nutritional support, and real-time biofeedback — the only three things that actually matter for lasting postural change.</div>
+    <button class="final-cta-btn" onclick="ctaClick()">
+      Get the Orthos System <span style="font-size:16px">→</span>
+    </button>
+    <div class="final-guarantee">
+      <svg width="13" height="13" viewBox="0 0 13 13" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="6.5" cy="6.5" r="5.5"/><polyline points="4 6.5 6 8.5 9.5 5"/></svg>
+      30-day money-back guarantee &nbsp;·&nbsp; Free shipping &nbsp;·&nbsp; Ships in 2–3 days
+    </div>
+  </div>
+
+  <div class="footer">
+    This page is an advertorial. Results may vary. The Orthos System is not intended to diagnose, treat, cure, or prevent any medical condition.<br>
+    © 2026 Orthos Health. All rights reserved. &nbsp;·&nbsp; <a href="#" style="color:inherit">Privacy</a> &nbsp;·&nbsp; <a href="#" style="color:inherit">Terms</a>
+  </div>
+
+</div><!-- /wrap -->
+
+<script>
+// ── Accordion helpers ──
+function setAccHeight(bodyEl) {
+  bodyEl.style.maxHeight = bodyEl.scrollHeight + 'px';
+}
+
+function toggleAcc(id) {
+  const acc   = document.getElementById('acc-' + id);
+  const body  = document.getElementById('body-' + id);
+  const hdr   = acc.querySelector('.acc-hdr');
+  const isOpen = acc.classList.contains('is-open');
+
+  if (isOpen) {
+    body.style.maxHeight = '0';
+    acc.classList.remove('is-open');
+    hdr.setAttribute('aria-expanded', 'false');
+  } else {
+    body.style.maxHeight = body.scrollHeight + 'px';
+    acc.classList.add('is-open');
+    hdr.setAttribute('aria-expanded', 'true');
+  }
+}
+
+function toggleInner(id) {
+  const iacc  = document.getElementById('iacc-' + id);
+  const ibody = document.getElementById('ibody-' + id);
+  const isOpen = iacc.classList.contains('is-open');
+
+  if (isOpen) {
+    ibody.style.maxHeight = '0';
+    iacc.classList.remove('is-open');
+  } else {
+    ibody.style.maxHeight = ibody.scrollHeight + 'px';
+    iacc.classList.add('is-open');
+    // Expand parent accordion to fit new content
+    ['s1','s2','s3'].forEach(pid => {
+      const pb = document.getElementById('body-' + pid);
+      if (pb && pb.style.maxHeight && pb.style.maxHeight !== '0px') {
+        pb.style.maxHeight = pb.scrollHeight + 'px';
+      }
+    });
+  }
+}
+
+function toggleQuiz() {
+  const body = document.getElementById('quiz-body');
+  const chev = document.getElementById('quiz-chev');
+  const sect = document.getElementById('quiz-sect');
+  const isOpen = sect.classList.contains('is-open');
+
+  if (isOpen) {
+    body.style.maxHeight = '0';
+    sect.classList.remove('is-open');
+    chev.style.transform = '';
+  } else {
+    body.style.maxHeight = body.scrollHeight + 'px';
+    sect.classList.add('is-open');
+    chev.style.transform = 'rotate(180deg)';
+  }
+}
+
+// Expand quiz body after content changes
+function expandQuiz() {
+  const body = document.getElementById('quiz-body');
+  if (document.getElementById('quiz-sect').classList.contains('is-open')) {
+    body.style.maxHeight = body.scrollHeight + 'px';
+  }
+}
+
+// ── Quiz ──
+const Qs = [
+  { q:'How often do you experience neck or upper back pain?',
+    opts:['Rarely or never','A few times a week','Daily or almost always'] },
+  { q:'When standing against a wall, can your head, shoulders, and heels all touch at the same time?',
+    opts:['Yes, easily','With some effort','No — not at all'] },
+  { q:'How many hours per day do you typically spend sitting?',
+    opts:['Under 4 hours','4–8 hours','More than 8 hours'] },
+  { q:'Do people ever comment that you slouch or hunch forward?',
+    opts:['Never','Occasionally','Often or always'] },
+  { q:'Do you experience lower back pain or stiffness when rising from a chair?',
+    opts:['Rarely','Sometimes','Most of the time'] },
+  { q:'Do you feel shoulder or mid-back tension and fatigue by end of day?',
+    opts:['Rarely','A few times a week','Every day'] },
+  { q:'Has a doctor, physio, or therapist ever said your posture needs attention?',
+    opts:['Never','Once or twice','Yes, multiple times'] },
+];
+
+let cur = 0, ans = new Array(Qs.length).fill(null);
+
+function renderQ() {
+  const q = Qs[cur];
+  document.getElementById('qq').textContent = q.q;
+  document.getElementById('qct').textContent = (cur + 1) + ' of ' + Qs.length;
+
+  const prog = document.getElementById('qprog');
+  prog.innerHTML = '';
+  Qs.forEach((_, i) => {
+    const d = document.createElement('div');
+    d.className = 'q-dot' + (i < cur ? ' done' : i === cur ? ' active' : '');
+    prog.appendChild(d);
+  });
+  const lbl = document.createElement('span');
+  lbl.className = 'quiz-progress-label';
+  lbl.textContent = (cur + 1) + ' / ' + Qs.length;
+  prog.appendChild(lbl);
+
+  const opts = document.getElementById('qopts');
+  opts.innerHTML = '';
+  q.opts.forEach((o, i) => {
+    const btn = document.createElement('button');
+    btn.className = 'quiz-opt' + (ans[cur] === i ? ' sel' : '');
+    btn.innerHTML = '<div class="quiz-opt-radio"></div>' + o;
+    btn.onclick = () => { ans[cur] = i; renderQ(); expandQuiz(); };
+    opts.appendChild(btn);
+  });
+
+  document.getElementById('qprev').disabled = cur === 0;
+  const nx = document.getElementById('qnext');
+  nx.disabled = ans[cur] === null;
+  nx.textContent = cur === Qs.length - 1 ? 'See my result' : 'Next →';
+
+  setTimeout(expandQuiz, 50);
+}
+
+function qnav(d) {
+  if (d === 1 && cur === Qs.length - 1) { showRes(); return; }
+  cur = Math.max(0, Math.min(Qs.length - 1, cur + d));
+  renderQ();
+}
+
+function showRes() {
+  const score = ans.reduce((s, a) => s + (a || 0), 0);
+  document.getElementById('quiz-screen').style.display = 'none';
+  const rs = document.getElementById('qres');
+  rs.style.display = 'flex';
+
+  let cls, label, title, desc, cta;
+  if (score <= 4) {
+    cls = 'mild'; label = 'Mild posture issues';
+    title = 'Your posture is slightly off — and easy to correct.';
+    desc = 'You have some minor postural habits that, left unaddressed, can develop into chronic pain over time. The Orthos System will help you build the right muscular foundation and break the patterns before they worsen.';
+    cta = true;
+  } else if (score <= 9) {
+    cls = 'bad'; label = 'Moderate posture problems';
+    title = 'Your posture needs real, structured attention.';
+    desc = 'You\'re already experiencing regular discomfort and visible postural imbalance. The Orthos System — exercise protocol, targeted supplementation, and biofeedback device — is designed for exactly this stage of postural decline.';
+    cta = true;
+  } else {
+    cls = 'sev'; label = 'Consult a physician';
+    title = 'Your symptoms suggest a need for professional evaluation.';
+    desc = 'Your responses indicate postural and pain patterns that may go beyond what a self-directed program can safely address. We strongly recommend consulting a physician, orthopedic specialist, or physical therapist before starting any new exercise program.';
+    cta = false;
+  }
+
+  rs.innerHTML =
+    '<div class="result-card ' + cls + '">' +
+      '<div class="result-badge">' + label + '</div>' +
+      '<div class="result-title">' + title + '</div>' +
+      '<div class="result-desc">' + desc + '</div>' +
+    '</div>' +
+    (cta
+      ? '<div class="cta-wrap"><button class="cta-btn" onclick="ctaClick()"><span>Get the Orthos System <span class="cta-arrow">→</span></span></button><div class="cta-subtext">30-day money-back guarantee · Free shipping</div></div>'
+      : '') +
+    '<button class="retake-btn" onclick="retake()">Retake the quiz</button>';
+
+  setTimeout(expandQuiz, 50);
+}
+
+function retake() {
+  cur = 0; ans = new Array(Qs.length).fill(null);
+  document.getElementById('quiz-screen').style.display = '';
+  const rs = document.getElementById('qres');
+  rs.style.display = 'none';
+  rs.innerHTML = '';
+  renderQ();
+}
+
+function ctaClick() {
+  alert('CTA clicked — link to purchase page goes here.');
+}
+
+renderQ();
+</script>
+</body>
+</html>
