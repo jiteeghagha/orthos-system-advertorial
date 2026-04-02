@@ -179,7 +179,7 @@ p { margin-bottom: 1rem; }
 }
 .patient-meta-row {
   font-family: var(--ff-b);
-  font-size: .8rem;
+  font-size: 1.02rem;
   color: var(--mid);
   padding-left: 14px;
   position: relative;
@@ -196,7 +196,7 @@ p { margin-bottom: 1rem; }
 }
 .patient-quote {
   font-family: var(--ff-b);
-  font-size: .88rem;
+  font-size: 1.02rem;
   font-style: italic;
   color: var(--ink);
   border-left: 3px solid var(--terra);
@@ -718,6 +718,8 @@ h3 {
 
 @media (max-width: 900px) {
   .hero-inner, .cols-2-3, .cols-3-2, .cols-2, .cols-3 { grid-template-columns: 1fr; }
+  .patient-card { width: 100% !important; }
+  .acc-wrap { width: 100% !important; }
   .ig { grid-template-columns: 1fr 1fr; }
   .vg { grid-template-columns: 1fr; }
   .stats-band { grid-template-columns: 1fr; gap: 20px; padding: 28px var(--pad); }
@@ -776,7 +778,7 @@ h3 {
 .hacc-item.open .hacc-icon::after { transform: translate(-50%,-50%) rotate(90deg); opacity: 0; }
 .hacc-label {
   font-family: var(--ff-b);
-  font-size: .9rem;
+  font-size: 1.02rem;
   font-weight: 700;
   color: var(--ink);
   line-height: 1.35;
@@ -788,8 +790,20 @@ h3 {
   padding: 0 20px 0 62px;
 }
 .hacc-item.open .hacc-body {
-  max-height: 220px;
+  max-height: 800px;
   padding: 0 20px 16px 62px;
+}
+.hacc-body-inner {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+.hacc-body-img {
+  display: block;
+  width: 50%;
+  height: auto;
+  border-radius: 8px;
+  margin: 0 auto;
 }
 .hacc-body ul {
   list-style: none;
@@ -798,7 +812,7 @@ h3 {
 }
 .hacc-body ul li {
   font-family: var(--ff-b);
-  font-size: .82rem;
+  font-size: 1.02rem;
   color: var(--mid);
   line-height: 1.65;
   padding: 4px 0 4px 16px;
@@ -816,7 +830,7 @@ h3 {
 /* Line 740: "Who Is Most At Risk" label above hero accordion */
 .risk-label {
   font-family: var(--ff-b);
-  font-size: .72rem;
+  font-size: 1.02rem;
   font-weight: 600;
   color: var(--green-muted);
   text-transform: uppercase;
@@ -829,6 +843,19 @@ h3 {
 
 /* Line 1005, 1048: margin-bottom:28px override */
 .mb-28 { margin-bottom: 28px; }
+
+/* Pull quote */
+.pull-quote {
+  font-family: Georgia, 'Times New Roman', serif;
+  font-size: 1.35rem;
+  font-style: italic;
+  font-weight: 400;
+  line-height: 1.55;
+  color: var(--ink);
+  border-left: 3px solid var(--green);
+  padding: 8px 0 8px 18px;
+  margin: 20px 0;
+}
 
 /* Line 1013: .sb variant — bold green emphasis */
 .sb-bold-green {

@@ -787,6 +787,32 @@ body {
 @keyframes slideDown { from { opacity:0; transform:translateY(-6px); } to { opacity:1; transform:translateY(0); } }
 .acc-body-inner, .inner-acc-body-inner { animation: none; }
 .acc.is-open .acc-body-inner { animation: slideDown .25s ease both; }
+
+/* ── Pre-Hero Title ── */
+.pre-hero-title {
+  margin-bottom: 32px;
+}
+.pre-hero-title h1 {
+  font-family: var(--serif);
+  font-size: clamp(26px, 5vw, 38px);
+  font-weight: 700;
+  color: #1e4a30;
+  line-height: 1.2;
+  margin-bottom: 10px;
+}
+.pre-hero-title h1 .heading-normal {
+  font-weight: 400;
+}
+.pre-hero-title .subtitle {
+  font-family: var(--sans);
+  font-size: 14px;
+  color: var(--ink-soft);
+  line-height: 1.7;
+}
+.pre-hero-title .subtitle .hl {
+  color: var(--green);
+  font-weight: 600;
+}
 </style>
 </head>
 <body>
@@ -794,6 +820,13 @@ body {
 <div class="topbar">As featured in <span>Spine Health Journal</span> &nbsp;·&nbsp; Trusted by over 14,000 patients</div>
 
 <div class="wrap">
+
+  <!-- ── Pre-Hero Title ── -->
+  <div class="pre-hero-title">
+    <h1><strong>Forward Head Posture (FHP)</strong> <span class="heading-normal">and Cervicothoracic Kyphosis</span></h1>
+    <p class="subtitle">Is the <span class="hl">slow&#8209;motion collapse</span> of the <span class="hl">upper spine.</span><br>
+    And if you are reading this, there is a very <span class="hl">high probability</span> it has <span class="hl">already started.</span></p>
+  </div>
 
   <!-- ── Hero ── -->
   <div class="hero">
