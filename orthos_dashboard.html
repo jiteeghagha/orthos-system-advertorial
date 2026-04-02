@@ -1,0 +1,749 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Orthos System — My Dashboard</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;1,400&family=DM+Sans:opsz,wght@9..40,300;9..40,400;9..40,500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="css/orthos_dashboard.css">
+</head>
+<body>
+
+<!-- ══════════════════════════════════
+     LOGIN SCREEN
+══════════════════════════════════ -->
+<div id="login-screen">
+  <div class="login-card">
+    <div class="login-logo">
+      <div class="login-logo-mark">
+        <svg viewBox="0 0 24 24"><path d="M12 2C7 2 4 6 4 10c0 5 4 9 8 12 4-3 8-7 8-12 0-4-3-8-8-8z"/></svg>
+      </div>
+      <div class="login-logo-name">Orthos System</div>
+    </div>
+    <div class="login-tagline">
+      <h2>Welcome back to your personal recovery program</h2>
+      <p>Sign in to access your personalized exercise plan, supplement tracker, device data, and progress history.</p>
+    </div>
+    <div class="login-divider"><span>Sign in with</span></div>
+    <button class="google-btn" onclick="doLogin()">
+      <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+        <path d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z" fill="#4285F4"/>
+        <path d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z" fill="#34A853"/>
+        <path d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l3.66-2.84z" fill="#FBBC05"/>
+        <path d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z" fill="#EA4335"/>
+      </svg>
+      Continue with Google
+    </button>
+    <div class="login-legal">
+      By signing in you agree to Orthos Health's
+      <a href="#">Terms of Service</a> and <a href="#">Privacy Policy</a>.
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════
+     APP SHELL
+══════════════════════════════════ -->
+<div id="app">
+
+  <!-- Top Nav -->
+  <nav class="topnav">
+    <div class="nav-logo">
+      <div class="nav-logo-mark">
+        <svg viewBox="0 0 24 24"><path d="M12 2C7 2 4 6 4 10c0 5 4 9 8 12 4-3 8-7 8-12 0-4-3-8-8-8z"/></svg>
+      </div>
+      Orthos
+    </div>
+    <div class="nav-center">
+      <button class="nav-tab active" onclick="showTab('exercise',this)">Exercise</button>
+      <button class="nav-tab" onclick="showTab('supplements',this)">Supplements</button>
+      <button class="nav-tab" onclick="showTab('device',this)">Device</button>
+      <button class="nav-tab" onclick="showTab('progress',this)">Progress</button>
+    </div>
+    <div class="nav-right">
+      <div class="nav-avatar" id="nav-avatar">ML</div>
+      <button class="logout-btn" onclick="doLogout()">Sign out</button>
+    </div>
+  </nav>
+
+  <!-- Main -->
+  <main class="main">
+
+    <!-- Welcome banner -->
+    <div class="welcome-banner">
+      <div class="welcome-text">
+        <div class="welcome-label">Day 14 of 21 · Week 2</div>
+        <div class="welcome-name">Good morning, <em id="user-first-name">Margaret</em></div>
+        <div class="welcome-sub">You're two-thirds through your reset. Keep going — this is where it counts.</div>
+      </div>
+      <div class="welcome-score-ring">
+        <svg class="ring-svg" width="80" height="80" viewBox="0 0 80 80">
+          <circle cx="40" cy="40" r="32" fill="none" stroke="rgba(255,255,255,0.08)" stroke-width="6"/>
+          <circle cx="40" cy="40" r="32" fill="none" stroke="rgba(184,147,90,0.7)" stroke-width="6"
+            stroke-dasharray="201" stroke-dashoffset="60" stroke-linecap="round"
+            transform="rotate(-90 40 40)"/>
+        </svg>
+        <div class="ring-label">72</div>
+        <div class="ring-sub">Posture Score</div>
+      </div>
+    </div>
+
+    <!-- ── EXERCISE TAB ── -->
+    <div class="section-page active" id="tab-exercise">
+      <div class="page-header">
+        <div class="page-header-label">Step One</div>
+        <div class="page-header-title">Your Exercise Plan</div>
+        <div class="page-header-sub">Personalized 21-Day Postural Reset — tailored to your quiz results</div>
+      </div>
+
+      <div class="stat-row">
+        <div class="stat-card">
+          <div class="stat-label">Sessions done</div>
+          <div class="stat-val">13 <span>/ 21</span></div>
+          <div class="stat-delta">↑ On track</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-label">Streak</div>
+          <div class="stat-val">6 <span>days</span></div>
+          <div class="stat-delta">↑ Personal best</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-label">Avg. duration</div>
+          <div class="stat-val">14 <span>min</span></div>
+          <div class="stat-delta">↑ Up 2 min</div>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="card-hdr">
+          <div class="card-hdr-title">Today's Session — Day 14</div>
+          <div class="card-hdr-badge gold">Week 2 · Strength</div>
+        </div>
+        <div class="card-body">
+          <div class="day-tabs" id="day-tabs">
+            <button class="day-tab done" onclick="selectDay(8,this)">Day 8</button>
+            <button class="day-tab done" onclick="selectDay(9,this)">Day 9</button>
+            <button class="day-tab done" onclick="selectDay(10,this)">Day 10</button>
+            <button class="day-tab done" onclick="selectDay(11,this)">Day 11</button>
+            <button class="day-tab done" onclick="selectDay(12,this)">Day 12</button>
+            <button class="day-tab done" onclick="selectDay(13,this)">Day 13</button>
+            <button class="day-tab active" onclick="selectDay(14,this)">Day 14</button>
+            <button class="day-tab" onclick="selectDay(15,this)">Day 15</button>
+            <button class="day-tab" onclick="selectDay(16,this)">Day 16</button>
+          </div>
+          <div class="exercise-list" id="exercise-list"></div>
+          <div class="progress-bar-wrap">
+            <div class="progress-bar-label">
+              <span>Session progress</span>
+              <span id="ex-progress-label">0 / 5 complete</span>
+            </div>
+            <div class="progress-bar-track">
+              <div class="progress-bar-fill" id="ex-progress-bar" style="width:0%"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="card-hdr">
+          <div class="card-hdr-title">Program Overview</div>
+          <div class="card-hdr-badge ink">21 Days</div>
+        </div>
+        <div class="card-body" style="display:flex;flex-direction:column;gap:10px">
+          <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px">
+            <div style="padding:12px;background:var(--green-pale);border:1px solid var(--green-mid);border-radius:var(--r-sm);text-align:center">
+              <div style="font-size:10px;text-transform:uppercase;letter-spacing:.1em;color:var(--green);font-weight:500;margin-bottom:4px">Week 1</div>
+              <div style="font-family:var(--serif);font-size:15px;color:var(--ink)">Mobility</div>
+              <div style="font-size:11px;color:var(--ink-muted);margin-top:2px">Done ✓</div>
+            </div>
+            <div style="padding:12px;background:var(--gold-pale);border:1px solid rgba(184,147,90,.3);border-radius:var(--r-sm);text-align:center">
+              <div style="font-size:10px;text-transform:uppercase;letter-spacing:.1em;color:var(--gold-deep);font-weight:500;margin-bottom:4px">Week 2</div>
+              <div style="font-family:var(--serif);font-size:15px;color:var(--ink)">Strength</div>
+              <div style="font-size:11px;color:var(--gold-deep);margin-top:2px">In progress</div>
+            </div>
+            <div style="padding:12px;background:var(--cream);border:1px solid var(--border);border-radius:var(--r-sm);text-align:center">
+              <div style="font-size:10px;text-transform:uppercase;letter-spacing:.1em;color:var(--ink-faint);font-weight:500;margin-bottom:4px">Week 3</div>
+              <div style="font-family:var(--serif);font-size:15px;color:var(--ink-muted)">Endurance</div>
+              <div style="font-size:11px;color:var(--ink-faint);margin-top:2px">Upcoming</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ── SUPPLEMENTS TAB ── -->
+    <div class="section-page" id="tab-supplements">
+      <div class="page-header">
+        <div class="page-header-label">Step Two</div>
+        <div class="page-header-title">Supplement Tracker</div>
+        <div class="page-header-sub">Check off each supplement as you take it. Consistency is everything.</div>
+      </div>
+
+      <div class="streak-banner">
+        <div class="streak-num" id="supp-streak">18</div>
+        <div class="streak-text">
+          <strong>Day supplement streak 🔥</strong>
+          <span>You haven't missed a day since you started. Keep it going.</span>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="card-hdr">
+          <div class="card-hdr-title">Today — <span id="supp-today-date"></span></div>
+          <div class="card-hdr-badge" id="supp-all-done-badge" style="display:none;background:var(--green-pale);color:var(--green)">All done ✓</div>
+        </div>
+        <div class="card-body">
+          <div class="supp-grid" id="supp-grid"></div>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="card-hdr">
+          <div class="card-hdr-title">Why these three?</div>
+        </div>
+        <div class="card-body" style="display:flex;flex-direction:column;gap:14px">
+          <div style="display:flex;gap:12px;align-items:flex-start">
+            <div style="font-size:24px;flex-shrink:0;width:36px;text-align:center">☀️</div>
+            <div>
+              <div style="font-size:13px;font-weight:500;color:var(--ink);margin-bottom:3px">D₃ + K₂ — The Foundation</div>
+              <div style="font-size:12px;color:var(--ink-soft);line-height:1.5">D₃ stimulates calcium absorption; K₂ ensures it goes into bone rather than soft tissue. Together they build the skeletal density your posture depends on. Critical for adults over 40 — most are severely deficient.</div>
+            </div>
+          </div>
+          <div style="display:flex;gap:12px;align-items:flex-start">
+            <div style="font-size:24px;flex-shrink:0;width:36px;text-align:center">🌙</div>
+            <div>
+              <div style="font-size:13px;font-weight:500;color:var(--ink);margin-bottom:3px">Magnesium Glycinate — The Relaxer</div>
+              <div style="font-size:12px;color:var(--ink-soft);line-height:1.5">Chronically tight postural muscles pull the spine out of alignment. Magnesium acts as a natural muscle relaxant and helps the nervous system downregulate the chronic tension patterns that cause poor posture.</div>
+            </div>
+          </div>
+          <div style="display:flex;gap:12px;align-items:flex-start">
+            <div style="font-size:24px;flex-shrink:0;width:36px;text-align:center">🦴</div>
+            <div>
+              <div style="font-size:13px;font-weight:500;color:var(--ink);margin-bottom:3px">Collagen Peptides — The Rebuild</div>
+              <div style="font-size:12px;color:var(--ink-soft);line-height:1.5">Ligaments, tendons, and intervertebral discs are made largely of collagen. As we age, production drops. Supplementing provides the raw material to rebuild the connective tissue that holds spinal alignment.</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ── DEVICE TAB ── -->
+    <div class="section-page" id="tab-device">
+      <div class="page-header">
+        <div class="page-header-label">Step Three</div>
+        <div class="page-header-title">Device &amp; Posture Scores</div>
+        <div class="page-header-sub">Live data from your Orthos Postural Trainer</div>
+      </div>
+
+      <div class="stat-row">
+        <div class="stat-card">
+          <div class="stat-label">Today's score</div>
+          <div class="stat-val" style="color:var(--gold-deep)">72 <span>/ 100</span></div>
+          <div class="stat-delta">↑ +4 from yesterday</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-label">Good posture</div>
+          <div class="stat-val">71 <span>%</span></div>
+          <div class="stat-delta">↑ Up from 58%</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-label">Alerts today</div>
+          <div class="stat-val">8</div>
+          <div class="stat-delta">↓ Down from 21</div>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="card-hdr">
+          <div class="card-hdr-title">Posture Score — Last 14 Days</div>
+          <div class="card-hdr-badge green">Improving</div>
+        </div>
+        <div class="card-body">
+          <div class="chart-wrap">
+            <div class="chart-label-y">
+              <span>100</span><span>75</span><span>50</span><span>25</span><span>0</span>
+            </div>
+            <div class="chart-inner">
+              <div class="bar-chart" id="posture-chart"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="card-hdr">
+          <div class="card-hdr-title">Device Status</div>
+          <div class="card-hdr-badge green">Connected</div>
+        </div>
+        <div class="card-body" style="display:flex;flex-direction:column;gap:14px">
+          <div class="device-info-grid">
+            <div class="device-info-item">
+              <div class="device-info-label">Battery</div>
+              <div class="battery-wrap" style="margin-top:4px">
+                <div class="battery-bar"><div class="battery-fill" style="width:73%"></div></div>
+                <div class="device-info-val green" style="font-size:13px;min-width:36px;text-align:right">73%</div>
+              </div>
+            </div>
+            <div class="device-info-item">
+              <div class="device-info-label">Last sync</div>
+              <div class="device-info-val gold">2 min ago</div>
+            </div>
+            <div class="device-info-item">
+              <div class="device-info-label">Firmware</div>
+              <div class="device-info-val">v2.4.1</div>
+            </div>
+            <div class="device-info-item">
+              <div class="device-info-label">Wear time today</div>
+              <div class="device-info-val green">6h 14m</div>
+            </div>
+            <div class="device-info-item">
+              <div class="device-info-label">Sensitivity</div>
+              <div class="device-info-val">Medium</div>
+            </div>
+            <div class="device-info-item">
+              <div class="device-info-label">Alert mode</div>
+              <div class="device-info-val">Vibration</div>
+            </div>
+          </div>
+          <button style="padding:10px;border:1px solid var(--border-md);border-radius:var(--r-sm);background:var(--cream);color:var(--ink-soft);font-size:13px;font-weight:500;display:flex;align-items:center;justify-content:center;gap:8px;transition:all .15s" onmouseover="this.style.background=getComputedStyle(document.documentElement).getPropertyValue('--cream-dark')" onmouseout="this.style.background=getComputedStyle(document.documentElement).getPropertyValue('--cream')">
+            <svg width="14" height="14" viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M7 1v2M7 11v2M1 7h2M11 7h2M2.93 2.93l1.41 1.41M9.66 9.66l1.41 1.41M2.93 11.07l1.41-1.41M9.66 4.34l1.41-1.41"/></svg>
+            Calibrate Device
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- ── PROGRESS TAB ── -->
+    <div class="section-page" id="tab-progress">
+      <div class="page-header">
+        <div class="page-header-label">Your Journey</div>
+        <div class="page-header-title">Quiz Results &amp; Progress</div>
+        <div class="page-header-sub">Track how your posture assessment has changed since you started</div>
+      </div>
+
+      <div class="card">
+        <div class="card-hdr">
+          <div class="card-hdr-title">Assessment History</div>
+          <button class="retake-quiz-btn" onclick="showRetakeQuiz()">
+            <svg width="13" height="13" viewBox="0 0 13 13" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="1 4 1 1 4 1"/><path d="M1 1l3 3a6 6 0 1 1-1.5 4"/></svg>
+            Retake Quiz
+          </button>
+        </div>
+        <div class="card-body">
+          <div class="quiz-history">
+            <div class="quiz-entry">
+              <div class="quiz-date">Mar 31, 2026</div>
+              <div class="quiz-result-pill bad">Moderate</div>
+              <div class="quiz-score-bar"><div class="quiz-score-fill bad" style="width:64%"></div></div>
+              <div class="quiz-score-num">9 / 14</div>
+            </div>
+            <div class="quiz-entry">
+              <div class="quiz-date">Mar 17, 2026</div>
+              <div class="quiz-result-pill bad">Moderate</div>
+              <div class="quiz-score-bar"><div class="quiz-score-fill bad" style="width:79%"></div></div>
+              <div class="quiz-score-num">11 / 14</div>
+            </div>
+            <div class="quiz-entry">
+              <div class="quiz-date">Mar 3, 2026</div>
+              <div class="quiz-result-pill sev">Physician</div>
+              <div class="quiz-score-bar"><div class="quiz-score-fill sev" style="width:93%"></div></div>
+              <div class="quiz-score-num">13 / 14</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Retake quiz panel (hidden until clicked) -->
+      <div class="card" id="retake-panel" style="display:none">
+        <div class="card-hdr">
+          <div class="card-hdr-title">Posture Self-Assessment</div>
+          <div class="card-hdr-badge gold">7 Questions</div>
+        </div>
+        <div class="card-body" id="retake-body"></div>
+      </div>
+
+      <div class="card">
+        <div class="card-hdr">
+          <div class="card-hdr-title">Improvement Timeline</div>
+        </div>
+        <div class="card-body">
+          <div class="timeline">
+            <div class="tl-item">
+              <div class="tl-dot">📋</div>
+              <div class="tl-content">
+                <div class="tl-date">Mar 3, 2026 · Start</div>
+                <div class="tl-text">Completed intake quiz. Score: <strong>13/14 (See Physician)</strong>. Consulted with Dr. Rowan, cleared to begin the Orthos program.</div>
+              </div>
+            </div>
+            <div class="tl-item">
+              <div class="tl-dot gold">📦</div>
+              <div class="tl-content">
+                <div class="tl-date">Mar 5, 2026</div>
+                <div class="tl-text">Device activated. Initial posture score: <strong>51 / 100</strong>. Supplements started same day.</div>
+              </div>
+            </div>
+            <div class="tl-item">
+              <div class="tl-dot green">✓</div>
+              <div class="tl-content">
+                <div class="tl-date">Mar 12, 2026 · Week 1 Complete</div>
+                <div class="tl-text">Completed the mobility phase. Posture score reached <strong>62</strong>. Shoulder tension notably reduced.</div>
+              </div>
+            </div>
+            <div class="tl-item">
+              <div class="tl-dot">📋</div>
+              <div class="tl-content">
+                <div class="tl-date">Mar 17, 2026 · Reassessment</div>
+                <div class="tl-text">Quiz score dropped to <strong>11/14 (Moderate)</strong> — significant improvement from Physician tier.</div>
+              </div>
+            </div>
+            <div class="tl-item">
+              <div class="tl-dot gold">💪</div>
+              <div class="tl-content">
+                <div class="tl-date">Mar 19, 2026 · Week 2 Begins</div>
+                <div class="tl-text">Entered strength phase. Added resistance band work. Device alerts dropping week-over-week.</div>
+              </div>
+            </div>
+            <div class="tl-item">
+              <div class="tl-dot green">📈</div>
+              <div class="tl-content">
+                <div class="tl-date">Mar 31, 2026 · Today</div>
+                <div class="tl-text">Posture score: <strong>72 / 100</strong>. Quiz score: <strong>9/14 (Moderate)</strong>. On track to reach Mild tier by end of Week 3.</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="card-hdr">
+          <div class="card-hdr-title">Overall Metrics</div>
+          <div class="card-hdr-badge green">28 days active</div>
+        </div>
+        <div class="card-body">
+          <div class="stat-row" style="grid-template-columns:1fr 1fr">
+            <div class="stat-card">
+              <div class="stat-label">Posture score</div>
+              <div class="stat-val">51→72</div>
+              <div class="stat-delta">↑ +21 points</div>
+            </div>
+            <div class="stat-card">
+              <div class="stat-label">Quiz score</div>
+              <div class="stat-val">13→9</div>
+              <div class="stat-delta">↑ −4 points (better)</div>
+            </div>
+            <div class="stat-card">
+              <div class="stat-label">Daily alerts</div>
+              <div class="stat-val">32→8</div>
+              <div class="stat-delta">↓ 75% reduction</div>
+            </div>
+            <div class="stat-card">
+              <div class="stat-label">Good posture %</div>
+              <div class="stat-val">41→71%</div>
+              <div class="stat-delta">↑ +30 percentage pts</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+
+  </main>
+
+  <!-- Mobile bottom nav -->
+  <div class="mobile-nav">
+    <button class="mobile-nav-btn active" id="mob-exercise" onclick="showTab('exercise',null,true)">
+      <svg viewBox="0 0 24 24"><path d="M3 12h4l3-9 4 18 3-9h4"/></svg>Exercise
+    </button>
+    <button class="mobile-nav-btn" id="mob-supplements" onclick="showTab('supplements',null,true)">
+      <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"/><path d="M12 2v3M12 19v3M4.22 4.22l2.12 2.12M17.66 17.66l2.12 2.12M2 12h3M19 12h3M4.22 19.78l2.12-2.12M17.66 6.34l2.12-2.12"/></svg>Supplements
+    </button>
+    <button class="mobile-nav-btn" id="mob-device" onclick="showTab('device',null,true)">
+      <svg viewBox="0 0 24 24"><rect x="5" y="2" width="14" height="20" rx="2"/><line x1="12" y1="18" x2="12" y2="18"/></svg>Device
+    </button>
+    <button class="mobile-nav-btn" id="mob-progress" onclick="showTab('progress',null,true)">
+      <svg viewBox="0 0 24 24"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>Progress
+    </button>
+  </div>
+
+</div><!-- /app -->
+
+<script>
+// ═══════════════════════════════════
+// DATA
+// ═══════════════════════════════════
+const USER = { name: 'Margaret Landry', initials: 'ML', firstName: 'Margaret' };
+
+const EXERCISES = {
+  14: [
+    { name: 'Wall Angels', sets: '3 × 12 reps', duration: '4 min', done: false },
+    { name: 'Chin Tucks with Band', sets: '3 × 15 reps', duration: '3 min', done: false },
+    { name: 'Romanian Deadlift', sets: '3 × 10 reps', duration: '4 min', done: false },
+    { name: 'Thoracic Extension on Roller', sets: '2 × 60 sec', duration: '3 min', done: false },
+    { name: 'Dead Bug Core Hold', sets: '3 × 30 sec', duration: '3 min', done: false },
+  ],
+  13: [
+    { name: 'Hip Flexor Stretch', sets: '3 × 45 sec each', duration: '5 min', done: true },
+    { name: 'Scapular Retractions', sets: '3 × 15 reps', duration: '3 min', done: true },
+    { name: 'Glute Bridge', sets: '3 × 12 reps', duration: '3 min', done: true },
+    { name: 'Cat-Cow Mobilisation', sets: '2 × 10 reps', duration: '2 min', done: true },
+    { name: 'Serratus Anterior Push-up', sets: '3 × 10 reps', duration: '3 min', done: true },
+  ],
+};
+
+const SUPPLEMENTS = [
+  { name: 'Vitamin D₃ + K₂', dose: '5,000 IU D₃ · 100 mcg K₂', time: 'With breakfast', icon: '☀️', am: false, pm: false },
+  { name: 'Magnesium Glycinate', dose: '400 mg', time: 'Before bed', icon: '🌙', am: false, pm: false },
+  { name: 'Collagen Peptides', dose: '10 g in water or coffee', time: 'Morning, on empty stomach', icon: '🦴', am: false, pm: false },
+];
+
+const POSTURE_DATA = [
+  { day:'Mar 18', score:55 }, { day:'Mar 19', score:58 }, { day:'Mar 20', score:57 },
+  { day:'Mar 21', score:60 }, { day:'Mar 22', score:62 }, { day:'Mar 23', score:61 },
+  { day:'Mar 24', score:64 }, { day:'Mar 25', score:65 }, { day:'Mar 26', score:66 },
+  { day:'Mar 27', score:67 }, { day:'Mar 28', score:68 }, { day:'Mar 29', score:69 },
+  { day:'Mar 30', score:68 }, { day:'Mar 31', score:72, today:true },
+];
+
+const QUIZ_QS = [
+  { q:'How often do you experience neck or upper back pain?', opts:['Rarely or never','A few times a week','Daily or almost always'] },
+  { q:'When standing against a wall, can your head, shoulders, and heels all touch at the same time?', opts:['Yes, easily','With some effort','No — not at all'] },
+  { q:'How many hours per day do you typically spend sitting?', opts:['Under 4 hours','4–8 hours','More than 8 hours'] },
+  { q:'Do people ever comment that you slouch or hunch forward?', opts:['Never','Occasionally','Often or always'] },
+  { q:'Do you feel lower back pain or stiffness when rising from a chair?', opts:['Rarely','Sometimes','Most of the time'] },
+  { q:'Do you feel shoulder or mid-back tension and fatigue by end of day?', opts:['Rarely','A few times a week','Every day'] },
+  { q:'Has a doctor, physio, or therapist ever said your posture needs attention?', opts:['Never','Once or twice','Yes, multiple times'] },
+];
+
+// ═══════════════════════════════════
+// LOGIN / LOGOUT
+// ═══════════════════════════════════
+function doLogin() {
+  const loginBtn = document.querySelector('.google-btn');
+  loginBtn.textContent = 'Signing in…';
+  loginBtn.disabled = true;
+  setTimeout(() => {
+    document.getElementById('login-screen').style.display = 'none';
+    const app = document.getElementById('app');
+    app.classList.add('visible');
+    document.getElementById('nav-avatar').textContent = USER.initials;
+    document.getElementById('user-first-name').textContent = USER.firstName;
+    initAll();
+  }, 1000);
+}
+
+function doLogout() {
+  document.getElementById('app').classList.remove('visible');
+  document.getElementById('app').style.display = 'none';
+  const ls = document.getElementById('login-screen');
+  ls.style.display = 'flex';
+  const btn = ls.querySelector('.google-btn');
+  btn.innerHTML = btn.innerHTML.replace('Signing in…','Continue with Google');
+  btn.disabled = false;
+  btn.innerHTML = `<svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" style="width:20px;height:20px;flex-shrink:0"><path d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z" fill="#4285F4"/><path d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z" fill="#34A853"/><path d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l3.66-2.84z" fill="#FBBC05"/><path d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z" fill="#EA4335"/></svg>Continue with Google`;
+}
+
+// ═══════════════════════════════════
+// TAB NAVIGATION
+// ═══════════════════════════════════
+function showTab(tab, btn, mobile) {
+  document.querySelectorAll('.section-page').forEach(p => p.classList.remove('active'));
+  document.getElementById('tab-' + tab).classList.add('active');
+  document.querySelectorAll('.nav-tab').forEach(t => t.classList.remove('active'));
+  document.querySelectorAll('.mobile-nav-btn').forEach(t => t.classList.remove('active'));
+  if (btn) btn.classList.add('active');
+  const mobBtn = document.getElementById('mob-' + tab);
+  if (mobBtn) mobBtn.classList.add('active');
+  // sync desktop tabs too
+  document.querySelectorAll('.nav-tab').forEach(t => {
+    if (t.getAttribute('onclick') && t.getAttribute('onclick').includes("'" + tab + "'")) t.classList.add('active');
+  });
+}
+
+// ═══════════════════════════════════
+// EXERCISE
+// ═══════════════════════════════════
+let currentDay = 14;
+let exercises = JSON.parse(JSON.stringify(EXERCISES));
+
+function renderExercises(day) {
+  const list = document.getElementById('exercise-list');
+  const dayExs = exercises[day] || exercises[14];
+  list.innerHTML = dayExs.map((ex, i) => `
+    <div class="ex-item ${ex.done ? 'done' : ''}" id="ex-${i}">
+      <div class="ex-check" onclick="toggleExercise(${i})">
+        <svg viewBox="0 0 12 12"><polyline points="2 6 5 9 10 3"/></svg>
+      </div>
+      <div class="ex-vid">
+        <div class="ex-vid-bg"></div>
+        <div class="ex-vid-play"><svg viewBox="0 0 10 10"><path d="M2 1l7 4.5-7 4.5V1z"/></svg></div>
+      </div>
+      <div class="ex-info">
+        <div class="ex-name">${ex.name}</div>
+        <div class="ex-meta">${ex.duration}</div>
+      </div>
+      <div class="ex-sets">${ex.sets}</div>
+    </div>
+  `).join('');
+  updateExProgress(day);
+}
+
+function updateExProgress(day) {
+  const dayExs = exercises[day] || exercises[14];
+  const done = dayExs.filter(e => e.done).length;
+  const pct = Math.round(done / dayExs.length * 100);
+  document.getElementById('ex-progress-bar').style.width = pct + '%';
+  document.getElementById('ex-progress-label').textContent = done + ' / ' + dayExs.length + ' complete';
+}
+
+function toggleExercise(i) {
+  const dayExs = exercises[currentDay] || exercises[14];
+  dayExs[i].done = !dayExs[i].done;
+  const item = document.getElementById('ex-' + i);
+  item.classList.toggle('done', dayExs[i].done);
+  updateExProgress(currentDay);
+}
+
+function selectDay(day, btn) {
+  currentDay = day;
+  document.querySelectorAll('.day-tab').forEach(t => { if(!t.classList.contains('done')) t.classList.remove('active'); });
+  // set only the clicked button as active
+  document.querySelectorAll('.day-tab').forEach(t => t.classList.remove('active'));
+  btn.classList.add('active');
+  renderExercises(day);
+}
+
+// ═══════════════════════════════════
+// SUPPLEMENTS
+// ═══════════════════════════════════
+function renderSupplements() {
+  const today = new Date();
+  document.getElementById('supp-today-date').textContent = today.toLocaleDateString('en-US', { weekday:'long', month:'long', day:'numeric' });
+
+  const grid = document.getElementById('supp-grid');
+  grid.innerHTML = SUPPLEMENTS.map((s, i) => `
+    <div class="supp-row" id="supp-row-${i}">
+      <div class="supp-icon">${s.icon}</div>
+      <div class="supp-detail">
+        <div class="supp-row-name">${s.name}</div>
+        <div class="supp-row-dose">${s.dose}</div>
+        <div class="supp-row-time">${s.time}</div>
+      </div>
+      <div class="supp-checks">
+        <button class="supp-check-btn ${s.am?'checked':''}" title="Morning" onclick="toggleSupp(${i},'am')" id="supp-am-${i}">
+          ${s.am ? '<svg viewBox="0 0 12 12"><polyline points="2 6 5 9 10 3"/></svg>' : 'AM'}
+        </button>
+        <button class="supp-check-btn ${s.pm?'checked':''}" title="Evening" onclick="toggleSupp(${i},'pm')" id="supp-pm-${i}">
+          ${s.pm ? '<svg viewBox="0 0 12 12"><polyline points="2 6 5 9 10 3"/></svg>' : 'PM'}
+        </button>
+      </div>
+    </div>
+  `).join('');
+}
+
+function toggleSupp(i, slot) {
+  SUPPLEMENTS[i][slot] = !SUPPLEMENTS[i][slot];
+  renderSupplements();
+  checkAllSupps();
+}
+
+function checkAllSupps() {
+  const allDone = SUPPLEMENTS.every(s => s.am || s.pm);
+  document.getElementById('supp-all-done-badge').style.display = allDone ? 'block' : 'none';
+}
+
+// ═══════════════════════════════════
+// POSTURE CHART
+// ═══════════════════════════════════
+function renderChart() {
+  const chart = document.getElementById('posture-chart');
+  const maxH = 120;
+  chart.innerHTML = POSTURE_DATA.map(d => {
+    const h = Math.round(d.score / 100 * maxH);
+    return `
+      <div class="bar-col">
+        <div class="bar ${d.today?'today':''}" style="height:${h}px">
+          <div class="bar-tooltip">${d.score}</div>
+        </div>
+        <div class="bar-x-label">${d.day.split(' ')[1]}</div>
+      </div>`;
+  }).join('');
+}
+
+// ═══════════════════════════════════
+// RETAKE QUIZ
+// ═══════════════════════════════════
+let qCur = 0, qAns = new Array(QUIZ_QS.length).fill(null);
+
+function showRetakeQuiz() {
+  const panel = document.getElementById('retake-panel');
+  panel.style.display = panel.style.display === 'none' ? '' : 'none';
+  if (panel.style.display !== 'none') {
+    qCur = 0; qAns = new Array(QUIZ_QS.length).fill(null);
+    renderDQuiz();
+    panel.scrollIntoView({ behavior: 'smooth', block: 'start' });
+  }
+}
+
+function renderDQuiz() {
+  const body = document.getElementById('retake-body');
+  const q = QUIZ_QS[qCur];
+  const prog = QUIZ_QS.map((_,i) =>
+    `<div class="dq-dot ${i<qCur?'done':i===qCur?'active':''}"></div>`
+  ).join('') + `<span style="font-size:11px;color:var(--ink-faint);margin-left:6px">${qCur+1} / ${QUIZ_QS.length}</span>`;
+
+  body.innerHTML = `
+    <div class="dquiz-prog">${prog}</div>
+    <div class="dquiz-q">${q.q}</div>
+    <div class="dquiz-opts">
+      ${q.opts.map((o,i) => `
+        <button class="dquiz-opt ${qAns[qCur]===i?'sel':''}" onclick="selectQAns(${i})">
+          <div class="dquiz-radio"></div>${o}
+        </button>`).join('')}
+    </div>
+    <div class="dquiz-nav">
+      <button class="dquiz-btn" onclick="dQuizNav(-1)" ${qCur===0?'disabled':''}>← Back</button>
+      <button class="dquiz-btn primary" onclick="dQuizNav(1)" ${qAns[qCur]===null?'disabled':''}>
+        ${qCur===QUIZ_QS.length-1?'See result':'Next →'}
+      </button>
+    </div>`;
+}
+
+function selectQAns(i) { qAns[qCur] = i; renderDQuiz(); }
+
+function dQuizNav(d) {
+  if (d===1 && qCur===QUIZ_QS.length-1) { showDQuizResult(); return; }
+  qCur = Math.max(0, Math.min(QUIZ_QS.length-1, qCur+d));
+  renderDQuiz();
+}
+
+function showDQuizResult() {
+  const score = qAns.reduce((s,a)=>s+(a||0),0);
+  const body = document.getElementById('retake-body');
+  let cls, label, title, desc;
+  if (score<=4) { cls='mild'; label='Mild posture issues'; title='Your posture is improving — you\'re on track.'; desc='Your score shows real progress. Continue the Orthos System through Week 3 and you should comfortably reach the Mild tier.'; }
+  else if (score<=9) { cls='bad'; label='Moderate posture problems'; title='Still moderate — but trending the right direction.'; desc='You\'ve improved from your intake score. Keep focusing on the daily exercises and consistent supplementation.'; }
+  else { cls='sev'; label='Consult your physician'; title='Still at a severity level requiring professional oversight.'; desc='Please continue to work with your physician or physical therapist alongside the Orthos program.'; }
+
+  body.innerHTML = `
+    <div style="border-radius:var(--r-sm);padding:16px 18px;display:flex;flex-direction:column;gap:6px;background:var(--${cls==='mild'?'green':cls==='bad'?'amber':'red'}-pale);border:1px solid rgba(${cls==='mild'?'58,107,74':cls==='bad'?'184,147,90':'168,50,50'},.25)">
+      <div style="font-size:10px;font-weight:600;letter-spacing:.1em;text-transform:uppercase;color:var(--${cls==='mild'?'green':cls==='bad'?'gold-deep':'red'})">${label}</div>
+      <div style="font-family:var(--serif);font-size:17px;color:var(--ink)">${title}</div>
+      <div style="font-size:13px;color:var(--ink-soft);line-height:1.5">${desc}</div>
+      <div style="font-size:12px;color:var(--ink-muted);margin-top:4px">Score: ${score} / 14</div>
+    </div>
+    <button class="dquiz-btn" style="margin-top:10px;width:100%;text-align:center" onclick="qCur=0;qAns=new Array(${QUIZ_QS.length}).fill(null);renderDQuiz()">Retake</button>`;
+}
+
+// ═══════════════════════════════════
+// INIT
+// ═══════════════════════════════════
+function initAll() {
+  renderExercises(14);
+  renderSupplements();
+  renderChart();
+}
+</script>
+</body>
+</html>
