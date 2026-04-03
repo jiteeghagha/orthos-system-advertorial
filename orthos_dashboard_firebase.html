@@ -1,0 +1,1187 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Orthos System — My Dashboard</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;1,400&family=DM+Sans:opsz,wght@9..40,300;9..40,400;9..40,500&display=swap" rel="stylesheet">
+<style>
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+:root {
+  --cream:      #f7f3ee;
+  --cream-dark: #ede8e0;
+  --cream-mid:  #f0ebe3;
+  --ink:        #1a1714;
+  --ink-soft:   #3d3830;
+  --ink-muted:  #7a7268;
+  --ink-faint:  #b0a99e;
+  --gold:       #b8935a;
+  --gold-light: #d4b07a;
+  --gold-pale:  #f5ead8;
+  --gold-deep:  #8a6a35;
+  --green:      #3a6b4a;
+  --green-pale: #eaf3ed;
+  --green-mid:  #c6dece;
+  --red:        #a83232;
+  --red-pale:   #fdf0f0;
+  --amber-pale: #fdf4e3;
+  --border:     rgba(26,23,20,0.10);
+  --border-md:  rgba(26,23,20,0.18);
+  --serif: 'Playfair Display', Georgia, serif;
+  --sans:  'DM Sans', system-ui, sans-serif;
+  --r:    12px;
+  --r-sm: 8px;
+}
+html { scroll-behavior: smooth; }
+body { font-family: var(--sans); background: var(--cream); color: var(--ink); font-size: 14px; line-height: 1.6; min-height: 100vh; }
+button { font-family: var(--sans); cursor: pointer; }
+
+/* ── Loading screen ── */
+#loading-screen {
+  position: fixed; inset: 0; background: var(--cream);
+  display: flex; align-items: center; justify-content: center; z-index: 200;
+  flex-direction: column; gap: 16px;
+}
+.loading-logo { width: 52px; height: 52px; border-radius: 50%; background: var(--ink); display: flex; align-items: center; justify-content: center; }
+.loading-logo svg { width: 22px; height: 22px; fill: var(--gold); }
+.loading-dots { display: flex; gap: 6px; }
+.loading-dot { width: 6px; height: 6px; border-radius: 50%; background: var(--ink-faint); animation: pulse 1.2s ease-in-out infinite; }
+.loading-dot:nth-child(2) { animation-delay: .2s; }
+.loading-dot:nth-child(3) { animation-delay: .4s; }
+@keyframes pulse { 0%,80%,100%{opacity:.3;transform:scale(.8)} 40%{opacity:1;transform:scale(1)} }
+
+/* ── Login screen ── */
+#login-screen {
+  min-height: 100vh; display: none; align-items: center; justify-content: center; padding: 24px;
+  background: var(--cream);
+  background-image: radial-gradient(ellipse 600px 400px at 80% 20%, rgba(184,147,90,0.08) 0%, transparent 70%),
+    radial-gradient(ellipse 400px 500px at 10% 80%, rgba(58,107,74,0.05) 0%, transparent 70%);
+}
+.login-card {
+  width: 100%; max-width: 400px; background: #fff; border: 1px solid var(--border-md);
+  border-radius: 20px; padding: 44px 40px; display: flex; flex-direction: column;
+  align-items: center; gap: 28px;
+  box-shadow: 0 8px 48px rgba(26,23,20,0.08), 0 1px 3px rgba(26,23,20,0.06);
+  animation: cardIn .5s cubic-bezier(0.34,1.56,0.64,1) both;
+}
+@keyframes cardIn { from{opacity:0;transform:translateY(16px) scale(0.97)} to{opacity:1;transform:none} }
+.login-logo { display: flex; flex-direction: column; align-items: center; gap: 8px; }
+.login-logo-mark {
+  width: 52px; height: 52px; border-radius: 50%; background: var(--ink);
+  display: flex; align-items: center; justify-content: center; position: relative;
+}
+.login-logo-mark::after { content:''; position:absolute; inset:3px; border-radius:50%; border:1px solid rgba(184,147,90,0.4); }
+.login-logo-mark svg { width: 22px; height: 22px; fill: var(--gold); }
+.login-logo-name { font-family: var(--serif); font-size: 22px; color: var(--ink); }
+.login-tagline { text-align: center; }
+.login-tagline h2 { font-family: var(--serif); font-size: 20px; color: var(--ink); margin-bottom: 6px; line-height: 1.25; }
+.login-tagline p { font-size: 13px; color: var(--ink-muted); line-height: 1.5; }
+.login-divider { width:100%; display:flex; align-items:center; gap:12px; }
+.login-divider::before,.login-divider::after { content:''; flex:1; height:1px; background:var(--border); }
+.login-divider span { font-size:11px; color:var(--ink-faint); letter-spacing:.06em; text-transform:uppercase; }
+.google-btn {
+  width: 100%; display: flex; align-items: center; justify-content: center; gap: 12px;
+  padding: 13px 20px; border: 1.5px solid var(--border-md); border-radius: var(--r-sm);
+  background: #fff; color: var(--ink-soft); font-size: 14px; font-weight: 500;
+  transition: border-color .2s, box-shadow .2s, transform .15s;
+}
+.google-btn:hover { box-shadow: 0 2px 12px rgba(26,23,20,0.08); transform: translateY(-1px); }
+.google-btn:disabled { opacity: .5; cursor: default; transform: none; }
+.google-btn svg { width: 20px; height: 20px; flex-shrink: 0; }
+.login-error { font-size: 12px; color: var(--red); text-align: center; background: var(--red-pale); padding: 8px 12px; border-radius: 6px; width: 100%; display: none; }
+.login-legal { font-size: 11px; color: var(--ink-faint); text-align: center; line-height: 1.6; }
+.login-legal a { color: var(--gold); }
+
+/* ── App shell ── */
+#app { display: none; min-height: 100vh; flex-direction: column; }
+#app.visible { display: flex; animation: fadeIn .4s ease both; }
+@keyframes fadeIn { from{opacity:0} to{opacity:1} }
+
+/* ── Top nav ── */
+.topnav {
+  position: sticky; top: 0; z-index: 100;
+  background: rgba(247,243,238,0.92); backdrop-filter: blur(12px);
+  border-bottom: 1px solid var(--border); padding: 0 24px; height: 58px;
+  display: flex; align-items: center; justify-content: space-between; gap: 16px;
+}
+.nav-logo { display: flex; align-items: center; gap: 10px; font-family: var(--serif); font-size: 18px; color: var(--ink); }
+.nav-logo-mark { flex-shrink: 0; }
+.nav-logo-mark img { width: 40px; height: 40px; display: block; object-fit: contain; }
+.nav-center { display: flex; gap: 4px; }
+.nav-tab { padding: 6px 14px; border-radius: 20px; border: none; background: none; font-size: 13px; color: var(--ink-muted); transition: background .15s, color .15s; white-space: nowrap; }
+.nav-tab:hover { background: var(--cream-dark); color: var(--ink); }
+.nav-tab.active { background: var(--ink); color: #fff; font-weight: 500; }
+.nav-right { display: flex; align-items: center; gap: 12px; }
+.nav-avatar {
+  width: 34px; height: 34px; border-radius: 50%; background: var(--gold-pale);
+  border: 1.5px solid rgba(184,147,90,0.3); overflow: hidden;
+  display: flex; align-items: center; justify-content: center;
+  font-family: var(--serif); font-size: 13px; color: var(--gold-deep); font-weight: 600; cursor: pointer;
+}
+.nav-avatar img { width: 100%; height: 100%; object-fit: cover; border-radius: 50%; }
+.logout-btn { font-size: 12px; color: var(--ink-faint); background: none; border: none; padding: 4px 8px; border-radius: 4px; transition: color .15s, background .15s; }
+.logout-btn:hover { color: var(--ink); background: var(--cream-dark); }
+
+.main { flex: 1; padding: 32px 24px 60px; max-width: 820px; margin: 0 auto; width: 100%; }
+
+/* ── Welcome banner ── */
+.welcome-banner {
+  background: var(--ink); border-radius: var(--r); padding: 28px 32px;
+  margin-bottom: 28px; display: flex; align-items: center; justify-content: space-between;
+  gap: 20px; position: relative; overflow: hidden;
+}
+.welcome-banner::before { content:''; position:absolute; top:-60px; right:-40px; width:200px; height:200px; border-radius:50%; background:radial-gradient(circle,rgba(184,147,90,0.18) 0%,transparent 70%); }
+.welcome-banner::after { content:''; position:absolute; bottom:-80px; left:30%; width:260px; height:260px; border-radius:50%; background:radial-gradient(circle,rgba(58,107,74,0.1) 0%,transparent 70%); }
+.welcome-text { position: relative; z-index: 1; }
+.welcome-label { font-size: 11px; letter-spacing: .12em; text-transform: uppercase; color: var(--gold); font-weight: 500; margin-bottom: 4px; }
+.welcome-name { font-family: var(--serif); font-size: 26px; color: #fff; line-height: 1.2; margin-bottom: 6px; }
+.welcome-name em { color: var(--gold-light); font-style: italic; }
+.welcome-sub { font-size: 13px; color: rgba(255,255,255,0.5); }
+.welcome-score-ring { position: relative; z-index: 1; flex-shrink: 0; text-align: center; }
+.ring-label { font-family: var(--serif); font-size: 22px; color: #fff; position: absolute; top: 50%; left: 50%; transform: translate(-50%,-54%); }
+.ring-sub { font-size: 10px; color: rgba(255,255,255,0.45); letter-spacing: .08em; text-transform: uppercase; margin-top: 4px; }
+
+/* ── Section pages ── */
+.section-page { display: none; flex-direction: column; gap: 20px; }
+.section-page.active { display: flex; animation: fadeUp .3s ease both; }
+@keyframes fadeUp { from{opacity:0;transform:translateY(8px)} to{opacity:1;transform:none} }
+
+/* ── Page header ── */
+.page-header { margin-bottom: 4px; }
+.page-header-label { font-size: 10px; letter-spacing: .14em; text-transform: uppercase; color: var(--ink-faint); font-weight: 500; margin-bottom: 4px; }
+.page-header-title { font-family: var(--serif); font-size: 26px; color: var(--ink); line-height: 1.2; }
+.page-header-sub { font-size: 13px; color: var(--ink-muted); margin-top: 4px; }
+
+/* ── Cards ── */
+.card { background: #fff; border: 1px solid var(--border); border-radius: var(--r); overflow: hidden; transition: box-shadow .2s; }
+.card:hover { box-shadow: 0 4px 24px rgba(26,23,20,0.07); }
+.card-hdr { padding: 18px 20px 14px; display: flex; align-items: center; justify-content: space-between; border-bottom: 1px solid var(--border); gap: 12px; flex-wrap: wrap; }
+.card-hdr-title { font-family: var(--serif); font-size: 17px; color: var(--ink); }
+.card-hdr-badge { font-size: 10px; font-weight: 500; letter-spacing: .08em; text-transform: uppercase; padding: 3px 9px; border-radius: 20px; white-space: nowrap; }
+.card-hdr-badge.green { background: var(--green-pale); color: var(--green); }
+.card-hdr-badge.gold { background: var(--gold-pale); color: var(--gold-deep); }
+.card-hdr-badge.ink { background: var(--cream-dark); color: var(--ink-muted); }
+.card-body { padding: 18px 20px; }
+
+/* ── Stat row ── */
+.stat-row { display: grid; grid-template-columns: repeat(3,1fr); gap: 12px; }
+.stat-card { background: var(--cream); border: 1px solid var(--border); border-radius: var(--r-sm); padding: 14px 16px; }
+.stat-label { font-size: 10px; text-transform: uppercase; letter-spacing: .1em; color: var(--ink-faint); font-weight: 500; margin-bottom: 4px; }
+.stat-val { font-family: var(--serif); font-size: 26px; color: var(--ink); line-height: 1; }
+.stat-val span { font-family: var(--sans); font-size: 13px; color: var(--ink-muted); margin-left: 2px; }
+.stat-delta { font-size: 11px; color: var(--green); margin-top: 3px; }
+.stat-delta.down { color: var(--red); }
+
+/* ── Day tabs ── */
+.day-tabs { display: flex; gap: 6px; overflow-x: auto; padding-bottom: 2px; }
+.day-tab { flex-shrink:0; padding:6px 14px; border-radius:20px; border:1px solid var(--border); background:#fff; font-size:12px; color:var(--ink-muted); transition:all .15s; }
+.day-tab:hover { border-color:var(--border-md); color:var(--ink); }
+.day-tab.active { background:var(--ink); color:#fff; border-color:transparent; }
+.day-tab.done { background:var(--green-pale); color:var(--green); border-color:var(--green-mid); }
+
+/* ── Exercise list ── */
+.exercise-list { display: flex; flex-direction: column; gap: 10px; margin-top: 16px; }
+.ex-item { display:flex; align-items:center; gap:14px; padding:12px 14px; border:1px solid var(--border); border-radius:var(--r-sm); background:var(--cream); transition:border-color .2s; }
+.ex-item:hover { border-color: var(--border-md); }
+.ex-item.done { opacity: .6; }
+.ex-item.done .ex-name { text-decoration: line-through; color: var(--ink-faint); }
+.ex-check { width:22px; height:22px; border-radius:50%; border:1.5px solid var(--border-md); background:#fff; flex-shrink:0; display:flex; align-items:center; justify-content:center; cursor:pointer; transition:all .2s; }
+.ex-item.done .ex-check { background:var(--green); border-color:var(--green); }
+.ex-check svg { width:11px; height:11px; stroke:#fff; fill:none; stroke-width:2.5; stroke-linecap:round; stroke-linejoin:round; opacity:0; }
+.ex-item.done .ex-check svg { opacity:1; }
+.ex-vid { width:60px; height:44px; background:var(--ink); border-radius:6px; display:flex; align-items:center; justify-content:center; flex-shrink:0; cursor:pointer; overflow:hidden; position:relative; }
+.ex-vid-bg { position:absolute; inset:0; background:linear-gradient(135deg,#2e2a26,#1a1714); }
+.ex-vid-play { position:relative; width:20px; height:20px; border-radius:50%; background:rgba(255,255,255,.18); border:1px solid rgba(255,255,255,.3); display:flex; align-items:center; justify-content:center; transition:background .2s; }
+.ex-vid:hover .ex-vid-play { background:rgba(255,255,255,.28); }
+.ex-vid-play svg { width:8px; height:8px; fill:#fff; margin-left:1px; }
+.ex-info { flex:1; min-width:0; }
+.ex-name { font-size:13px; font-weight:500; color:var(--ink); margin-bottom:2px; }
+.ex-meta { font-size:11px; color:var(--ink-muted); }
+.ex-sets { font-size:11px; font-weight:500; color:var(--ink-muted); white-space:nowrap; flex-shrink:0; }
+.progress-bar-wrap { margin-top: 14px; }
+.progress-bar-label { display:flex; justify-content:space-between; font-size:11px; color:var(--ink-muted); margin-bottom:6px; }
+.progress-bar-track { height:5px; background:var(--cream-dark); border-radius:3px; overflow:hidden; }
+.progress-bar-fill { height:100%; background:var(--green); border-radius:3px; transition:width .6s cubic-bezier(.4,0,.2,1); }
+
+/* ── Supplements ── */
+.supp-grid { display: flex; flex-direction: column; gap: 10px; }
+.supp-row { display:flex; align-items:center; gap:14px; padding:14px 16px; border:1px solid var(--border); border-radius:var(--r-sm); background:var(--cream); transition:border-color .2s; }
+.supp-row:hover { border-color:var(--border-md); }
+.supp-icon { width:40px; height:40px; border-radius:10px; display:flex; align-items:center; justify-content:center; font-size:20px; flex-shrink:0; }
+.supp-detail { flex:1; min-width:0; }
+.supp-row-name { font-size:13px; font-weight:500; color:var(--ink); }
+.supp-row-dose { font-size:11px; color:var(--ink-muted); margin-top:1px; }
+.supp-row-time { font-size:11px; color:var(--ink-faint); }
+.supp-checks { display:flex; gap:6px; flex-shrink:0; }
+.supp-check-btn { width:30px; height:30px; border-radius:50%; border:1.5px solid var(--border-md); background:#fff; font-size:10px; font-weight:600; color:var(--ink-muted); transition:all .2s; display:flex; align-items:center; justify-content:center; }
+.supp-check-btn:hover { border-color:var(--gold); color:var(--gold); background:var(--gold-pale); }
+.supp-check-btn.checked { background:var(--ink); border-color:var(--ink); color:#fff; }
+.supp-check-btn svg { width:12px; height:12px; stroke:#fff; fill:none; stroke-width:2.5; stroke-linecap:round; stroke-linejoin:round; }
+.streak-banner { display:flex; align-items:center; gap:14px; padding:14px 18px; background:linear-gradient(135deg,var(--gold-pale),#fdf6e8); border:1px solid rgba(184,147,90,0.25); border-radius:var(--r-sm); }
+.streak-num { font-family:var(--serif); font-size:32px; color:var(--gold-deep); line-height:1; }
+
+/* ── Charts ── */
+.chart-wrap { margin-top: 16px; position: relative; }
+.chart-label-y { position:absolute; left:0; top:0; bottom:24px; display:flex; flex-direction:column; justify-content:space-between; font-size:10px; color:var(--ink-faint); text-align:right; width:26px; }
+.chart-inner { margin-left: 34px; }
+.bar-chart { display:flex; align-items:flex-end; gap:5px; height:120px; }
+.bar-col { flex:1; display:flex; flex-direction:column; align-items:center; gap:4px; }
+.bar { width:100%; border-radius:4px 4px 0 0; transition:height .6s cubic-bezier(.4,0,.2,1),background .3s; position:relative; cursor:pointer; min-height:4px; }
+.bar.today { background:var(--gold); }
+.bar:not(.today) { background:var(--cream-dark); }
+.bar:hover { filter:brightness(0.9); }
+.bar-tooltip { display:none; position:absolute; bottom:calc(100% + 6px); left:50%; transform:translateX(-50%); background:var(--ink); color:#fff; font-size:11px; padding:4px 8px; border-radius:4px; white-space:nowrap; z-index:10; }
+.bar:hover .bar-tooltip { display:block; }
+.bar-x-label { font-size:10px; color:var(--ink-faint); text-align:center; }
+
+/* ── Device info ── */
+.device-info-grid { display:grid; grid-template-columns:1fr 1fr; gap:10px; margin-top:16px; }
+.device-info-item { padding:12px 14px; background:var(--cream); border:1px solid var(--border); border-radius:var(--r-sm); }
+.device-info-label { font-size:10px; text-transform:uppercase; letter-spacing:.1em; color:var(--ink-faint); font-weight:500; margin-bottom:4px; }
+.device-info-val { font-size:15px; font-weight:500; color:var(--ink); }
+.battery-wrap { display:flex; align-items:center; gap:8px; }
+.battery-bar { flex:1; height:8px; background:var(--cream-dark); border-radius:4px; overflow:hidden; }
+.battery-fill { height:100%; background:var(--green); border-radius:4px; }
+
+/* ── Quiz / progress ── */
+.quiz-history { display:flex; flex-direction:column; gap:10px; }
+.quiz-entry { display:flex; align-items:center; gap:14px; padding:14px 16px; border:1px solid var(--border); border-radius:var(--r-sm); background:var(--cream); }
+.quiz-date { font-size:12px; color:var(--ink-muted); min-width:80px; }
+.quiz-result-pill { font-size:10px; font-weight:600; letter-spacing:.08em; text-transform:uppercase; padding:3px 10px; border-radius:20px; flex-shrink:0; }
+.quiz-result-pill.mild { background:var(--green-pale); color:var(--green); }
+.quiz-result-pill.moderate { background:var(--amber-pale); color:#7a5a20; }
+.quiz-result-pill.severe { background:var(--red-pale); color:var(--red); }
+.quiz-score-bar { flex:1; height:6px; background:var(--cream-dark); border-radius:3px; overflow:hidden; }
+.quiz-score-fill { height:100%; border-radius:3px; }
+.quiz-score-fill.mild { background:var(--green); }
+.quiz-score-fill.moderate { background:var(--gold); }
+.quiz-score-fill.severe { background:var(--red); }
+.quiz-score-num { font-size:12px; font-weight:500; color:var(--ink-muted); min-width:36px; text-align:right; }
+
+/* ── Live quiz ── */
+.dquiz-prog { display:flex; gap:5px; align-items:center; margin-bottom:14px; }
+.dq-dot { flex:1; height:3px; border-radius:2px; background:var(--cream-dark); }
+.dq-dot.done { background:var(--ink); }
+.dq-dot.active { background:var(--gold); }
+.dquiz-q { font-family:var(--serif); font-size:17px; color:var(--ink); margin-bottom:14px; line-height:1.35; }
+.dquiz-opts { display:flex; flex-direction:column; gap:8px; margin-bottom:16px; }
+.dquiz-opt { display:flex; align-items:center; gap:12px; padding:11px 14px; border:1px solid var(--border); border-radius:var(--r-sm); background:var(--cream); cursor:pointer; font-size:13px; color:var(--ink-soft); transition:all .15s; text-align:left; width:100%; }
+.dquiz-opt:hover { border-color:var(--border-md); background:var(--cream-dark); }
+.dquiz-opt.sel { border-color:var(--gold); background:var(--gold-pale); font-weight:500; color:var(--ink); }
+.dquiz-radio { width:16px; height:16px; border-radius:50%; border:1.5px solid var(--border-md); flex-shrink:0; transition:all .15s; display:flex; align-items:center; justify-content:center; }
+.dquiz-opt.sel .dquiz-radio { background:var(--gold); border-color:var(--gold); }
+.dquiz-opt.sel .dquiz-radio::after { content:''; width:6px; height:6px; border-radius:50%; background:#fff; }
+.dquiz-nav { display:flex; justify-content:space-between; align-items:center; }
+.dquiz-btn { padding:8px 18px; border:1px solid var(--border-md); border-radius:var(--r-sm); background:#fff; color:var(--ink); font-size:13px; font-weight:500; transition:all .15s; }
+.dquiz-btn:hover { background:var(--cream-dark); }
+.dquiz-btn:disabled { opacity:.3; cursor:default; }
+.dquiz-btn.primary { background:var(--ink); color:#fff; border-color:transparent; }
+.dquiz-btn.primary:hover { background:#2e2a26; }
+.retake-quiz-btn { padding:10px 18px; border:1.5px solid var(--border-md); border-radius:var(--r-sm); background:#fff; color:var(--ink); font-size:13px; font-weight:500; transition:all .15s; display:flex; align-items:center; gap:8px; }
+.retake-quiz-btn:hover { background:var(--cream-dark); transform:translateY(-1px); }
+
+/* ── Timeline ── */
+.timeline { display:flex; flex-direction:column; position:relative; }
+.timeline::before { content:''; position:absolute; left:16px; top:20px; bottom:20px; width:1px; background:var(--border); }
+.tl-item { display:flex; gap:16px; align-items:flex-start; padding:10px 0; }
+.tl-dot { width:34px; height:34px; border-radius:50%; flex-shrink:0; display:flex; align-items:center; justify-content:center; border:1.5px solid var(--border-md); background:#fff; position:relative; z-index:1; font-size:13px; }
+.tl-dot.gold { background:var(--gold-pale); border-color:rgba(184,147,90,0.4); }
+.tl-dot.green { background:var(--green-pale); border-color:rgba(58,107,74,0.3); }
+.tl-content { flex:1; padding-top:6px; }
+.tl-date { font-size:10px; color:var(--ink-faint); text-transform:uppercase; letter-spacing:.1em; margin-bottom:2px; }
+.tl-text { font-size:13px; color:var(--ink-soft); line-height:1.45; }
+.tl-text strong { color:var(--ink); font-weight:500; }
+
+/* ── CTA btn ── */
+.cta-btn { display:block; width:100%; padding:14px; background:var(--ink); color:#fff; border:none; border-radius:var(--r-sm); font-size:14px; font-weight:500; cursor:pointer; transition:background .2s,transform .15s; text-align:center; }
+.cta-btn:hover { background:#2e2a26; transform:translateY(-1px); }
+
+/* ── Saving indicator ── */
+.save-indicator { position:fixed; bottom:24px; right:24px; background:var(--ink); color:#fff; font-size:12px; padding:8px 16px; border-radius:20px; opacity:0; transform:translateY(8px); transition:opacity .3s,transform .3s; pointer-events:none; z-index:200; }
+.save-indicator.show { opacity:1; transform:translateY(0); }
+
+/* ── Skeleton loaders ── */
+.skeleton { background:linear-gradient(90deg,var(--cream-dark) 25%,var(--cream-mid) 50%,var(--cream-dark) 75%); background-size:200% 100%; animation:shimmer 1.4s infinite; border-radius:6px; }
+@keyframes shimmer { 0%{background-position:200% 0} 100%{background-position:-200% 0} }
+
+/* ── Error state ── */
+.error-banner { background:var(--red-pale); border:1px solid rgba(168,50,50,.25); border-radius:var(--r-sm); padding:12px 16px; font-size:13px; color:var(--red); display:flex; align-items:center; gap:8px; }
+
+/* ── Responsive ── */
+@media (max-width:600px) {
+  .nav-center { display:none; }
+  .main { padding:20px 16px 80px; }
+  .stat-row { grid-template-columns:1fr 1fr; }
+  .welcome-score-ring { display:none; }
+  .welcome-banner { padding:22px 20px; }
+  .device-info-grid { grid-template-columns:1fr; }
+}
+.mobile-nav { display:none; position:fixed; bottom:0; left:0; right:0; background:rgba(247,243,238,0.96); backdrop-filter:blur(12px); border-top:1px solid var(--border); padding:8px 0 env(safe-area-inset-bottom,8px); z-index:100; justify-content:space-around; }
+@media (max-width:600px) { .mobile-nav { display:flex; } }
+.mobile-nav-btn { flex:1; display:flex; flex-direction:column; align-items:center; gap:3px; background:none; border:none; padding:4px 0; color:var(--ink-faint); font-size:10px; font-weight:500; transition:color .15s; }
+.mobile-nav-btn svg { width:20px; height:20px; stroke:currentColor; fill:none; stroke-width:1.5; stroke-linecap:round; stroke-linejoin:round; }
+.mobile-nav-btn.active { color:var(--ink); }
+</style>
+</head>
+<body>
+
+<!-- Loading -->
+<div id="loading-screen">
+  <div class="loading-logo"><svg viewBox="0 0 24 24"><path d="M12 2C7 2 4 6 4 10c0 5 4 9 8 12 4-3 8-7 8-12 0-4-3-8-8-8z"/></svg></div>
+  <div class="loading-dots"><div class="loading-dot"></div><div class="loading-dot"></div><div class="loading-dot"></div></div>
+</div>
+
+<!-- Login -->
+<div id="login-screen">
+  <div class="login-card">
+    <div class="login-logo">
+      <div class="login-logo-mark"><svg viewBox="0 0 24 24"><path d="M12 2C7 2 4 6 4 10c0 5 4 9 8 12 4-3 8-7 8-12 0-4-3-8-8-8z"/></svg></div>
+      <div class="login-logo-name">Orthos System</div>
+    </div>
+    <div class="login-tagline">
+      <h2>Welcome back to your personal recovery program</h2>
+      <p>Sign in to access your personalized exercise plan, supplement tracker, device data, and progress history.</p>
+    </div>
+    <div class="login-divider"><span>Sign in with</span></div>
+    <button class="google-btn" id="google-signin-btn" onclick="signInWithGoogle()">
+      <svg viewBox="0 0 24 24"><path d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z" fill="#4285F4"/><path d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z" fill="#34A853"/><path d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l3.66-2.84z" fill="#FBBC05"/><path d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z" fill="#EA4335"/></svg>
+      Continue with Google
+    </button>
+    <div class="login-error" id="login-error"></div>
+    <div class="login-legal">By signing in you agree to Orthos Health's <a href="#">Terms of Service</a> and <a href="#">Privacy Policy</a>.</div>
+  </div>
+</div>
+
+<!-- App -->
+<div id="app">
+  <nav class="topnav">
+    <div class="nav-logo">
+      <div class="nav-logo-mark"><img src="assets/logo.png" alt="Orthos logo"></div>
+      Orthos
+    </div>
+    <div class="nav-center">
+      <button class="nav-tab active" onclick="showTab('exercise',this)">Exercise</button>
+      <button class="nav-tab" onclick="showTab('supplements',this)">Supplements</button>
+      <button class="nav-tab" onclick="showTab('device',this)">Device</button>
+      <button class="nav-tab" onclick="showTab('progress',this)">Progress</button>
+    </div>
+    <div class="nav-right">
+      <div class="nav-avatar" id="nav-avatar">?</div>
+      <button class="logout-btn" onclick="signOut()">Sign out</button>
+    </div>
+  </nav>
+
+  <main class="main">
+    <div class="welcome-banner">
+      <div class="welcome-text">
+        <div class="welcome-label" id="banner-label">Loading…</div>
+        <div class="welcome-name">Good <span id="time-greeting">morning</span>, <em id="user-first-name">…</em></div>
+        <div class="welcome-sub" id="banner-sub"></div>
+      </div>
+      <div class="welcome-score-ring">
+        <svg width="80" height="80" viewBox="0 0 80 80">
+          <circle cx="40" cy="40" r="32" fill="none" stroke="rgba(255,255,255,0.08)" stroke-width="6"/>
+          <circle id="score-ring-arc" cx="40" cy="40" r="32" fill="none" stroke="rgba(184,147,90,0.7)" stroke-width="6"
+            stroke-dasharray="201" stroke-dashoffset="201" stroke-linecap="round" transform="rotate(-90 40 40)" style="transition:stroke-dashoffset 1s ease"/>
+        </svg>
+        <div class="ring-label" id="score-ring-val">–</div>
+        <div class="ring-sub">Posture Score</div>
+      </div>
+    </div>
+
+    <!-- Exercise tab -->
+    <div class="section-page active" id="tab-exercise">
+      <div class="page-header">
+        <div class="page-header-label">Step One</div>
+        <div class="page-header-title">Your Exercise Plan</div>
+        <div class="page-header-sub">Personalized 21-Day Postural Reset</div>
+      </div>
+      <div class="stat-row">
+        <div class="stat-card"><div class="stat-label">Sessions done</div><div class="stat-val" id="ex-stat-done">–</div><div class="stat-delta" id="ex-stat-delta"></div></div>
+        <div class="stat-card"><div class="stat-label">Streak</div><div class="stat-val" id="ex-stat-streak">–</div><div class="stat-delta">days</div></div>
+        <div class="stat-card"><div class="stat-label">Program day</div><div class="stat-val" id="ex-stat-day">–</div><div class="stat-delta" id="ex-stat-week"></div></div>
+      </div>
+      <div class="card">
+        <div class="card-hdr">
+          <div class="card-hdr-title" id="ex-card-title">Today's Session</div>
+          <div class="card-hdr-badge gold" id="ex-card-badge">Loading</div>
+        </div>
+        <div class="card-body">
+          <div class="day-tabs" id="day-tabs"></div>
+          <div class="exercise-list" id="exercise-list"><div class="skeleton" style="height:60px"></div><div class="skeleton" style="height:60px;margin-top:10px"></div></div>
+          <div class="progress-bar-wrap">
+            <div class="progress-bar-label"><span>Session progress</span><span id="ex-progress-label">0 / 0</span></div>
+            <div class="progress-bar-track"><div class="progress-bar-fill" id="ex-progress-bar" style="width:0%"></div></div>
+          </div>
+        </div>
+      </div>
+      <div class="card">
+        <div class="card-hdr"><div class="card-hdr-title">Program Overview</div><div class="card-hdr-badge ink">21 Days</div></div>
+        <div class="card-body">
+          <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px">
+            <div style="padding:12px;background:var(--green-pale);border:1px solid var(--green-mid);border-radius:var(--r-sm);text-align:center"><div style="font-size:10px;text-transform:uppercase;letter-spacing:.1em;color:var(--green);font-weight:500;margin-bottom:4px">Week 1</div><div style="font-family:var(--serif);font-size:15px">Mobility</div><div id="w1-status" style="font-size:11px;color:var(--ink-muted);margin-top:2px"></div></div>
+            <div style="padding:12px;background:var(--gold-pale);border:1px solid rgba(184,147,90,.3);border-radius:var(--r-sm);text-align:center"><div style="font-size:10px;text-transform:uppercase;letter-spacing:.1em;color:var(--gold-deep);font-weight:500;margin-bottom:4px">Week 2</div><div style="font-family:var(--serif);font-size:15px">Strength</div><div id="w2-status" style="font-size:11px;color:var(--gold-deep);margin-top:2px"></div></div>
+            <div style="padding:12px;background:var(--cream);border:1px solid var(--border);border-radius:var(--r-sm);text-align:center"><div style="font-size:10px;text-transform:uppercase;letter-spacing:.1em;color:var(--ink-faint);font-weight:500;margin-bottom:4px">Week 3</div><div style="font-family:var(--serif);font-size:15px;color:var(--ink-muted)">Endurance</div><div id="w3-status" style="font-size:11px;color:var(--ink-faint);margin-top:2px"></div></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Supplements tab -->
+    <div class="section-page" id="tab-supplements">
+      <div class="page-header">
+        <div class="page-header-label">Step Two</div>
+        <div class="page-header-title">Supplement Tracker</div>
+        <div class="page-header-sub">Check off each supplement as you take it. Consistency is everything.</div>
+      </div>
+      <div class="streak-banner">
+        <div class="streak-num" id="supp-streak">–</div>
+        <div><strong style="font-size:13px;font-weight:500;color:var(--ink);display:block;margin-bottom:2px">Day supplement streak 🔥</strong><span style="font-size:12px;color:var(--ink-muted)">Keep your streak alive — take your supplements today.</span></div>
+      </div>
+      <div class="card">
+        <div class="card-hdr">
+          <div class="card-hdr-title">Today — <span id="supp-today-date"></span></div>
+          <div class="card-hdr-badge green" id="supp-all-done-badge" style="display:none">All done ✓</div>
+        </div>
+        <div class="card-body"><div class="supp-grid" id="supp-grid"><div class="skeleton" style="height:70px"></div><div class="skeleton" style="height:70px;margin-top:10px"></div><div class="skeleton" style="height:70px;margin-top:10px"></div></div></div>
+      </div>
+      <div class="card">
+        <div class="card-hdr"><div class="card-hdr-title">Why these three?</div></div>
+        <div class="card-body" style="display:flex;flex-direction:column;gap:14px">
+          <div style="display:flex;gap:12px;align-items:flex-start"><div style="font-size:24px;flex-shrink:0;width:36px;text-align:center">☀️</div><div><div style="font-size:13px;font-weight:500;margin-bottom:3px">D₃ + K₂ — The Foundation</div><div style="font-size:12px;color:var(--ink-soft);line-height:1.5">D₃ stimulates calcium absorption; K₂ ensures it goes into bone. Together they build the skeletal density your posture depends on. Most adults over 40 are severely deficient.</div></div></div>
+          <div style="display:flex;gap:12px;align-items:flex-start"><div style="font-size:24px;flex-shrink:0;width:36px;text-align:center">🌙</div><div><div style="font-size:13px;font-weight:500;margin-bottom:3px">Magnesium Glycinate — The Relaxer</div><div style="font-size:12px;color:var(--ink-soft);line-height:1.5">Chronically tight postural muscles pull the spine out of alignment. Magnesium acts as a natural muscle relaxant and helps the nervous system downregulate the tension patterns that cause poor posture.</div></div></div>
+          <div style="display:flex;gap:12px;align-items:flex-start"><div style="font-size:24px;flex-shrink:0;width:36px;text-align:center">🦴</div><div><div style="font-size:13px;font-weight:500;margin-bottom:3px">Collagen Peptides — The Rebuild</div><div style="font-size:12px;color:var(--ink-soft);line-height:1.5">Ligaments, tendons, and intervertebral discs are made largely of collagen. Supplementing provides the raw material to rebuild the connective tissue that holds spinal alignment.</div></div></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Device tab -->
+    <div class="section-page" id="tab-device">
+      <div class="page-header">
+        <div class="page-header-label">Step Three</div>
+        <div class="page-header-title">Device &amp; Posture Scores</div>
+        <div class="page-header-sub">Data from your Orthos Postural Trainer</div>
+      </div>
+      <div class="stat-row">
+        <div class="stat-card"><div class="stat-label">Today's score</div><div class="stat-val" id="dev-score">–</div><div class="stat-delta" id="dev-score-delta"></div></div>
+        <div class="stat-card"><div class="stat-label">Good posture</div><div class="stat-val" id="dev-good-pct">–</div><div class="stat-delta">of wear time</div></div>
+        <div class="stat-card"><div class="stat-label">Alerts today</div><div class="stat-val" id="dev-alerts">–</div><div class="stat-delta" id="dev-alerts-delta"></div></div>
+      </div>
+      <div class="card">
+        <div class="card-hdr"><div class="card-hdr-title">Posture Score — Last 14 Days</div><div class="card-hdr-badge green" id="chart-trend">Loading</div></div>
+        <div class="card-body">
+          <div class="chart-wrap">
+            <div class="chart-label-y"><span>100</span><span>75</span><span>50</span><span>25</span><span>0</span></div>
+            <div class="chart-inner"><div class="bar-chart" id="posture-chart"><div class="skeleton" style="width:100%;height:120px;border-radius:6px"></div></div></div>
+          </div>
+        </div>
+      </div>
+      <div class="card">
+        <div class="card-hdr"><div class="card-hdr-title">Device Status</div><div class="card-hdr-badge green">Connected</div></div>
+        <div class="card-body" style="display:flex;flex-direction:column;gap:14px">
+          <div class="device-info-grid">
+            <div class="device-info-item"><div class="device-info-label">Battery</div><div class="battery-wrap" style="margin-top:4px"><div class="battery-bar"><div class="battery-fill" id="dev-battery-fill" style="width:73%"></div></div><div style="font-size:13px;font-weight:500;color:var(--green);min-width:36px;text-align:right" id="dev-battery-label">73%</div></div></div>
+            <div class="device-info-item"><div class="device-info-label">Last sync</div><div class="device-info-val" style="color:var(--gold-deep)" id="dev-sync">–</div></div>
+            <div class="device-info-item"><div class="device-info-label">Firmware</div><div class="device-info-val">v2.4.1</div></div>
+            <div class="device-info-item"><div class="device-info-label">Wear time today</div><div class="device-info-val" style="color:var(--green)" id="dev-wear">–</div></div>
+            <div class="device-info-item"><div class="device-info-label">Sensitivity</div><div class="device-info-val">Medium</div></div>
+            <div class="device-info-item"><div class="device-info-label">Alert mode</div><div class="device-info-val">Vibration</div></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Progress tab -->
+    <div class="section-page" id="tab-progress">
+      <div class="page-header">
+        <div class="page-header-label">Your Journey</div>
+        <div class="page-header-title">Quiz Results &amp; Progress</div>
+        <div class="page-header-sub">Track how your posture assessment has changed since you started</div>
+      </div>
+      <div class="card">
+        <div class="card-hdr">
+          <div class="card-hdr-title">Assessment History</div>
+          <button class="retake-quiz-btn" onclick="toggleRetakePanel()">
+            <svg width="13" height="13" viewBox="0 0 13 13" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="1 4 1 1 4 1"/><path d="M1 1l3 3a6 6 0 1 1-1.5 4"/></svg>
+            Retake Quiz
+          </button>
+        </div>
+        <div class="card-body"><div class="quiz-history" id="quiz-history"><div class="skeleton" style="height:48px"></div><div class="skeleton" style="height:48px;margin-top:10px"></div></div></div>
+      </div>
+      <div class="card" id="retake-panel" style="display:none">
+        <div class="card-hdr"><div class="card-hdr-title">Posture Self-Assessment</div><div class="card-hdr-badge gold">7 Questions</div></div>
+        <div class="card-body" id="retake-body"></div>
+      </div>
+      <div class="card">
+        <div class="card-hdr"><div class="card-hdr-title">Overall Metrics</div><div class="card-hdr-badge green" id="prog-days-badge">–</div></div>
+        <div class="card-body">
+          <div class="stat-row" style="grid-template-columns:1fr 1fr">
+            <div class="stat-card"><div class="stat-label">Posture score</div><div class="stat-val" id="prog-score-range">–</div><div class="stat-delta" id="prog-score-delta"></div></div>
+            <div class="stat-card"><div class="stat-label">Quiz score</div><div class="stat-val" id="prog-quiz-range">–</div><div class="stat-delta" id="prog-quiz-delta"></div></div>
+            <div class="stat-card"><div class="stat-label">Exercise streak</div><div class="stat-val" id="prog-ex-streak">–</div><div class="stat-delta">days</div></div>
+            <div class="stat-card"><div class="stat-label">Supplement streak</div><div class="stat-val" id="prog-supp-streak">–</div><div class="stat-delta">days</div></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <div class="mobile-nav">
+    <button class="mobile-nav-btn active" id="mob-exercise" onclick="showTab('exercise',null,true)"><svg viewBox="0 0 24 24"><path d="M3 12h4l3-9 4 18 3-9h4"/></svg>Exercise</button>
+    <button class="mobile-nav-btn" id="mob-supplements" onclick="showTab('supplements',null,true)"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"/><path d="M12 2v3M12 19v3M4.22 4.22l2.12 2.12M17.66 17.66l2.12 2.12M2 12h3M19 12h3M4.22 19.78l2.12-2.12M17.66 6.34l2.12-2.12"/></svg>Supps</button>
+    <button class="mobile-nav-btn" id="mob-device" onclick="showTab('device',null,true)"><svg viewBox="0 0 24 24"><rect x="5" y="2" width="14" height="20" rx="2"/><line x1="12" y1="18" x2="12" y2="18"/></svg>Device</button>
+    <button class="mobile-nav-btn" id="mob-progress" onclick="showTab('progress',null,true)"><svg viewBox="0 0 24 24"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>Progress</button>
+  </div>
+</div>
+
+<div class="save-indicator" id="save-indicator">Saved ✓</div>
+
+<!-- ══════════════════════════
+     FIREBASE SDK
+══════════════════════════ -->
+<script type="module">
+// ─────────────────────────────────────────
+// STEP 1: REPLACE THIS WITH YOUR CONFIG
+// Firebase Console → Project Settings → Your apps → SDK setup
+// ─────────────────────────────────────────
+const FIREBASE_CONFIG = {
+  apiKey: "AIzaSyCPY9pPnrqPzoPGauogswffsEbU2XxInxE",
+  authDomain: "orthos-systems-fbdb1.firebaseapp.com",
+  projectId: "orthos-systems-fbdb1",
+  storageBucket: "orthos-systems-fbdb1.firebasestorage.app",
+  messagingSenderId: "87027449226",
+  appId: "1:87027449226:web:d465d57416ead73d9c9c73",
+};
+
+// ─────────────────────────────────────────
+// Firebase imports (modular v10 SDK via CDN)
+// ─────────────────────────────────────────
+import { initializeApp }                                         from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
+import { getAuth, GoogleAuthProvider, signInWithPopup,
+         signOut as fbSignOut, onAuthStateChanged }              from "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
+import { getFirestore, doc, getDoc, setDoc, collection,
+         addDoc, query, orderBy, limit, getDocs,
+         serverTimestamp, updateDoc, increment }                 from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
+
+// ─────────────────────────────────────────
+// Init
+// ─────────────────────────────────────────
+const app      = initializeApp(FIREBASE_CONFIG);
+const auth     = getAuth(app);
+const db       = getFirestore(app);
+const provider = new GoogleAuthProvider();
+
+let currentUser   = null;
+let userProfile   = null;
+let todayStr      = new Date().toISOString().split('T')[0]; // "YYYY-MM-DD"
+let currentExDay  = null;
+
+// Exercise definitions per program day
+const EXERCISE_PLANS = {
+  // Week 1 — Mobility (days 1–7)
+  default_w1: [
+    { name:'Cat-Cow Mobilisation',       sets:'2 × 10 reps',    duration:'3 min' },
+    { name:'Hip Flexor Stretch',          sets:'3 × 45 sec each',duration:'5 min' },
+    { name:'Thoracic Rotation',           sets:'2 × 10 each side',duration:'4 min'},
+    { name:'Chin Tucks (supine)',          sets:'3 × 12 reps',   duration:'3 min' },
+    { name:'Childs Pose Hold',             sets:'3 × 60 sec',     duration:'4 min' },
+  ],
+  // Week 2 — Strength (days 8–14)
+  default_w2: [
+    { name:'Wall Angels',                 sets:'3 × 12 reps',    duration:'4 min' },
+    { name:'Chin Tucks with Band',        sets:'3 × 15 reps',    duration:'3 min' },
+    { name:'Romanian Deadlift',           sets:'3 × 10 reps',    duration:'4 min' },
+    { name:'Thoracic Extension on Roller',sets:'2 × 60 sec',     duration:'3 min' },
+    { name:'Dead Bug Core Hold',          sets:'3 × 30 sec',     duration:'3 min' },
+  ],
+  // Week 3 — Endurance (days 15–21)
+  default_w3: [
+    { name:'Loaded Carries (Farmer\'s Walk)', sets:'3 × 40 m',   duration:'5 min' },
+    { name:'Single-Leg Deadlift',         sets:'3 × 8 each side',duration:'5 min' },
+    { name:'Plank with Shoulder Tap',     sets:'3 × 20 reps',    duration:'4 min' },
+    { name:'Band Pull-Apart',             sets:'3 × 20 reps',    duration:'3 min' },
+    { name:'Copenhagen Side Plank',       sets:'3 × 30 sec each',duration:'4 min' },
+  ],
+};
+
+const QUIZ_QUESTIONS = [
+  { q:'How often do you experience neck or upper back pain?',                                      opts:['Rarely or never','A few times a week','Daily or almost always'] },
+  { q:'When standing against a wall, can your head, shoulders, and heels all touch at once?',      opts:['Yes, easily','With some effort','No — not at all'] },
+  { q:'How many hours per day do you typically spend sitting?',                                    opts:['Under 4 hours','4–8 hours','More than 8 hours'] },
+  { q:'Do people ever comment that you slouch or hunch forward?',                                  opts:['Never','Occasionally','Often or always'] },
+  { q:'Do you feel lower back pain or stiffness when rising from a chair?',                        opts:['Rarely','Sometimes','Most of the time'] },
+  { q:'Do you feel shoulder or mid-back tension by end of day?',                                   opts:['Rarely','A few times a week','Every day'] },
+  { q:'Has a doctor, physio, or therapist ever said your posture needs attention?',                opts:['Never','Once or twice','Yes, multiple times'] },
+];
+
+// ─────────────────────────────────────────
+// Auth state observer
+// ─────────────────────────────────────────
+onAuthStateChanged(auth, async (user) => {
+  hideLoading();
+  if (user) {
+    currentUser = user;
+    await loadUserAndShow(user);
+  } else {
+    showLogin();
+  }
+});
+
+// ─────────────────────────────────────────
+// Auth actions
+// ─────────────────────────────────────────
+window.signInWithGoogle = async () => {
+  const btn = document.getElementById('google-signin-btn');
+  const errEl = document.getElementById('login-error');
+  btn.disabled = true;
+  btn.textContent = 'Signing in…';
+  errEl.style.display = 'none';
+  try {
+    await signInWithPopup(auth, provider);
+    // onAuthStateChanged will fire and handle the rest
+  } catch (err) {
+    btn.disabled = false;
+    btn.innerHTML = `<svg viewBox="0 0 24 24" style="width:20px;height:20px;flex-shrink:0"><path d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z" fill="#4285F4"/><path d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z" fill="#34A853"/><path d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l3.66-2.84z" fill="#FBBC05"/><path d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z" fill="#EA4335"/></svg>Continue with Google`;
+    errEl.textContent = err.code === 'auth/popup-closed-by-user' ? 'Sign-in cancelled.' : 'Sign-in failed. Please try again.';
+    errEl.style.display = 'block';
+  }
+};
+
+window.signOut = async () => {
+  await fbSignOut(auth);
+  currentUser = null;
+  userProfile = null;
+  showLogin();
+};
+
+// ─────────────────────────────────────────
+// Load user profile + all data
+// ─────────────────────────────────────────
+async function loadUserAndShow(user) {
+  const uid      = user.uid;
+  const userRef  = doc(db, 'users', uid);
+  const snap     = await getDoc(userRef);
+
+  if (!snap.exists()) {
+    // First-time user — create profile
+    const profile = {
+      uid,
+      email:          user.email,
+      displayName:    user.displayName || user.email,
+      photoURL:       user.photoURL || '',
+      joinedAt:       serverTimestamp(),
+      programDay:     1,
+      programStarted: todayStr,
+      quizTier:       'moderate',
+      latestScore:    0,
+      suppStreak:     0,
+      exStreak:       0,
+    };
+    await setDoc(userRef, profile);
+    userProfile = profile;
+  } else {
+    userProfile = snap.data();
+  }
+
+  renderNav(user);
+  renderWelcomeBanner();
+  await Promise.all([
+    loadExerciseTab(),
+    loadSupplementTab(),
+    loadDeviceTab(),
+    loadProgressTab(),
+  ]);
+  showApp();
+}
+
+// ─────────────────────────────────────────
+// Nav / banner
+// ─────────────────────────────────────────
+function renderNav(user) {
+  const avatar = document.getElementById('nav-avatar');
+  if (user.photoURL) {
+    avatar.innerHTML = `<img src="${user.photoURL}" alt="avatar">`;
+  } else {
+    const initials = (user.displayName || user.email || '?').split(' ').map(w=>w[0]).slice(0,2).join('').toUpperCase();
+    avatar.textContent = initials;
+  }
+}
+
+function renderWelcomeBanner() {
+  const hour  = new Date().getHours();
+  const greet = hour < 12 ? 'morning' : hour < 17 ? 'afternoon' : 'evening';
+  document.getElementById('time-greeting').textContent = greet;
+  const first = (userProfile.displayName || '').split(' ')[0] || 'there';
+  document.getElementById('user-first-name').textContent = first;
+  const day = userProfile.programDay || 1;
+  const week = Math.ceil(day / 7);
+  document.getElementById('banner-label').textContent = `Day ${day} of 21 · Week ${week}`;
+  document.getElementById('banner-sub').textContent = day <= 7
+    ? 'Week 1 focus: Mobility & flexibility — build the foundation.'
+    : day <= 14
+    ? 'Week 2 focus: Strength — this is where the real change begins.'
+    : 'Week 3 focus: Endurance — lock in the habit for good.';
+
+  // Score ring
+  const score = userProfile.latestScore || 0;
+  document.getElementById('score-ring-val').textContent = score || '–';
+  const circumference = 201;
+  const offset = circumference - (score / 100) * circumference;
+  setTimeout(() => { document.getElementById('score-ring-arc').style.strokeDashoffset = offset; }, 300);
+}
+
+// ─────────────────────────────────────────
+// EXERCISE TAB
+// ─────────────────────────────────────────
+async function loadExerciseTab() {
+  const day    = userProfile.programDay || 1;
+  currentExDay = day;
+  document.getElementById('ex-stat-done').textContent  = `${Math.max(0,day-1)} / 21`;
+  document.getElementById('ex-stat-streak').textContent = userProfile.exStreak || 0;
+  document.getElementById('ex-stat-day').textContent    = day;
+  document.getElementById('ex-stat-week').textContent   = `Week ${Math.ceil(day/7)}`;
+  document.getElementById('ex-card-title').textContent  = `Day ${day} — Today's Session`;
+  document.getElementById('ex-card-badge').textContent  = day<=7 ? 'Week 1 · Mobility' : day<=14 ? 'Week 2 · Strength' : 'Week 3 · Endurance';
+
+  const w = Math.ceil(day/7);
+  document.getElementById('w1-status').textContent = w>1 ? 'Complete ✓' : w===1 ? 'In progress' : 'Upcoming';
+  document.getElementById('w2-status').textContent = w>2 ? 'Complete ✓' : w===2 ? 'In progress' : 'Upcoming';
+  document.getElementById('w3-status').textContent = w>3 ? 'Complete ✓' : w===3 ? 'In progress' : 'Upcoming';
+
+  // Build day tabs (show ±3 days)
+  const tabs = document.getElementById('day-tabs');
+  tabs.innerHTML = '';
+  const start = Math.max(1, day-3);
+  const end   = Math.min(21, day+3);
+  for (let d = start; d <= end; d++) {
+    const btn = document.createElement('button');
+    btn.className = `day-tab${d < day ? ' done' : d === day ? ' active' : ''}`;
+    btn.textContent = `Day ${d}`;
+    btn.onclick = () => switchDay(d, btn);
+    tabs.appendChild(btn);
+  }
+
+  await renderExercisesForDay(day);
+}
+
+async function renderExercisesForDay(day) {
+  const uid    = currentUser.uid;
+  const docRef = doc(db, 'users', uid, 'exercises', `${todayStr}-d${day}`);
+  const snap   = await getDoc(docRef);
+  const saved  = snap.exists() ? snap.data() : null;
+
+  const plan = day<=7 ? EXERCISE_PLANS.default_w1 : day<=14 ? EXERCISE_PLANS.default_w2 : EXERCISE_PLANS.default_w3;
+  const completions = saved ? (saved.completions || []) : [];
+
+  const list = document.getElementById('exercise-list');
+  list.innerHTML = plan.map((ex, i) => {
+    const done = completions.includes(ex.name);
+    const safeName = ex.name.replace(/"/g, '&quot;');
+    return `
+      <div class="ex-item${done?' done':''}" id="exi-${i}">
+        <div class="ex-check" data-idx="${i}" data-name="${safeName}" data-day="${day}" onclick="toggleExercise(this.dataset.idx,this.dataset.name,this.dataset.day)">
+          <svg viewBox="0 0 12 12"><polyline points="2 6 5 9 10 3"/></svg>
+        </div>
+        <div class="ex-vid"><div class="ex-vid-bg"></div><div class="ex-vid-play"><svg viewBox="0 0 10 10"><path d="M2 1l7 4.5-7 4.5V1z"/></svg></div></div>
+        <div class="ex-info"><div class="ex-name">${ex.name}</div><div class="ex-meta">${ex.duration}</div></div>
+        <div class="ex-sets">${ex.sets}</div>
+      </div>`;
+  }).join('');
+
+  updateExProgress(plan, completions);
+}
+
+window._exPlanCache = {};
+window.toggleExercise = async (idx, name, day) => {
+  idx = parseInt(idx);
+  day = parseInt(day);
+  const uid    = currentUser.uid;
+  const key    = `${todayStr}-d${day}`;
+  const docRef = doc(db, 'users', uid, 'exercises', key);
+  const snap   = await getDoc(docRef);
+  let completions = snap.exists() ? (snap.data().completions || []) : [];
+
+  const alreadyDone = completions.includes(name);
+  if (alreadyDone) {
+    completions = completions.filter(n => n !== name);
+  } else {
+    completions.push(name);
+  }
+
+  const plan = day<=7 ? EXERCISE_PLANS.default_w1 : day<=14 ? EXERCISE_PLANS.default_w2 : EXERCISE_PLANS.default_w3;
+  const allDone = completions.length >= plan.length;
+
+  await setDoc(docRef, {
+    date: todayStr, programDay: day,
+    completions, totalCount: plan.length,
+    doneCount: completions.length, completed: allDone,
+    updatedAt: serverTimestamp(),
+  }, { merge: true });
+
+  if (allDone && !alreadyDone) {
+    // Update streak on profile
+    await updateDoc(doc(db, 'users', uid), { exStreak: increment(1) });
+    userProfile.exStreak = (userProfile.exStreak || 0) + 1;
+    document.getElementById('ex-stat-streak').textContent = userProfile.exStreak;
+  }
+
+  // Update UI
+  const item = document.getElementById(`exi-${idx}`);
+  if (!alreadyDone) item.classList.add('done'); else item.classList.remove('done');
+  updateExProgress(plan, completions);
+  showSaved();
+};
+
+window.switchDay = async (day, btn) => {
+  currentExDay = day;
+  document.querySelectorAll('.day-tab').forEach(t => { if(!t.classList.contains('done')) t.classList.remove('active'); });
+  document.querySelectorAll('.day-tab').forEach(t => t.classList.remove('active'));
+  btn.classList.add('active');
+  await renderExercisesForDay(day);
+};
+
+function updateExProgress(plan, completions) {
+  const done = completions.length;
+  const total = plan.length;
+  const pct = total ? Math.round(done/total*100) : 0;
+  document.getElementById('ex-progress-bar').style.width = pct + '%';
+  document.getElementById('ex-progress-label').textContent = `${done} / ${total} complete`;
+}
+
+// ─────────────────────────────────────────
+// SUPPLEMENTS TAB
+// ─────────────────────────────────────────
+const SUPPS = [
+  { key:'d3k2',    name:'Vitamin D₃ + K₂',     dose:'5,000 IU D₃ · 100 mcg K₂',      time:'With breakfast',            icon:'☀️' },
+  { key:'magnesium',name:'Magnesium Glycinate', dose:'400 mg',                          time:'Before bed',                 icon:'🌙' },
+  { key:'collagen', name:'Collagen Peptides',   dose:'10 g in water or coffee',         time:'Morning, on empty stomach',  icon:'🦴' },
+];
+
+async function loadSupplementTab() {
+  document.getElementById('supp-streak').textContent = userProfile.suppStreak || 0;
+  document.getElementById('supp-today-date').textContent = new Date().toLocaleDateString('en-US',{weekday:'long',month:'long',day:'numeric'});
+
+  const uid    = currentUser.uid;
+  const docRef = doc(db, 'users', uid, 'supplements', todayStr);
+  const snap   = await getDoc(docRef);
+  const data   = snap.exists() ? snap.data() : {};
+
+  renderSuppGrid(data);
+}
+
+function renderSuppGrid(data) {
+  const grid = document.getElementById('supp-grid');
+  grid.innerHTML = SUPPS.map((s,i) => {
+    const am = data[`${s.key}_am`] || false;
+    const pm = data[`${s.key}_pm`] || false;
+    return `
+      <div class="supp-row">
+        <div class="supp-icon">${s.icon}</div>
+        <div class="supp-detail">
+          <div class="supp-row-name">${s.name}</div>
+          <div class="supp-row-dose">${s.dose}</div>
+          <div class="supp-row-time">${s.time}</div>
+        </div>
+        <div class="supp-checks">
+          <button class="supp-check-btn${am?' checked':''}" onclick="toggleSupp('${s.key}','am')" title="Morning">
+            ${am ? '<svg viewBox="0 0 12 12"><polyline points="2 6 5 9 10 3"/></svg>' : 'AM'}
+          </button>
+          <button class="supp-check-btn${pm?' checked':''}" onclick="toggleSupp('${s.key}','pm')" title="Evening">
+            ${pm ? '<svg viewBox="0 0 12 12"><polyline points="2 6 5 9 10 3"/></svg>' : 'PM'}
+          </button>
+        </div>
+      </div>`;
+  }).join('');
+}
+
+window.toggleSupp = async (key, slot) => {
+  const uid    = currentUser.uid;
+  const docRef = doc(db, 'users', uid, 'supplements', todayStr);
+  const snap   = await getDoc(docRef);
+  const data   = snap.exists() ? snap.data() : {};
+  const field  = `${key}_${slot}`;
+  data[field]  = !data[field];
+
+  // Check if all required doses are done (am for all 3)
+  const allDone = SUPPS.every(s => data[`${s.key}_am`] || data[`${s.key}_pm`]);
+  data.allDone  = allDone;
+  data.date     = todayStr;
+  data.updatedAt = serverTimestamp();
+
+  await setDoc(docRef, data, { merge: true });
+
+  if (allDone) {
+    await updateDoc(doc(db, 'users', uid), { suppStreak: increment(1) });
+    userProfile.suppStreak = (userProfile.suppStreak || 0) + 1;
+    document.getElementById('supp-streak').textContent = userProfile.suppStreak;
+  }
+
+  renderSuppGrid(data);
+  document.getElementById('supp-all-done-badge').style.display = allDone ? '' : 'none';
+  showSaved();
+};
+
+// ─────────────────────────────────────────
+// DEVICE TAB
+// ─────────────────────────────────────────
+async function loadDeviceTab() {
+  const uid    = currentUser.uid;
+  const docRef = doc(db, 'users', uid, 'posture_scores', todayStr);
+  const snap   = await getDoc(docRef);
+
+  if (snap.exists()) {
+    const d = snap.data();
+    document.getElementById('dev-score').innerHTML = `${d.score}<span> / 100</span>`;
+    document.getElementById('dev-good-pct').innerHTML = `${d.goodPct}<span>%</span>`;
+    document.getElementById('dev-alerts').textContent = d.alertCount;
+    document.getElementById('dev-wear').textContent = minutesToHours(d.wearMinutes);
+    document.getElementById('dev-sync').textContent = timeAgo(d.syncedAt?.toDate?.() || new Date());
+  } else {
+    // No data today — show placeholder
+    document.getElementById('dev-score').innerHTML = `–`;
+    document.getElementById('dev-score-delta').textContent = 'No sync today yet';
+    document.getElementById('dev-good-pct').textContent = '–';
+    document.getElementById('dev-alerts').textContent = '–';
+    document.getElementById('dev-wear').textContent = '–';
+    document.getElementById('dev-sync').textContent = 'Never';
+  }
+
+  // Load last 14 days for chart
+  const q    = query(collection(db, 'users', uid, 'posture_scores'), orderBy('date','desc'), limit(14));
+  const docs = await getDocs(q);
+  const scores = [];
+  docs.forEach(d => scores.unshift(d.data()));
+
+  renderPostureChart(scores);
+}
+
+function renderPostureChart(scores) {
+  const chart = document.getElementById('posture-chart');
+  if (!scores.length) { chart.innerHTML = '<div style="font-size:13px;color:var(--ink-faint);padding:20px 0">No posture data yet. Sync your device to see your scores here.</div>'; return; }
+
+  const maxH = 120;
+  chart.innerHTML = scores.map((s, i) => {
+    const h      = Math.round((s.score / 100) * maxH);
+    const isToday = s.date === todayStr;
+    const label  = s.date ? s.date.slice(5).replace('-','/') : '';
+    return `
+      <div class="bar-col">
+        <div class="bar${isToday?' today':''}" style="height:${h}px">
+          <div class="bar-tooltip">${s.score}</div>
+        </div>
+        <div class="bar-x-label">${label}</div>
+      </div>`;
+  }).join('');
+
+  // Trend badge
+  if (scores.length >= 2) {
+    const first = scores[0].score;
+    const last  = scores[scores.length-1].score;
+    const trend = last > first ? 'Improving' : last < first ? 'Declining' : 'Stable';
+    const badge = document.getElementById('chart-trend');
+    badge.textContent = trend;
+    badge.className = `card-hdr-badge ${trend==='Improving'?'green':trend==='Declining'?'':' gold'}`;
+  } else {
+    document.getElementById('chart-trend').textContent = 'Building history';
+  }
+}
+
+// ─────────────────────────────────────────
+// PROGRESS TAB
+// ─────────────────────────────────────────
+async function loadProgressTab() {
+  const uid = currentUser.uid;
+
+  // Quiz history
+  const q    = query(collection(db, 'users', uid, 'quiz_results'), orderBy('takenAt','desc'), limit(10));
+  const docs = await getDocs(q);
+  const results = [];
+  docs.forEach(d => results.push({ id: d.id, ...d.data() }));
+
+  renderQuizHistory(results);
+
+  // Metrics
+  const days = userProfile.programDay || 1;
+  document.getElementById('prog-days-badge').textContent = `${days} days active`;
+  document.getElementById('prog-ex-streak').textContent  = userProfile.exStreak || 0;
+  document.getElementById('prog-supp-streak').textContent = userProfile.suppStreak || 0;
+
+  if (results.length >= 2) {
+    const first = results[results.length-1];
+    const last  = results[0];
+    document.getElementById('prog-quiz-range').textContent = `${first.score}→${last.score}`;
+    document.getElementById('prog-quiz-delta').textContent = `${first.score > last.score ? '↑' : '↓'} ${Math.abs(first.score - last.score)} pts change`;
+  } else if (results.length === 1) {
+    document.getElementById('prog-quiz-range').textContent = results[0].score;
+    document.getElementById('prog-quiz-delta').textContent = 'First assessment';
+  }
+
+  // Posture score range
+  const scoreQ    = query(collection(db, 'users', uid, 'posture_scores'), orderBy('date','asc'), limit(30));
+  const scoreDocs = await getDocs(scoreQ);
+  const scores    = [];
+  scoreDocs.forEach(d => scores.push(d.data().score));
+  if (scores.length >= 2) {
+    document.getElementById('prog-score-range').textContent = `${scores[0]}→${scores[scores.length-1]}`;
+    const diff = scores[scores.length-1] - scores[0];
+    document.getElementById('prog-score-delta').textContent = `${diff>=0?'↑':'↓'} ${Math.abs(diff)} points`;
+  }
+}
+
+function renderQuizHistory(results) {
+  const el = document.getElementById('quiz-history');
+  if (!results.length) {
+    el.innerHTML = '<div style="font-size:13px;color:var(--ink-muted);padding:8px 0">No quiz results yet. Take your first assessment above.</div>';
+    return;
+  }
+  el.innerHTML = results.map(r => {
+    const date = r.takenAt?.toDate ? r.takenAt.toDate().toLocaleDateString('en-US',{month:'short',day:'numeric',year:'numeric'}) : '–';
+    const tier = r.tier || 'moderate';
+    const pct  = Math.round((r.score / (r.maxScore||14)) * 100);
+    return `
+      <div class="quiz-entry">
+        <div class="quiz-date">${date}</div>
+        <div class="quiz-result-pill ${tier}">${tier.charAt(0).toUpperCase()+tier.slice(1)}</div>
+        <div class="quiz-score-bar"><div class="quiz-score-fill ${tier}" style="width:${pct}%"></div></div>
+        <div class="quiz-score-num">${r.score} / ${r.maxScore||14}</div>
+      </div>`;
+  }).join('');
+}
+
+// ─────────────────────────────────────────
+// LIVE QUIZ (retake)
+// ─────────────────────────────────────────
+let qCur = 0, qAns = new Array(QUIZ_QUESTIONS.length).fill(null);
+
+window.toggleRetakePanel = () => {
+  const panel = document.getElementById('retake-panel');
+  const isHidden = panel.style.display === 'none';
+  panel.style.display = isHidden ? '' : 'none';
+  if (isHidden) { qCur=0; qAns=new Array(QUIZ_QUESTIONS.length).fill(null); renderLiveQuiz(); panel.scrollIntoView({behavior:'smooth',block:'start'}); }
+};
+
+function renderLiveQuiz() {
+  const body = document.getElementById('retake-body');
+  const q    = QUIZ_QUESTIONS[qCur];
+  const prog = QUIZ_QUESTIONS.map((_,i)=>`<div class="dq-dot${i<qCur?' done':i===qCur?' active':''}"></div>`).join('') +
+    `<span style="font-size:11px;color:var(--ink-faint);margin-left:6px">${qCur+1} / ${QUIZ_QUESTIONS.length}</span>`;
+
+  body.innerHTML = `
+    <div class="dquiz-prog">${prog}</div>
+    <div class="dquiz-q">${q.q}</div>
+    <div class="dquiz-opts">
+      ${q.opts.map((o,i)=>`
+        <button class="dquiz-opt${qAns[qCur]===i?' sel':''}" onclick="selectQA(${i})">
+          <div class="dquiz-radio"></div>${o}
+        </button>`).join('')}
+    </div>
+    <div class="dquiz-nav">
+      <button class="dquiz-btn" onclick="liveQuizNav(-1)" ${qCur===0?'disabled':''}>← Back</button>
+      <button class="dquiz-btn primary" onclick="liveQuizNav(1)" ${qAns[qCur]===null?'disabled':''}>${qCur===QUIZ_QUESTIONS.length-1?'See result':'Next →'}</button>
+    </div>`;
+}
+
+window.selectQA = (i) => { qAns[qCur]=i; renderLiveQuiz(); };
+
+window.liveQuizNav = (d) => {
+  if (d===1 && qCur===QUIZ_QUESTIONS.length-1) { saveAndShowQuizResult(); return; }
+  qCur = Math.max(0, Math.min(QUIZ_QUESTIONS.length-1, qCur+d));
+  renderLiveQuiz();
+};
+
+async function saveAndShowQuizResult() {
+  const score = qAns.reduce((s,a)=>s+(a||0),0);
+  const tier  = score<=4 ? 'mild' : score<=9 ? 'moderate' : 'severe';
+
+  // Save to Firestore
+  const uid = currentUser.uid;
+  await addDoc(collection(db, 'users', uid, 'quiz_results'), {
+    takenAt:   serverTimestamp(),
+    score,
+    maxScore:  14,
+    tier,
+    answers:   qAns,
+    questions: QUIZ_QUESTIONS.map(q=>q.q),
+  });
+
+  // Update profile quiz tier
+  await updateDoc(doc(db, 'users', uid), { quizTier: tier });
+  userProfile.quizTier = tier;
+
+  showSaved();
+
+  // Re-render history
+  await loadProgressTab();
+
+  // Show result inline
+  const colors = { mild:'var(--green-pale)', moderate:'var(--amber-pale)', severe:'var(--red-pale)' };
+  const textColors = { mild:'var(--green)', moderate:'#7a5a20', severe:'var(--red)' };
+  const titles = {
+    mild:     'Your posture is improving — you\'re on track.',
+    moderate: 'Still moderate, but trending the right direction.',
+    severe:   'Your symptoms suggest professional oversight is needed.',
+  };
+  const descs = {
+    mild:     'Your score shows real progress. Continue the Orthos System through Week 3 and you should reach the Mild tier comfortably.',
+    moderate: 'You\'ve improved from your intake score. Keep focusing on daily exercises and consistent supplementation.',
+    severe:   'Please continue to work with your physician or physical therapist alongside the Orthos program.',
+  };
+
+  document.getElementById('retake-body').innerHTML = `
+    <div style="border-radius:var(--r-sm);padding:16px;background:${colors[tier]};border:1px solid rgba(0,0,0,.08);display:flex;flex-direction:column;gap:6px">
+      <div style="font-size:10px;font-weight:600;letter-spacing:.1em;text-transform:uppercase;color:${textColors[tier]}">${tier.charAt(0).toUpperCase()+tier.slice(1)}</div>
+      <div style="font-family:var(--serif);font-size:17px;color:var(--ink)">${titles[tier]}</div>
+      <div style="font-size:13px;color:var(--ink-soft);line-height:1.5">${descs[tier]}</div>
+      <div style="font-size:12px;color:var(--ink-muted);margin-top:4px">Score: ${score} / 14 — saved to your history</div>
+    </div>
+    <button class="dquiz-btn" style="margin-top:10px;width:100%;text-align:center" onclick="qCur=0;qAns=new Array(${QUIZ_QUESTIONS.length}).fill(null);renderLiveQuiz()">Retake</button>`;
+}
+
+// Make renderLiveQuiz accessible globally for the retake button
+window.renderLiveQuiz = renderLiveQuiz;
+
+// ─────────────────────────────────────────
+// UI helpers
+// ─────────────────────────────────────────
+window.showTab = (tab, btn, mobile) => {
+  document.querySelectorAll('.section-page').forEach(p=>p.classList.remove('active'));
+  document.getElementById('tab-'+tab).classList.add('active');
+  document.querySelectorAll('.nav-tab').forEach(t=>t.classList.remove('active'));
+  document.querySelectorAll('.mobile-nav-btn').forEach(t=>t.classList.remove('active'));
+  if (btn) btn.classList.add('active');
+  document.querySelectorAll('.nav-tab').forEach(t=>{
+    if((t.getAttribute('onclick')||'').includes("'"+tab+"'")) t.classList.add('active');
+  });
+  const mob = document.getElementById('mob-'+tab);
+  if (mob) mob.classList.add('active');
+};
+
+function showSaved() {
+  const el = document.getElementById('save-indicator');
+  el.classList.add('show');
+  setTimeout(()=>el.classList.remove('show'), 1800);
+}
+
+function hideLoading() { document.getElementById('loading-screen').style.display = 'none'; }
+function showLogin()   { document.getElementById('login-screen').style.display = 'flex'; document.getElementById('app').classList.remove('visible'); document.getElementById('app').style.display = 'none'; }
+function showApp()     { document.getElementById('login-screen').style.display = 'none'; const app = document.getElementById('app'); app.style.display='flex'; app.classList.add('visible'); }
+
+function minutesToHours(m) {
+  if (!m) return '–';
+  const h = Math.floor(m/60), min = m%60;
+  return h ? `${h}h ${min}m` : `${min}m`;
+}
+
+function timeAgo(date) {
+  const diff = Math.floor((Date.now() - date.getTime()) / 1000);
+  if (diff < 60) return 'Just now';
+  if (diff < 3600) return `${Math.floor(diff/60)} min ago`;
+  if (diff < 86400) return `${Math.floor(diff/3600)}h ago`;
+  return `${Math.floor(diff/86400)}d ago`;
+}
+
+</script>
+</body>
+</html>
