@@ -683,6 +683,32 @@ async function loadUserAndShow(user) {
     userProfile = profile;
   } else {
     userProfile = snap.data();
+
+    // Advance programDay based on calendar days elapsed since programStarted
+    if (userProfile.programStarted) {
+      const started  = new Date(userProfile.programStarted + 'T00:00:00');
+      const today    = new Date(todayStr + 'T00:00:00');
+      const elapsed  = Math.floor((today - started) / 86400000); // days since start
+      const newDay   = Math.min(Math.max(elapsed + 1, 1), 21);   // clamp 1–21
+      if (newDay !== userProfile.programDay) {
+        userProfile.programDay = newDay;
+        await updateDoc(doc(db, 'users', currentUser.uid), { programDay: newDay });
+      }
+    }
+  }
+
+  // If latestScore is missing or 0, pull it from the most recent quiz result
+  if (!userProfile.latestScore) {
+    const qSnap = await getDocs(query(
+      collection(db, 'users', currentUser.uid, 'quiz_results'),
+      orderBy('takenAt', 'desc'),
+      limit(1)
+    ));
+    if (!qSnap.empty) {
+      const latest = qSnap.docs[0].data();
+      userProfile.latestScore = latest.score || 0;
+      await updateDoc(doc(db, 'users', currentUser.uid), { latestScore: userProfile.latestScore });
+    }
   }
 
   renderNav(user);
@@ -766,9 +792,15 @@ async function loadExerciseTab() {
   await renderExercisesForDay(day);
 }
 
+function dateStrForDay(day) {
+  const started = new Date(userProfile.programStarted + 'T00:00:00');
+  started.setDate(started.getDate() + (day - 1));
+  return started.toISOString().split('T')[0];
+}
+
 async function renderExercisesForDay(day) {
   const uid    = currentUser.uid;
-  const docRef = doc(db, 'users', uid, 'exercises', `${todayStr}-d${day}`);
+  const docRef = doc(db, 'users', uid, 'exercises', `${dateStrForDay(day)}-d${day}`);
   const snap   = await getDoc(docRef);
   const saved  = snap.exists() ? snap.data() : null;
 
@@ -798,7 +830,7 @@ window.toggleExercise = async (idx, name, day) => {
   idx = parseInt(idx);
   day = parseInt(day);
   const uid    = currentUser.uid;
-  const key    = `${todayStr}-d${day}`;
+  const key    = `${dateStrForDay(day)}-d${day}`;
   const docRef = doc(db, 'users', uid, 'exercises', key);
   const snap   = await getDoc(docRef);
   let completions = snap.exists() ? (snap.data().completions || []) : [];
@@ -814,7 +846,7 @@ window.toggleExercise = async (idx, name, day) => {
   const allDone = completions.length >= plan.length;
 
   await setDoc(docRef, {
-    date: todayStr, programDay: day,
+    date: dateStrForDay(day), programDay: day,
     completions, totalCount: plan.length,
     doneCount: completions.length, completed: allDone,
     updatedAt: serverTimestamp(),
@@ -860,7 +892,8 @@ const SUPPS = [
 ];
 
 async function loadSupplementTab() {
-  document.getElementById('supp-streak').textContent = userProfile.suppStreak || 0;
+  const suppStreakCapped = Math.min(userProfile.suppStreak || 0, (userProfile.programDay || 1) - 1);
+  document.getElementById('supp-streak').textContent = suppStreakCapped;
   document.getElementById('supp-today-date').textContent = new Date().toLocaleDateString('en-US',{weekday:'long',month:'long',day:'numeric'});
 
   const uid    = currentUser.uid;
@@ -1004,9 +1037,10 @@ async function loadProgressTab() {
 
   // Metrics
   const days = userProfile.programDay || 1;
+  const maxStreak = days - 1; // can't exceed days completed
   document.getElementById('prog-days-badge').textContent = `${days} days active`;
-  document.getElementById('prog-ex-streak').textContent  = userProfile.exStreak || 0;
-  document.getElementById('prog-supp-streak').textContent = userProfile.suppStreak || 0;
+  document.getElementById('prog-ex-streak').textContent  = Math.min(userProfile.exStreak || 0, maxStreak);
+  document.getElementById('prog-supp-streak').textContent = Math.min(userProfile.suppStreak || 0, maxStreak);
 
   if (results.length >= 2) {
     const first = results[results.length-1];
@@ -1018,7 +1052,7 @@ async function loadProgressTab() {
     document.getElementById('prog-quiz-delta').textContent = 'First assessment';
   }
 
-  // Posture score range
+  // Posture score range — use device scores if available, fall back to latest quiz score
   const scoreQ    = query(collection(db, 'users', uid, 'posture_scores'), orderBy('date','asc'), limit(30));
   const scoreDocs = await getDocs(scoreQ);
   const scores    = [];
@@ -1027,6 +1061,9 @@ async function loadProgressTab() {
     document.getElementById('prog-score-range').textContent = `${scores[0]}→${scores[scores.length-1]}`;
     const diff = scores[scores.length-1] - scores[0];
     document.getElementById('prog-score-delta').textContent = `${diff>=0?'↑':'↓'} ${Math.abs(diff)} points`;
+  } else if (userProfile.latestScore) {
+    document.getElementById('prog-score-range').textContent = userProfile.latestScore;
+    document.getElementById('prog-score-delta').textContent = 'From quiz';
   }
 }
 
@@ -1106,9 +1143,14 @@ async function saveAndShowQuizResult() {
     questions: QUIZ_QUESTIONS.map(q=>q.q),
   });
 
-  // Update profile quiz tier
-  await updateDoc(doc(db, 'users', uid), { quizTier: tier });
+  // Update profile quiz tier and latest score
+  await updateDoc(doc(db, 'users', uid), { quizTier: tier, latestScore: score });
   userProfile.quizTier = tier;
+  userProfile.latestScore = score;
+  // Refresh score ring
+  document.getElementById('score-ring-val').textContent = score;
+  const offset = 201 - (score / 14) * 201;
+  document.getElementById('score-ring-arc').style.strokeDashoffset = offset;
 
   showSaved();
 
