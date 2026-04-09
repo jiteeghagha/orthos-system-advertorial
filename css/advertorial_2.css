@@ -803,3 +803,106 @@ body {
   color: var(--green);
   font-weight: 600;
 }
+
+/* ── Who Is Most At Risk Carousel ── */
+.risk-carousel-section {
+  margin: 40px 0 32px;
+}
+.risk-carousel-label {
+  font-size: 10px;
+  font-weight: 500;
+  letter-spacing: .16em;
+  text-transform: uppercase;
+  color: var(--green);
+  margin-bottom: 16px;
+}
+.risk-carousel-wrap {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+.risk-carousel-viewport {
+  flex: 1;
+  overflow: hidden;
+  border-radius: var(--radius);
+}
+.risk-carousel-track {
+  display: flex;
+  transition: transform .4s cubic-bezier(0.4,0,0.2,1);
+}
+.risk-carousel-slide {
+  min-width: 100%;
+  background: var(--cream-dark);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  overflow: hidden;
+}
+.risk-carousel-slide img {
+  width: 50%;
+  height: auto;
+  object-fit: contain;
+  display: block;
+  margin: 24px auto 0;
+}
+.risk-carousel-body {
+  padding: 18px 20px 20px;
+}
+.risk-carousel-title {
+  font-family: var(--serif);
+  font-size: 18px;
+  color: var(--ink);
+  margin-bottom: 10px;
+}
+.risk-carousel-body ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+.risk-carousel-body ul li {
+  font-size: 13px;
+  color: var(--ink-soft);
+  padding-left: 14px;
+  position: relative;
+  line-height: 1.55;
+}
+.risk-carousel-body ul li::before {
+  content: '–';
+  position: absolute;
+  left: 0;
+  color: var(--gold);
+}
+.risk-carousel-arrow {
+  flex-shrink: 0;
+  width: 36px; height: 36px;
+  border-radius: 50%;
+  border: 1px solid var(--border-strong);
+  background: #fff;
+  font-size: 16px;
+  color: var(--ink-soft);
+  cursor: pointer;
+  display: flex; align-items: center; justify-content: center;
+  transition: background .15s, border-color .15s;
+}
+.risk-carousel-arrow:hover { background: var(--cream-dark); border-color: var(--border-strong); }
+.risk-carousel-dots {
+  display: flex;
+  justify-content: center;
+  gap: 6px;
+  margin-top: 14px;
+}
+.risk-dot {
+  width: 7px; height: 7px;
+  border-radius: 50%;
+  border: none;
+  background: var(--border-strong);
+  cursor: pointer;
+  padding: 0;
+  transition: background .2s, transform .2s;
+}
+.risk-dot.active {
+  background: var(--gold);
+  transform: scale(1.25);
+}
