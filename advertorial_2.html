@@ -17,9 +17,9 @@
 
   <!-- ── Pre-Hero Title ── -->
   <div class="pre-hero-title">
-    <h1><strong>Forward Head Posture (FHP)</strong> <span class="heading-normal">and Cervicothoracic Kyphosis</span></h1>
-    <p class="subtitle">Is the <span class="hl">slow&#8209;motion collapse</span> of the <span class="hl">upper spine.</span><br>
-    And if you are reading this, there is a very <span class="hl">high probability</span> it has <span class="hl">already started.</span></p>
+    <h1><strong>Forward Head Posture (FHP)</strong> <span class="heading-normal"> and upper spine changes often happen gradually over time.</span></h1>
+    <p class="subtitle">Most people don't <span class="hl">notice the shift</span> until it’s already part of their <span class="hl">daily posture.</span><br>
+    It happens <span class="hl">gradually…</span></p>
   </div>
 
   <!-- ── Hero ── -->
@@ -43,6 +43,151 @@
       <div class="hero-quote">"After 6 weeks I could stand at the whiteboard without pain for the first time in years."</div>
     </div>  
   </div>
+
+  <!-- ── Who Is Most At Risk Carousel ── -->
+  <!-- <div class="risk-carousel-section">
+    <p class="risk-carousel-label">Hours spent looking slightly downward… every single day.</p>
+    <p class="risk-carousel-label">And over time, that small shift begins to add up.</p>
+    <div class="risk-carousel-wrap">
+      <button class="risk-carousel-arrow risk-carousel-prev" onclick="riskCarouselMove(-1)" aria-label="Previous">&#8592;</button>
+      <div class="risk-carousel-viewport">
+        <div class="risk-carousel-track" id="risk-carousel-track">
+
+          <div class="risk-carousel-slide">
+            <img src="assets/hero/desk worker.png" alt="Desk Workers">
+            <div class="risk-carousel-body">
+              <div class="risk-carousel-title">Desk Workers 💻</div>
+              <ul>
+                <li>Sit for 6–10+ hours per day, often uninterrupted</li>
+                <li>Fixed screen position encourages forward head posture</li>
+                <li>Minimal activation of key stabilizers due to passive sitting</li>
+              </ul>
+            </div>
+          </div>
+
+          <div class="risk-carousel-slide">
+            <img src="assets/hero/truck drivers.png" alt="Truck Drivers">
+            <div class="risk-carousel-body">
+              <div class="risk-carousel-title">Truck Drivers 🚚</div>
+              <ul>
+                <li>Sit for 10–12 hours a day with limited trunk movement</li>
+                <li>Weak glutes, inactive deep core, and tight hip flexors develop over time</li>
+                <li>Leads to lumbar spine compression and a persistent slouched posture</li>
+              </ul>
+            </div>
+          </div>
+
+          <div class="risk-carousel-slide">
+            <img src="assets/hero/surgeons.png" alt="Surgeons & Dentists">
+            <div class="risk-carousel-body">
+              <div class="risk-carousel-title">Surgeons &amp; Dentists 🩺</div>
+              <ul>
+                <li>Hold forward-leaning positions for extended periods</li>
+                <li>Neck and upper-back muscles become overworked while stabilizers weaken</li>
+                <li>Common results: forward head posture and thoracic spine collapse</li>
+              </ul>
+            </div>
+          </div>
+
+          <div class="risk-carousel-slide">
+            <img src="assets/hero/pilot.png" alt="Pilots">
+            <div class="risk-carousel-body">
+              <div class="risk-carousel-title">Pilots ✈️</div>
+              <ul>
+                <li>Long seated periods with minimal spinal movement</li>
+                <li>Cockpit ergonomics often promote rounded shoulders</li>
+                <li>Reduced activation of glutes and deep abdominal stabilizers</li>
+              </ul>
+            </div>
+          </div>
+
+          <div class="risk-carousel-slide">
+            <img src="assets/hero/gamer.png" alt="Gamers">
+            <div class="risk-carousel-body">
+              <div class="risk-carousel-title">Gamers / Esports Professionals 🎮</div>
+              <ul>
+                <li>Similar to desk workers but with longer continuous sessions</li>
+                <li>High rates of neck flexion and upper-back rounding</li>
+                <li>Inactive core stabilizers disengage entirely between sessions</li>
+              </ul>
+            </div>
+          </div>
+
+          <div class="risk-carousel-slide">
+            <img src="assets/hero/assemble line worker.png" alt="Assembly Line Workers">
+            <div class="risk-carousel-body">
+              <div class="risk-carousel-title">Assembly Line Workers 🏭</div>
+              <ul>
+                <li>Often stand but repeat the same limited motion pattern</li>
+                <li>Muscles not recruited become neurologically "quiet"</li>
+                <li>Can lead to hip imbalance and chronic lower back strain</li>
+              </ul>
+            </div>
+          </div>
+
+          <div class="risk-carousel-slide">
+            <img src="assets/hero/call center.png" alt="Call Center Workers">
+            <div class="risk-carousel-body">
+              <div class="risk-carousel-title">Call Center Workers 📞</div>
+              <ul>
+                <li>Prolonged sitting combined with phone posture habits</li>
+                <li>Shoulder elevation and neck tilt patterns become permanent</li>
+                <li>Core and back stabilizers progressively disengage</li>
+              </ul>
+            </div>
+          </div>
+
+          <div class="risk-carousel-slide">
+            <img src="assets/hero/cashiers.png" alt="Cashiers & Retail Workers">
+            <div class="risk-carousel-body">
+              <div class="risk-carousel-title">Cashiers &amp; Retail Workers 🛒</div>
+              <ul>
+                <li>Long standing with minimal intentional movement</li>
+                <li>Weight shifts to passive structures — ligaments and discs</li>
+                <li>Core stabilizers chronically under-recruited</li>
+              </ul>
+            </div>
+          </div>
+
+        </div>
+      </div>
+      <button class="risk-carousel-arrow risk-carousel-next" onclick="riskCarouselMove(1)" aria-label="Next">&#8594;</button>
+    </div>
+    <div class="risk-carousel-dots" id="risk-carousel-dots"></div>
+  </div> -->
+
+  <script>
+    (function() {
+      var track = document.getElementById('risk-carousel-track');
+      var dotsEl = document.getElementById('risk-carousel-dots');
+      var slides = track.querySelectorAll('.risk-carousel-slide');
+      var current = 0;
+
+      slides.forEach(function(_, i) {
+        var d = document.createElement('button');
+        d.className = 'risk-dot' + (i === 0 ? ' active' : '');
+        d.setAttribute('aria-label', 'Slide ' + (i+1));
+        d.onclick = function() { goTo(i); };
+        dotsEl.appendChild(d);
+      });
+
+      function goTo(n) {
+        current = (n + slides.length) % slides.length;
+        track.style.transform = 'translateX(-' + (current * 100) + '%)';
+        dotsEl.querySelectorAll('.risk-dot').forEach(function(d, i) {
+          d.classList.toggle('active', i === current);
+        });
+      }
+
+      window.riskCarouselMove = function(dir) {
+        clearInterval(autoPlay);
+        goTo(current + dir);
+        autoPlay = setInterval(function() { goTo(current + 1); }, 4000);
+      };
+
+      var autoPlay = setInterval(function() { goTo(current + 1); }, 4000);
+    })();
+  </script>
 
   <!-- ── System intro ── -->
   <div class="section-divide">
