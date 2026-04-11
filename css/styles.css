@@ -40,18 +40,7 @@ p { margin-bottom: 1rem; }
 
 /* ── FULL WIDTH SECTIONS ── */
 /* Every top-level section spans 100% viewport width */
-.band {
-  width: 100%;
-  padding: 0 var(--pad);
-}
-.band-flush {
-  width: 100%;
-}
 
-/* ── INNER CONTENT MAX WIDTH for readability ── */
-/* Long copy columns get a max-width so lines aren't too long */
-.prose { max-width: 740px; }
-.prose-center { max-width: 740px; margin: 0 auto; }
 
 /* ── TICKER ── */
 .ticker {
@@ -209,25 +198,6 @@ p { margin-bottom: 1rem; }
   gap: 0;
   align-items: start;
 }
-.eyebrow {
-  font-family: var(--ff-b);
-  font-size: .68rem;
-  font-weight: 600;
-  color: var(--terra);
-  text-transform: uppercase;
-  letter-spacing: .18em;
-  margin-bottom: 16px;
-  display: flex;
-  align-items: center;
-  gap: 10px;
-}
-.eyebrow::before {
-  content: '';
-  display: block;
-  width: 28px; height: 2px;
-  background: var(--terra);
-  flex-shrink: 0;
-}
 h1 {
   font-family: var(--ff-d);
   font-size: clamp(2rem, 3.8vw, 3rem);
@@ -237,17 +207,6 @@ h1 {
   text-transform: none;
   letter-spacing: -.01em;
   margin-bottom: 20px;
-}
-.hero-deck {
-  font-family: var(--ff-b);
-  font-size: 1.08rem;
-  font-style: normal;
-  font-weight: 500;
-  color: var(--mid);
-  line-height: 1.75;
-  border-left: 3px solid var(--terra);
-  padding-left: 16px;
-  margin-bottom: 0;
 }
 /* ── THICK RULE ── */
 .thick-rule {
@@ -298,25 +257,6 @@ h3 {
   margin: 0 0 10px;
 }
 
-/* ── CARDS ── */
-.card {
-  background: var(--white);
-  border-radius: var(--r);
-  box-shadow: var(--shadow);
-  padding: 28px 32px;
-}
-.card-green {
-  background: var(--green-light);
-  border-radius: var(--r);
-  box-shadow: var(--shadow);
-  padding: 28px 32px;
-}
-.card-terra {
-  background: var(--terra-light);
-  border-radius: var(--r);
-  box-shadow: var(--shadow);
-  padding: 28px 32px;
-}
 .card-dark {
   background: rgba(255,255,255,.06);
   border-radius: var(--r);
@@ -332,9 +272,11 @@ h3 {
 .card-img .cap-inner {
   padding: 12px 16px 14px;
   font-family: var(--ff-b);
-  font-size: .68rem;
-  color: var(--pale);
-  font-style: italic;
+  font-size: .7rem;
+  font-weight: 600;
+  color: var(--terra);
+  text-transform: uppercase;
+  letter-spacing: .1em;
   text-align: center;
   line-height: 1.5;
 }
@@ -358,11 +300,6 @@ h3 {
   width: 100%;
   padding: 52px var(--pad);
   background: var(--charcoal);
-}
-.section-green {
-  width: 100%;
-  padding: 52px var(--pad);
-  background: var(--green);
 }
 
 /* Two column layouts */
@@ -497,71 +434,6 @@ h3 {
 .section-dark p, .section-dark li { color: #c8d8cc; }
 .section-dark h2 { color: #fff; text-transform: none; }
 
-/* ── ACCORDION ── */
-.acc-wrap { margin: 20px 0; }
-.acc-item {
-  background: var(--white);
-  border-radius: 12px;
-  box-shadow: var(--shadow);
-  margin: 10px 0;
-  overflow: hidden;
-}
-.acc-btn {
-  width: 100%;
-  background: none;
-  border: none;
-  cursor: pointer;
-  padding: 18px 22px;
-  display: flex;
-  align-items: center;
-  gap: 14px;
-  text-align: left;
-}
-.acc-btn:hover .acc-icon { background: var(--green-mid); }
-.acc-icon {
-  flex-shrink: 0;
-  width: 30px; height: 30px;
-  background: var(--green);
-  border-radius: 50%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  transition: background .2s;
-  position: relative;
-}
-.acc-icon::before, .acc-icon::after {
-  content: '';
-  position: absolute;
-  background: #fff;
-  border-radius: 2px;
-  transition: transform .3s, opacity .3s;
-}
-.acc-icon::before { width: 12px; height: 2px; }
-.acc-icon::after  { width: 2px; height: 12px; }
-.acc-item.open .acc-icon { background: var(--green-mid); }
-.acc-item.open .acc-icon::after { transform: rotate(90deg); opacity: 0; }
-.acc-label {
-  font-family: var(--ff-b);
-  font-size: 1rem;
-  font-weight: 700;
-  color: var(--green);
-  text-transform: none;
-  letter-spacing: -.01em;
-}
-.acc-body {
-  max-height: 0;
-  overflow: hidden;
-  transition: max-height .35s ease, padding .3s ease;
-  padding: 0 22px 0 64px;
-}
-.acc-item.open .acc-body { max-height: 200px; padding: 0 22px 18px 64px; }
-.acc-body p {
-  font-family: var(--ff-s);
-  font-size: .97rem;
-  color: var(--mid);
-  line-height: 1.72;
-  margin: 0;
-}
 
 /* ── TESTIMONIALS ── */
 .tc {
@@ -614,15 +486,7 @@ h3 {
 .ig .it h3 { font-size: .9rem; margin: 0 0 7px; }
 .ig .it p { font-size: .87rem; color: var(--mid); margin: 0; }
 
-/* ── SUPPLEMENT CARDS ── */
-.sc { background: var(--white); border-radius: var(--r); box-shadow: var(--shadow); padding: 22px; text-align: center; }
-.sc img { max-width: 140px; margin: 0 auto 14px; }
-.sc h3 { font-size: .88rem; margin: 0 0 6px; }
-.sc p { font-size: .82rem; color: var(--mid); margin: 0; line-height: 1.55; }
 
-/* ── VIDEO ── */
-.vg { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
-.vg video { width: 100%; border-radius: 10px; display: block; box-shadow: var(--shadow); }
 
 /* ── PRODUCT BANNER ── */
 .prod-banner {
@@ -711,17 +575,14 @@ h3 {
 
 /* ── UTILITY ── */
 .cap { font-family: var(--ff-b); font-size: .7rem; color: var(--pale); font-style: italic; margin-top: 8px; line-height: 1.55; text-align: center; }
-.gap-sm { margin-bottom: 14px; }
 .gap-md { margin-bottom: 24px; }
 .gap-lg { margin-bottom: 36px; }
-.img-r { border-radius: 10px; }
 
 @media (max-width: 900px) {
   .hero-inner, .cols-2-3, .cols-3-2, .cols-2, .cols-3 { grid-template-columns: 1fr; }
   .patient-card { width: 100% !important; }
   .acc-wrap { width: 100% !important; }
   .ig { grid-template-columns: 1fr 1fr; }
-  .vg { grid-template-columns: 1fr; }
   .stats-band { grid-template-columns: 1fr; gap: 20px; padding: 28px var(--pad); }
   .si { border-right: none; border-bottom: 1px solid #2e4a36; padding-bottom: 14px; }
   .si:last-child { border-bottom: none; }
@@ -844,30 +705,8 @@ h3 {
 /* Line 1005, 1048: margin-bottom:28px override */
 .mb-28 { margin-bottom: 28px; }
 
-/* Pull quote */
-.pull-quote {
-  font-family: Georgia, 'Times New Roman', serif;
-  font-size: 1.35rem;
-  font-style: italic;
-  font-weight: 400;
-  line-height: 1.55;
-  color: var(--ink);
-  border-left: 3px solid var(--green);
-  padding: 8px 0 8px 18px;
-  margin: 20px 0;
-}
 
-/* Line 1013: .sb variant — bold green emphasis */
-.sb-bold-green {
-  font-weight: 600;
-  color: var(--green);
-}
 
-/* Line 1014: .sb variant — italic mid-tone */
-.sb-italic-mid {
-  font-style: italic;
-  color: var(--mid);
-}
 
 /* Line 1021: .sb bold green, no bottom margin */
 .sb-bold-green-0 {
@@ -882,11 +721,6 @@ h3 {
 /* Line 1040: paragraph with no bottom margin */
 .mb-0 { margin-bottom: 0; }
 
-/* Line 1059: centered card-img with max-width */
-.img-center-640 {
-  max-width: 640px;
-  margin: 0 auto 28px;
-}
 
 /* Line 1094, 1143: align-items override on grid */
 .align-start { align-items: start; }
@@ -907,22 +741,7 @@ h3 {
 /* Line 1173: cols-2 margin-top:28px + align-items:start (combine .mt-28 .align-start) */
 /* Use .mt-28 and .align-start together */
 
-/* Line 1175: dark section caption label */
-.dark-label {
-  color: #9ecfaa;
-  font-family: var(--ff-b);
-  font-size: .72rem;
-  font-weight: 600;
-  text-transform: uppercase;
-  letter-spacing: .1em;
-  margin-bottom: 12px;
-}
 
-/* Lines 1180, 1184: .cap color override */
-.cap-alt {
-  color: #6a8570;
-  margin-top: 8px;
-}
 
 /* Line 1193: cols-3-2 align-items:start + margin-bottom:28px (combine .align-start .mb-28) */
 /* Use .align-start and .mb-28 together */
@@ -965,13 +784,6 @@ h3 {
 .mt-20 { margin-top: 20px; }
 
 
-/* ── PRODUCT HERO IMAGE ── */
-/* Originally: style="max-width:280px;margin:0 auto;padding:20px" */
-.product-img-hero {
-  max-width: 280px;
-  margin: 0 auto;
-  padding: 20px;
-}
 
 /* ── MUSCLE TABLE ACCORDION ── */
 .hacc-item.muscle-acc.open .hacc-body {
