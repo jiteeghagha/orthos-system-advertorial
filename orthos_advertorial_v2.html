@@ -1,0 +1,1369 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>The Orthos System — Retrain Natural Alignment</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400;1,600&family=DM+Sans:opsz,wght@9..40,300;9..40,400;9..40,500&display=swap" rel="stylesheet">
+<style>
+/* ── Reset ── */
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+:root {
+  --cream:       #f7f3ee;
+  --cream-dark:  #ede8e0;
+  --cream-mid:   #f0ebe3;
+  --cream-deep:  #e5dfd5;
+  --ink:         #1a1714;
+  --ink-soft:    #3d3830;
+  --ink-muted:   #7a7268;
+  --ink-faint:   #b0a99e;
+  --gold:        #b8935a;
+  --gold-light:  #d4b07a;
+  --gold-pale:   #f5ead8;
+  --gold-deep:   #8a6a35;
+  --green:       #3a6b4a;
+  --green-pale:  #eaf3ed;
+  --border:      rgba(26,23,20,0.10);
+  --border-md:   rgba(26,23,20,0.18);
+  --serif:       'Playfair Display', Georgia, serif;
+  --sans:        'DM Sans', system-ui, sans-serif;
+  --max:         680px;
+  --r:           14px;
+  --r-sm:        8px;
+}
+
+html { scroll-behavior: smooth; }
+
+body {
+  font-family: var(--sans);
+  background: var(--cream);
+  color: var(--ink);
+  font-size: 16px;
+  line-height: 1.7;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='300' height='300'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.75' numOctaves='4' stitchTiles='stitch'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3C/filter%3E%3Crect width='300' height='300' filter='url(%23n)' opacity='0.025'/%3E%3C/svg%3E");
+}
+
+/* ── Topbar ── */
+.topbar {
+  background: var(--ink);
+  padding: 10px 20px;
+  text-align: center;
+  font-size: 12px;
+  font-weight: 500;
+  letter-spacing: .1em;
+  text-transform: uppercase;
+  color: rgba(255,255,255,0.55);
+}
+.topbar span { color: var(--gold-light); }
+
+/* ── Layout ── */
+.wrap { max-width: var(--max); margin: 0 auto; padding: 0 24px; }
+
+/* ── Section spacing ── */
+section { padding: 64px 0; }
+section + section { border-top: 1px solid var(--border); }
+
+/* ── Typography ── */
+.eyebrow {
+  font-size: 11px;
+  font-weight: 500;
+  letter-spacing: .16em;
+  text-transform: uppercase;
+  color: var(--gold);
+  margin-bottom: 14px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+.eyebrow::after {
+  content: '';
+  flex: 1;
+  max-width: 40px;
+  height: 1px;
+  background: var(--gold);
+  opacity: .5;
+}
+
+h1, h2, h3 { font-family: var(--serif); line-height: 1.2; }
+
+.section-title {
+  font-family: var(--serif);
+  font-size: clamp(26px, 4vw, 36px);
+  color: var(--ink);
+  line-height: 1.2;
+  margin-bottom: 16px;
+}
+.section-title em { color: var(--gold); font-style: italic; }
+
+.section-sub {
+  font-size: 17px;
+  color: var(--ink-muted);
+  line-height: 1.6;
+  margin-bottom: 28px;
+}
+
+.body-text {
+  font-size: 15px;
+  color: var(--ink-soft);
+  line-height: 1.75;
+}
+.body-text p { margin-bottom: 16px; }
+.body-text p:last-child { margin-bottom: 0; }
+
+/* ── CTA Button ── */
+.cta-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  padding: 16px 28px;
+  background: var(--ink);
+  color: #fff;
+  border: none;
+  border-radius: var(--r-sm);
+  font-family: var(--sans);
+  font-size: 14px;
+  font-weight: 500;
+  letter-spacing: .03em;
+  cursor: pointer;
+  text-decoration: none;
+  transition: background .2s, transform .15s;
+  position: relative;
+  overflow: hidden;
+}
+.cta-btn::after {
+  content: '';
+  position: absolute; inset: 0;
+  background: linear-gradient(135deg, transparent 40%, rgba(255,255,255,0.05));
+  pointer-events: none;
+}
+.cta-btn:hover { background: #2e2a26; transform: translateY(-1px); }
+.cta-btn .arrow { font-size: 16px; transition: transform .2s; }
+.cta-btn:hover .arrow { transform: translateX(3px); }
+.cta-btn.gold {
+  background: var(--gold);
+  color: var(--ink);
+}
+.cta-btn.gold:hover { background: var(--gold-light); }
+.cta-btn-wrap { margin-top: 32px; display: flex; flex-direction: column; align-items: flex-start; gap: 10px; }
+.cta-guarantee { font-size: 12px; color: var(--ink-faint); display: flex; align-items: center; gap: 6px; }
+.cta-guarantee svg { width: 13px; height: 13px; stroke: currentColor; fill: none; stroke-width: 1.5; stroke-linecap: round; stroke-linejoin: round; }
+
+/* ══════════════════════════
+   HERO
+══════════════════════════ */
+.hero { padding: 56px 0 64px; }
+
+.hero-topline {
+  font-size: 12px;
+  font-weight: 500;
+  letter-spacing: .14em;
+  text-transform: uppercase;
+  color: var(--ink-faint);
+  margin-bottom: 20px;
+}
+
+.hero-headline {
+  font-family: var(--serif);
+  font-size: clamp(30px, 5vw, 44px);
+  line-height: 1.15;
+  color: var(--ink);
+  margin-bottom: 18px;
+  letter-spacing: -.02em;
+}
+.hero-headline em { color: var(--gold); font-style: italic; }
+
+.hero-subhead {
+  font-size: 18px;
+  color: var(--ink-soft);
+  line-height: 1.6;
+  margin-bottom: 36px;
+  max-width: 540px;
+}
+
+/* Testimonial card */
+.testimonial-card {
+  background: var(--cream-dark);
+  border: 1px solid var(--border-md);
+  border-radius: var(--r);
+  overflow: hidden;
+  margin-bottom: 40px;
+}
+.testimonial-video {
+  width: 100%;
+  aspect-ratio: 16/9;
+  background: var(--ink);
+  position: relative;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+}
+.testimonial-video-bg {
+  position: absolute; inset: 0;
+  background: linear-gradient(160deg, #2a2420 0%, #0f0d0b 100%);
+}
+.testimonial-video-label {
+  position: absolute;
+  top: 14px; left: 16px;
+  font-size: 10px;
+  font-weight: 500;
+  letter-spacing: .1em;
+  text-transform: uppercase;
+  color: rgba(255,255,255,0.4);
+  background: rgba(0,0,0,0.3);
+  padding: 4px 10px;
+  border-radius: 20px;
+}
+.play-btn {
+  position: relative;
+  width: 60px; height: 60px;
+  border-radius: 50%;
+  background: rgba(255,255,255,0.12);
+  border: 1.5px solid rgba(255,255,255,0.3);
+  display: flex; align-items: center; justify-content: center;
+  cursor: pointer;
+  transition: background .2s, transform .2s;
+  backdrop-filter: blur(4px);
+}
+.play-btn:hover { background: rgba(255,255,255,0.2); transform: scale(1.06); }
+.play-btn svg { width: 20px; height: 20px; fill: #fff; margin-left: 3px; }
+
+.testimonial-body {
+  padding: 20px 22px;
+  display: flex;
+  gap: 16px;
+  align-items: flex-start;
+}
+.testimonial-avatar {
+  width: 44px; height: 44px;
+  border-radius: 50%;
+  background: var(--gold-pale);
+  border: 1.5px solid rgba(184,147,90,0.3);
+  display: flex; align-items: center; justify-content: center;
+  font-family: var(--serif);
+  font-size: 16px;
+  color: var(--gold-deep);
+  flex-shrink: 0;
+}
+.testimonial-info { flex: 1; }
+.testimonial-name {
+  font-family: var(--serif);
+  font-size: 17px;
+  color: var(--ink);
+  margin-bottom: 2px;
+}
+.testimonial-meta {
+  font-size: 12px;
+  color: var(--ink-muted);
+  margin-bottom: 10px;
+  line-height: 1.5;
+}
+.testimonial-meta span {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+}
+.testimonial-meta span::before {
+  content: '·';
+  margin-right: 2px;
+}
+.testimonial-meta span:first-child::before { display: none; }
+.testimonial-quote {
+  font-family: var(--serif);
+  font-style: italic;
+  font-size: 15px;
+  color: var(--ink-soft);
+  line-height: 1.55;
+  border-left: 2px solid var(--gold);
+  padding-left: 14px;
+}
+
+/* Opening body copy */
+.hero-body {
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+}
+.hero-body-text {
+  font-size: 16px;
+  color: var(--ink-soft);
+  line-height: 1.8;
+  margin-bottom: 18px;
+}
+.hero-pull {
+  font-family: var(--serif);
+  font-size: clamp(20px, 3vw, 26px);
+  color: var(--ink);
+  line-height: 1.3;
+  border-left: 3px solid var(--gold);
+  padding: 10px 0 10px 20px;
+  margin: 24px 0;
+  font-style: italic;
+}
+
+/* ══════════════════════════
+   SECTION DIVIDER
+══════════════════════════ */
+.section-divide {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  padding: 0;
+  margin-bottom: 40px;
+}
+.section-divide::before, .section-divide::after {
+  content: '';
+  flex: 1;
+  height: 1px;
+  background: var(--border);
+}
+.section-divide-inner {
+  text-align: center;
+}
+.section-divide-label {
+  font-size: 10px;
+  letter-spacing: .16em;
+  text-transform: uppercase;
+  color: var(--ink-faint);
+  font-weight: 500;
+  display: block;
+  margin-bottom: 3px;
+}
+.section-divide-title {
+  font-family: var(--serif);
+  font-size: 20px;
+  color: var(--ink);
+}
+
+/* ══════════════════════════
+   SECTION 1 — THE PROBLEM
+══════════════════════════ */
+.problem-list {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  margin: 24px 0;
+}
+.problem-item {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  padding: 14px 16px;
+  background: var(--cream-dark);
+  border: 1px solid var(--border);
+  border-radius: var(--r-sm);
+}
+.problem-icon {
+  width: 32px; height: 32px;
+  border-radius: 50%;
+  background: rgba(26,23,20,0.06);
+  display: flex; align-items: center; justify-content: center;
+  flex-shrink: 0;
+  font-size: 14px;
+}
+.problem-text { flex: 1; }
+.problem-text strong { font-size: 13px; font-weight: 500; color: var(--ink); display: block; margin-bottom: 2px; }
+.problem-text span { font-size: 12px; color: var(--ink-muted); line-height: 1.45; }
+
+.authority-block {
+  background: var(--ink);
+  border-radius: var(--r-sm);
+  padding: 24px 28px;
+  margin-top: 28px;
+  position: relative;
+  overflow: hidden;
+}
+.authority-block::before {
+  content: '';
+  position: absolute; top: -40px; right: -40px;
+  width: 160px; height: 160px;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(184,147,90,0.15) 0%, transparent 70%);
+}
+.authority-block p {
+  font-family: var(--serif);
+  font-size: 18px;
+  color: #fff;
+  line-height: 1.4;
+  position: relative; z-index: 1;
+}
+.authority-block p em { color: var(--gold-light); font-style: italic; }
+
+/* ══════════════════════════
+   SECTION 2 — MECHANISM
+══════════════════════════ */
+.mechanism-grid {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  margin: 28px 0;
+}
+.mechanism-card {
+  display: flex;
+  gap: 18px;
+  padding: 22px 24px;
+  background: #fff;
+  border: 1px solid var(--border);
+  border-radius: var(--r);
+  position: relative;
+  overflow: hidden;
+  transition: box-shadow .2s;
+}
+.mechanism-card:hover { box-shadow: 0 4px 24px rgba(26,23,20,0.07); }
+.mechanism-card::before {
+  content: '';
+  position: absolute;
+  left: 0; top: 0; bottom: 0;
+  width: 3px;
+  background: var(--gold);
+}
+.mechanism-num {
+  font-family: var(--serif);
+  font-size: 32px;
+  color: var(--cream-deep);
+  line-height: 1;
+  flex-shrink: 0;
+  width: 36px;
+  text-align: center;
+  margin-top: 2px;
+}
+.mechanism-content { flex: 1; }
+.mechanism-title {
+  font-family: var(--serif);
+  font-size: 18px;
+  color: var(--ink);
+  margin-bottom: 6px;
+}
+.mechanism-body {
+  font-size: 14px;
+  color: var(--ink-soft);
+  line-height: 1.6;
+}
+
+.mechanism-close {
+  margin-top: 28px;
+  padding: 20px 24px;
+  background: var(--green-pale);
+  border: 1px solid rgba(58,107,74,0.2);
+  border-radius: var(--r-sm);
+  font-size: 15px;
+  color: var(--ink-soft);
+  line-height: 1.6;
+}
+.mechanism-close strong { color: var(--green); font-weight: 500; }
+
+/* ══════════════════════════
+   SECTION 3 — THE SYSTEM
+══════════════════════════ */
+.system-intro {
+  font-size: 15px;
+  color: var(--ink-soft);
+  line-height: 1.75;
+  margin-bottom: 32px;
+}
+
+.step-list { display: flex; flex-direction: column; gap: 0; }
+
+.step-item {
+  display: flex;
+  gap: 0;
+  position: relative;
+}
+.step-item:not(:last-child)::after {
+  content: '';
+  position: absolute;
+  left: 21px;
+  top: 44px;
+  bottom: -2px;
+  width: 1px;
+  background: var(--border);
+  z-index: 0;
+}
+.step-left {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-right: 20px;
+  flex-shrink: 0;
+}
+.step-num {
+  width: 44px; height: 44px;
+  border-radius: 50%;
+  background: var(--ink);
+  color: #fff;
+  display: flex; align-items: center; justify-content: center;
+  font-family: var(--serif);
+  font-size: 18px;
+  flex-shrink: 0;
+  position: relative; z-index: 1;
+  transition: background .2s;
+}
+.step-item:hover .step-num { background: var(--gold); }
+.step-content {
+  flex: 1;
+  padding-bottom: 36px;
+}
+.step-label {
+  font-size: 10px;
+  font-weight: 500;
+  letter-spacing: .14em;
+  text-transform: uppercase;
+  color: var(--gold);
+  margin-bottom: 4px;
+}
+.step-title {
+  font-family: var(--serif);
+  font-size: 22px;
+  color: var(--ink);
+  margin-bottom: 10px;
+  line-height: 1.2;
+}
+.step-body {
+  font-size: 14px;
+  color: var(--ink-soft);
+  line-height: 1.7;
+}
+.step-body p { margin-bottom: 10px; }
+.step-body p:last-child { margin-bottom: 0; }
+
+/* Step video/visual placeholder */
+.step-visual {
+  margin-top: 16px;
+  border-radius: var(--r-sm);
+  overflow: hidden;
+  border: 1px solid var(--border);
+}
+.step-video {
+  width: 100%;
+  aspect-ratio: 16/8;
+  background: var(--ink);
+  position: relative;
+  cursor: pointer;
+  display: flex; align-items: center; justify-content: center;
+}
+.step-video-bg { position: absolute; inset: 0; background: linear-gradient(135deg, #2a2420 0%, #0f0d0b 100%); }
+.step-video-play {
+  position: relative;
+  width: 42px; height: 42px;
+  border-radius: 50%;
+  background: rgba(255,255,255,0.12);
+  border: 1px solid rgba(255,255,255,0.3);
+  display: flex; align-items: center; justify-content: center;
+  transition: background .2s;
+}
+.step-video:hover .step-video-play { background: rgba(255,255,255,0.22); }
+.step-video-play svg { width: 14px; height: 14px; fill: #fff; margin-left: 2px; }
+
+/* Supplement cards */
+.supp-stack { display: flex; flex-direction: column; gap: 10px; margin-top: 14px; }
+.supp-card {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  padding: 14px 16px;
+  background: var(--cream);
+  border: 1px solid var(--border);
+  border-radius: var(--r-sm);
+  transition: border-color .2s, box-shadow .2s;
+}
+.supp-card:hover { border-color: var(--border-md); box-shadow: 0 2px 12px rgba(26,23,20,0.06); }
+.supp-vid {
+  width: 60px; height: 44px;
+  background: var(--ink);
+  border-radius: 6px;
+  display: flex; align-items: center; justify-content: center;
+  flex-shrink: 0;
+  cursor: pointer;
+  overflow: hidden;
+  position: relative;
+}
+.supp-vid-bg { position: absolute; inset: 0; background: linear-gradient(135deg, #2e2a26, #1a1714); }
+.supp-vid-play {
+  position: relative;
+  width: 22px; height: 22px;
+  border-radius: 50%;
+  background: rgba(255,255,255,.15);
+  border: 1px solid rgba(255,255,255,.3);
+  display: flex; align-items: center; justify-content: center;
+}
+.supp-vid-play svg { width: 9px; height: 9px; fill: #fff; margin-left: 1px; }
+.supp-tag {
+  font-size: 9px;
+  font-weight: 500;
+  letter-spacing: .1em;
+  text-transform: uppercase;
+  color: var(--gold);
+  background: var(--gold-pale);
+  border: 1px solid rgba(184,147,90,0.25);
+  padding: 2px 7px;
+  border-radius: 20px;
+  margin-left: 6px;
+  white-space: nowrap;
+}
+.img-ph {
+  border: 1.5px dashed var(--border-md);
+  border-radius: var(--r-sm);
+  height: 54px;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 12px; color: var(--ink-faint);
+  gap: 6px;
+  margin-top: 10px;
+}
+.img-ph svg { width: 14px; height: 14px; stroke: var(--ink-faint); fill: none; }
+
+/* Device card */
+.device-card {
+  background: #fff;
+  border: 1px solid var(--border);
+  border-radius: var(--r);
+  overflow: hidden;
+  margin-top: 14px;
+}
+.device-video {
+  width: 100%;
+  aspect-ratio: 16/8;
+  background: var(--ink);
+  display: flex; align-items: center; justify-content: center;
+  position: relative; cursor: pointer;
+}
+.device-video-bg { position: absolute; inset: 0; background: linear-gradient(135deg, #2a2420, #0f0d0b); }
+.device-info { padding: 18px 20px; }
+.device-name {
+  font-family: var(--serif);
+  font-size: 19px;
+  color: var(--ink);
+  margin-bottom: 6px;
+}
+.device-desc { font-size: 13px; color: var(--ink-soft); line-height: 1.55; }
+.device-features {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 6px;
+  margin-top: 14px;
+}
+.device-feature {
+  display: flex;
+  align-items: flex-start;
+  gap: 7px;
+  font-size: 12px;
+  color: var(--ink-muted);
+  line-height: 1.4;
+}
+.device-feature::before {
+  content: '';
+  width: 5px; height: 5px;
+  border-radius: 50%;
+  background: var(--gold);
+  margin-top: 5px;
+  flex-shrink: 0;
+}
+
+/* Identity shift block */
+.identity-block {
+  margin-top: 40px;
+  padding: 32px;
+  background: var(--cream-dark);
+  border-radius: var(--r);
+  border: 1px solid var(--border-md);
+  text-align: center;
+  position: relative;
+  overflow: hidden;
+}
+.identity-block::before {
+  content: '"';
+  position: absolute;
+  top: -20px; left: 20px;
+  font-family: var(--serif);
+  font-size: 120px;
+  color: rgba(184,147,90,0.08);
+  line-height: 1;
+}
+.identity-block p {
+  font-family: var(--serif);
+  font-style: italic;
+  font-size: clamp(18px, 3vw, 24px);
+  color: var(--ink);
+  line-height: 1.4;
+  position: relative; z-index: 1;
+}
+.identity-block p em { color: var(--gold); }
+
+/* ══════════════════════════
+   QUIZ SECTION
+══════════════════════════ */
+.quiz-wrap {
+  background: #fff;
+  border: 1px solid var(--border);
+  border-radius: var(--r);
+  overflow: hidden;
+}
+.quiz-hdr {
+  padding: 22px 24px 18px;
+  border-bottom: 1px solid var(--border);
+}
+.quiz-hdr-title { font-family: var(--serif); font-size: 20px; color: var(--ink); margin-bottom: 4px; }
+.quiz-hdr-sub { font-size: 13px; color: var(--ink-muted); }
+.quiz-inner { padding: 22px 24px; display: flex; flex-direction: column; gap: 14px; }
+.quiz-prog { display: flex; gap: 5px; }
+.q-dot { flex: 1; height: 3px; border-radius: 2px; background: var(--cream-dark); transition: background .3s; }
+.q-dot.done { background: var(--ink); }
+.q-dot.active { background: var(--gold); }
+.quiz-q { font-family: var(--serif); font-size: 17px; color: var(--ink); line-height: 1.35; }
+.quiz-opts { display: flex; flex-direction: column; gap: 8px; }
+.quiz-opt {
+  display: flex; align-items: center; gap: 12px;
+  padding: 12px 16px;
+  border: 1px solid var(--border);
+  border-radius: var(--r-sm);
+  background: var(--cream);
+  cursor: pointer;
+  font-size: 14px; color: var(--ink-soft);
+  transition: all .15s; text-align: left; width: 100%;
+  font-family: var(--sans);
+}
+.quiz-opt:hover { border-color: var(--border-md); background: var(--cream-dark); }
+.quiz-opt.sel { border-color: var(--gold); background: var(--gold-pale); font-weight: 500; color: var(--ink); }
+.quiz-radio {
+  width: 16px; height: 16px; border-radius: 50%;
+  border: 1.5px solid var(--border-md);
+  flex-shrink: 0; display: flex; align-items: center; justify-content: center;
+  transition: all .15s;
+}
+.quiz-opt.sel .quiz-radio { background: var(--gold); border-color: var(--gold); }
+.quiz-opt.sel .quiz-radio::after { content: ''; width: 6px; height: 6px; border-radius: 50%; background: #fff; }
+.quiz-nav { display: flex; justify-content: space-between; align-items: center; }
+.quiz-btn {
+  padding: 9px 20px;
+  border: 1px solid var(--border-md);
+  border-radius: var(--r-sm);
+  background: #fff; color: var(--ink);
+  font-family: var(--sans); font-size: 13px; font-weight: 500; cursor: pointer;
+  transition: all .15s;
+}
+.quiz-btn:hover { background: var(--cream-dark); }
+.quiz-btn:disabled { opacity: .3; cursor: default; }
+.quiz-btn.primary { background: var(--ink); color: #fff; border-color: transparent; }
+.quiz-btn.primary:hover { background: #2e2a26; }
+.result-card { border-radius: var(--r-sm); padding: 18px 20px; display: flex; flex-direction: column; gap: 6px; animation: fadeUp .4s ease both; }
+@keyframes fadeUp { from{opacity:0;transform:translateY(8px)} to{opacity:1;transform:none} }
+.result-card.mild { background: var(--green-pale); border: 1px solid rgba(58,107,74,0.25); }
+.result-card.moderate { background: #fffbeb; border: 1px solid rgba(184,147,90,0.3); }
+.result-card.severe { background: #fff1f1; border: 1px solid rgba(168,50,50,0.25); }
+.result-badge { font-size: 10px; font-weight: 600; letter-spacing: .1em; text-transform: uppercase; padding: 3px 10px; border-radius: 20px; width: fit-content; }
+.result-card.mild .result-badge { background: rgba(58,107,74,.12); color: var(--green); }
+.result-card.moderate .result-badge { background: rgba(184,147,90,.18); color: #7a5a20; }
+.result-card.severe .result-badge { background: rgba(168,50,50,.1); color: #a83232; }
+.result-title { font-family: var(--serif); font-size: 18px; color: var(--ink); line-height: 1.25; }
+.result-desc { font-size: 13px; color: var(--ink-soft); line-height: 1.55; }
+.retake-btn { padding: 9px; width: 100%; border: 1px solid var(--border-md); border-radius: var(--r-sm); background: #fff; color: var(--ink-soft); font-family: var(--sans); font-size: 13px; font-weight: 500; cursor: pointer; transition: background .15s; }
+.retake-btn:hover { background: var(--cream-dark); }
+
+/* ══════════════════════════
+   FINAL CTA
+══════════════════════════ */
+.final-cta {
+  background: var(--ink);
+  border-radius: var(--r);
+  padding: 48px 40px;
+  text-align: center;
+  position: relative;
+  overflow: hidden;
+  margin-top: 16px;
+}
+.final-cta::before {
+  content: '';
+  position: absolute; top: -80px; right: -80px;
+  width: 280px; height: 280px;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(184,147,90,0.15) 0%, transparent 70%);
+}
+.final-cta::after {
+  content: '';
+  position: absolute; bottom: -80px; left: -40px;
+  width: 240px; height: 240px;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(58,107,74,0.1) 0%, transparent 70%);
+}
+.final-cta-inner { position: relative; z-index: 1; display: flex; flex-direction: column; align-items: center; gap: 16px; }
+.final-cta-label { font-size: 11px; letter-spacing: .16em; text-transform: uppercase; color: var(--gold); font-weight: 500; }
+.final-cta-title { font-family: var(--serif); font-size: clamp(26px, 4vw, 36px); color: #fff; line-height: 1.2; }
+.final-cta-title em { color: var(--gold-light); font-style: italic; }
+.final-cta-desc { font-size: 14px; color: rgba(255,255,255,0.5); line-height: 1.6; max-width: 420px; }
+.final-cta-guarantee { font-size: 12px; color: rgba(255,255,255,0.3); display: flex; align-items: center; gap: 6px; }
+.final-cta-guarantee svg { width: 13px; height: 13px; stroke: currentColor; fill: none; stroke-width: 1.5; stroke-linecap: round; stroke-linejoin: round; }
+
+/* ══════════════════════════
+   FOOTER
+══════════════════════════ */
+.footer {
+  padding: 28px 0;
+  border-top: 1px solid var(--border);
+  text-align: center;
+  font-size: 11px;
+  color: var(--ink-faint);
+  line-height: 1.8;
+}
+.footer a { color: var(--ink-faint); text-decoration: underline; }
+
+/* ══════════════════════════
+   RESPONSIVE
+══════════════════════════ */
+@media (max-width: 560px) {
+  section { padding: 48px 0; }
+  .final-cta { padding: 36px 24px; }
+  .mechanism-card { flex-direction: column; gap: 8px; }
+  .mechanism-num { font-size: 22px; width: auto; }
+  .device-features { grid-template-columns: 1fr; }
+  .testimonial-body { flex-direction: column; }
+}
+
+/* ══════════════════════════
+   SCROLL ANIMATIONS
+══════════════════════════ */
+.reveal {
+  opacity: 0;
+  transform: translateY(20px);
+  transition: opacity .6s ease, transform .6s ease;
+}
+.reveal.visible {
+  opacity: 1;
+  transform: none;
+}
+.reveal-delay-1 { transition-delay: .1s; }
+.reveal-delay-2 { transition-delay: .2s; }
+.reveal-delay-3 { transition-delay: .3s; }
+</style>
+</head>
+<body>
+
+<div class="topbar">
+  As referenced in <span>Spine Health Journal</span> &nbsp;·&nbsp; Over 14,000 people have used the Orthos System
+</div>
+
+<!-- ══════════════════════════
+     HERO
+══════════════════════════ -->
+<section class="hero">
+  <div class="wrap">
+
+    <div class="hero-topline">Health & Posture · Editorial</div>
+
+    <h1 class="hero-headline reveal">
+      There's a Predictable Pattern Behind Poor Posture—<em>And Most People Miss It Completely</em>
+    </h1>
+
+    <p class="hero-subhead reveal reveal-delay-1">
+      Posture doesn't suddenly "go bad." It shifts gradually—until small changes begin to compound over time.
+    </p>
+
+    <!-- Testimonial -->
+    <div class="testimonial-card reveal reveal-delay-2">
+      <div class="testimonial-video">
+        <div class="testimonial-video-bg"></div>
+        <div class="testimonial-video-label">Patient Story</div>
+        <div class="play-btn">
+          <svg viewBox="0 0 16 16"><path d="M4 2l10 6-10 6V2z"/></svg>
+        </div>
+      </div>
+      <div class="testimonial-body">
+        <div class="testimonial-avatar">EL</div>
+        <div class="testimonial-info">
+          <div class="testimonial-name">Ethartha L., 54</div>
+          <div class="testimonial-meta">
+            <span>School teacher, 28 years</span>
+            <span>Chronic neck &amp; upper back pain</span>
+            <span>$6,200 spent on PT</span>
+          </div>
+          <div class="testimonial-quote">
+            "After 6 weeks I could stand at the whiteboard without pain for the first time in years."
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Opening copy -->
+    <div class="hero-body reveal">
+      <p class="hero-body-text">
+        There's a structure to how posture changes.
+      </p>
+      <p class="hero-body-text">
+        At first, it's barely noticeable. A slight shift forward. A subtle rounding. Nothing dramatic.
+      </p>
+      <p class="hero-body-text">
+        But over time, those small changes begin to organize themselves into a pattern.
+      </p>
+      <p class="hero-body-text">
+        And once that pattern is established… it tends to repeat.
+      </p>
+      <p class="hero-body-text">
+        Not because of laziness. Not because of a lack of effort. But because <strong>the body adapts to what it practices most.</strong>
+      </p>
+
+      <div class="hero-pull">
+        What most posture advice gets wrong is simple: it treats posture as something you <em>hold</em>—when in reality, it's something your body <em>learns.</em>
+      </div>
+
+      <p class="hero-body-text">
+        That distinction changes everything about how you approach fixing it.
+      </p>
+    </div>
+
+    <div class="cta-btn-wrap reveal">
+      <a href="#system" class="cta-btn">
+        See the 3-Part System That Helps Retrain Natural Alignment <span class="arrow">→</span>
+      </a>
+    </div>
+
+  </div>
+</section>
+
+<!-- ══════════════════════════
+     SECTION 1 — THE PROBLEM
+══════════════════════════ -->
+<section id="problem">
+  <div class="wrap">
+
+    <div class="eyebrow reveal">The Real Problem</div>
+    <h2 class="section-title reveal">Why Most Posture Solutions Don't Create <em>Lasting Change</em></h2>
+
+    <div class="body-text reveal">
+      <p>Many common approaches focus on short-term correction:</p>
+    </div>
+
+    <div class="problem-list reveal">
+      <div class="problem-item">
+        <div class="problem-icon">🪑</div>
+        <div class="problem-text">
+          <strong>Sitting up straighter</strong>
+          <span>Addresses the symptom in the moment — but doesn't change the underlying pattern.</span>
+        </div>
+      </div>
+      <div class="problem-item">
+        <div class="problem-icon">🦺</div>
+        <div class="problem-text">
+          <strong>Wearing rigid supports</strong>
+          <span>Can provide temporary relief, but often creates dependency rather than strength.</span>
+        </div>
+      </div>
+      <div class="problem-item">
+        <div class="problem-icon">🧘</div>
+        <div class="problem-text">
+          <strong>Occasional stretches</strong>
+          <span>Helpful for flexibility — but without structure and consistency, rarely produces lasting change.</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="body-text reveal" style="margin-top:24px">
+      <p>And while these can feel helpful in the moment… they often don't create lasting change.</p>
+      <p>Because posture isn't just a position. It's the result of a system:</p>
+    </div>
+
+    <div class="problem-list reveal">
+      <div class="problem-item">
+        <div class="problem-icon">💪</div>
+        <div class="problem-text">
+          <strong>How muscles activate</strong>
+          <span>Which muscle groups are engaged — and which have gone quiet.</span>
+        </div>
+      </div>
+      <div class="problem-item">
+        <div class="problem-icon">🦴</div>
+        <div class="problem-text">
+          <strong>How the body is supported structurally</strong>
+          <span>The nutritional and connective tissue foundation underneath posture.</span>
+        </div>
+      </div>
+      <div class="problem-item">
+        <div class="problem-icon">📡</div>
+        <div class="problem-text">
+          <strong>How awareness is maintained throughout the day</strong>
+          <span>Without feedback, the body defaults to familiar — not optimal — patterns.</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="authority-block reveal">
+      <p>Effort alone isn't enough. <em>Structure determines outcome.</em></p>
+    </div>
+
+  </div>
+</section>
+
+<!-- ══════════════════════════
+     SECTION 2 — MECHANISM
+══════════════════════════ -->
+<section id="mechanism">
+  <div class="wrap">
+
+    <div class="eyebrow reveal">The Mechanism</div>
+    <h2 class="section-title reveal">The 3 Factors That Influence How Posture <em>Develops Over Time</em></h2>
+
+    <p class="section-sub reveal">
+      When posture is viewed through a systems lens, three key factors consistently show up.
+    </p>
+
+    <div class="mechanism-grid">
+
+      <div class="mechanism-card reveal">
+        <div class="mechanism-num">1</div>
+        <div class="mechanism-content">
+          <div class="mechanism-title">Muscular Engagement</div>
+          <div class="mechanism-body">
+            Certain muscle groups play a central role in maintaining upright positioning. When they're underused or inactive, the body adapts by shifting load elsewhere — creating the compensatory patterns that show up as poor posture.
+          </div>
+        </div>
+      </div>
+
+      <div class="mechanism-card reveal reveal-delay-1">
+        <div class="mechanism-num">2</div>
+        <div class="mechanism-content">
+          <div class="mechanism-title">Structural Support</div>
+          <div class="mechanism-body">
+            Bones, joints, and connective tissue rely on proper inputs to function effectively. This isn't about extremes — it's about giving the body what it needs to maintain balance and integrity over time.
+          </div>
+        </div>
+      </div>
+
+      <div class="mechanism-card reveal reveal-delay-2">
+        <div class="mechanism-num">3</div>
+        <div class="mechanism-content">
+          <div class="mechanism-title">Feedback &amp; Awareness</div>
+          <div class="mechanism-body">
+            Perhaps the most overlooked factor. Without feedback, posture becomes automatic — and not always in a helpful way. Awareness acts as a guide, helping the body recognize and adjust positioning in real time.
+          </div>
+        </div>
+      </div>
+
+    </div>
+
+    <div class="mechanism-close reveal">
+      When these three factors work together, <strong>alignment becomes easier to maintain — without constant effort.</strong>
+    </div>
+
+  </div>
+</section>
+
+<!-- ══════════════════════════
+     SECTION 3 — THE SYSTEM
+══════════════════════════ -->
+<section id="system">
+  <div class="wrap">
+
+    <div class="section-divide reveal">
+      <div class="section-divide-inner">
+        <span class="section-divide-label">The Protocol</span>
+        <div class="section-divide-title">The Orthos System</div>
+      </div>
+    </div>
+
+    <div class="eyebrow reveal">The Alignment Matrix™</div>
+    <h2 class="section-title reveal">A System Designed to <em>Support Alignment</em>—Not Force It</h2>
+
+    <p class="system-intro reveal">
+      Instead of focusing on temporary correction, the Alignment Matrix™ is built around reinforcing the system itself. Three steps. Each one targeting a different part of the posture equation.
+    </p>
+
+    <div class="step-list">
+
+      <!-- Step 1 -->
+      <div class="step-item reveal">
+        <div class="step-left">
+          <div class="step-num">1</div>
+        </div>
+        <div class="step-content">
+          <div class="step-label">Step One</div>
+          <div class="step-title">Activate — Exercise</div>
+          <div class="step-body">
+            <p>Short, targeted movements designed to support natural engagement of key muscle groups.</p>
+            <p>Simple. Repeatable. Time-efficient. The 21-Day Postural Reset progresses from mobility work in Week 1 to strength-building in Weeks 2 and 3 — building the muscular foundation that holds alignment in place.</p>
+          </div>
+          <div class="step-visual">
+            <div class="step-video">
+              <div class="step-video-bg"></div>
+              <div class="step-video-play"><svg viewBox="0 0 12 12"><path d="M2 1.5l8 4.5-8 4.5V1.5z"/></svg></div>
+            </div>
+          </div>
+          <div class="cta-btn-wrap">
+            <a href="#" class="cta-btn">Get the Orthos System <span class="arrow">→</span></a>
+            <div class="cta-guarantee">
+              <svg viewBox="0 0 13 13"><circle cx="6.5" cy="6.5" r="5.5"/><polyline points="4 6.5 6 8.5 9.5 5"/></svg>
+              30-day money-back guarantee · Free shipping
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Step 2 -->
+      <div class="step-item reveal">
+        <div class="step-left">
+          <div class="step-num">2</div>
+        </div>
+        <div class="step-content">
+          <div class="step-label">Step Two</div>
+          <div class="step-title">Support — Supplements</div>
+          <div class="step-body">
+            <p>A structured approach to providing the body with the inputs it needs for long-term balance and stability.</p>
+            <p>Most postural problems have a nutritional component that exercise alone can't address. These three supplements directly support the bone, muscle, and connective tissue structures that keep you upright.</p>
+          </div>
+
+          <div class="supp-stack">
+            <div class="supp-card">
+              <div class="supp-vid">
+                <div class="supp-vid-bg"></div>
+                <div class="supp-vid-play"><svg viewBox="0 0 10 10"><path d="M2 1l7 4-7 4V1z"/></svg></div>
+              </div>
+              <div style="flex:1">
+                <div style="font-size:14px;font-weight:500;color:var(--ink);font-family:var(--serif)">Vitamin D₃ + K₂ <span class="supp-tag">Core</span></div>
+                <div style="font-size:12px;color:var(--ink-muted);margin-top:3px;line-height:1.4">Directs calcium into bone. Essential for the skeletal density posture depends on.</div>
+              </div>
+            </div>
+            <div class="img-ph">
+              <svg viewBox="0 0 24 24" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="3"/><circle cx="9" cy="9" r="2"/><polyline points="21 15 16 10 5 21"/></svg>
+              Product image
+            </div>
+            <div class="supp-card">
+              <div class="supp-vid">
+                <div class="supp-vid-bg"></div>
+                <div class="supp-vid-play"><svg viewBox="0 0 10 10"><path d="M2 1l7 4-7 4V1z"/></svg></div>
+              </div>
+              <div style="flex:1">
+                <div style="font-size:14px;font-weight:500;color:var(--ink);font-family:var(--serif)">Magnesium Glycinate <span class="supp-tag">Core</span></div>
+                <div style="font-size:12px;color:var(--ink-muted);margin-top:3px;line-height:1.4">Relaxes chronically tight postural muscles. Reduces the neurological tension that pulls the spine out of alignment.</div>
+              </div>
+            </div>
+            <div class="img-ph">
+              <svg viewBox="0 0 24 24" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="3"/><circle cx="9" cy="9" r="2"/><polyline points="21 15 16 10 5 21"/></svg>
+              Product image
+            </div>
+            <div class="supp-card">
+              <div class="supp-vid">
+                <div class="supp-vid-bg"></div>
+                <div class="supp-vid-play"><svg viewBox="0 0 10 10"><path d="M2 1l7 4-7 4V1z"/></svg></div>
+              </div>
+              <div style="flex:1">
+                <div style="font-size:14px;font-weight:500;color:var(--ink);font-family:var(--serif)">Collagen Peptides <span class="supp-tag">Support</span></div>
+                <div style="font-size:12px;color:var(--ink-muted);margin-top:3px;line-height:1.4">Rebuilds ligaments, tendons, and intervertebral discs — the connective tissue holding spinal structure.</div>
+              </div>
+            </div>
+          </div>
+
+          <div class="cta-btn-wrap">
+            <a href="#" class="cta-btn">Get the Orthos System <span class="arrow">→</span></a>
+            <div class="cta-guarantee">
+              <svg viewBox="0 0 13 13"><circle cx="6.5" cy="6.5" r="5.5"/><polyline points="4 6.5 6 8.5 9.5 5"/></svg>
+              30-day money-back guarantee · Free shipping
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Step 3 -->
+      <div class="step-item reveal">
+        <div class="step-left">
+          <div class="step-num">3</div>
+        </div>
+        <div class="step-content">
+          <div class="step-label">Step Three</div>
+          <div class="step-title">Guide — Device</div>
+          <div class="step-body">
+            <p>Real-time feedback that helps bring awareness to positioning throughout the day.</p>
+            <p>Not rigid. Not restrictive. Just enough input to help the body recalibrate over time.</p>
+          </div>
+
+          <div class="device-card">
+            <div class="device-video">
+              <div class="device-video-bg"></div>
+              <div class="play-btn" style="position:relative">
+                <svg viewBox="0 0 16 16"><path d="M4 2l10 6-10 6V2z"/></svg>
+              </div>
+            </div>
+            <div class="device-info">
+              <div class="device-name">The Orthos Postural Trainer</div>
+              <div class="device-desc">A biofeedback wearable that attaches to your upper back and vibrates gently the moment you begin to slouch — before the habit pattern locks in. Pairs with the Orthos app to track your improvement over time.</div>
+              <div class="device-features">
+                <div class="device-feature">Discreet under clothing</div>
+                <div class="device-feature">14-day battery life</div>
+                <div class="device-feature">Clinician-calibrated</div>
+                <div class="device-feature">Real-time posture scoring</div>
+                <div class="device-feature">Waterproof (IPX5)</div>
+                <div class="device-feature">Free companion app</div>
+              </div>
+            </div>
+          </div>
+
+          <div class="cta-btn-wrap">
+            <a href="#" class="cta-btn">Get the Orthos System <span class="arrow">→</span></a>
+            <div class="cta-guarantee">
+              <svg viewBox="0 0 13 13"><circle cx="6.5" cy="6.5" r="5.5"/><polyline points="4 6.5 6 8.5 9.5 5"/></svg>
+              30-day money-back guarantee · Free shipping
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div><!-- /step-list -->
+
+    <!-- Identity shift -->
+    <div class="identity-block reveal">
+      <p>Over time, something changes.<br>Alignment becomes less about effort… and more about <em>familiarity.</em></p>
+    </div>
+
+  </div>
+</section>
+
+<!-- ══════════════════════════
+     QUIZ
+══════════════════════════ -->
+<section id="quiz">
+  <div class="wrap">
+
+    <div class="eyebrow reveal">Free Assessment</div>
+    <h2 class="section-title reveal">Quiz Yourself</h2>
+    <p class="section-sub reveal">Answer 7 quick questions to understand where your posture stands — and what level of support you may need.</p>
+
+    <div class="quiz-wrap reveal">
+      <div class="quiz-hdr">
+        <div class="quiz-hdr-title">Posture Self-Assessment</div>
+        <div class="quiz-hdr-sub">Takes about 2 minutes · No sign-up required</div>
+      </div>
+      <div class="quiz-inner">
+        <div id="quiz-screen">
+          <div class="quiz-prog" id="qprog" style="margin-bottom:14px"></div>
+          <div class="quiz-q" id="qq" style="margin-bottom:14px"></div>
+          <div class="quiz-opts" id="qopts"></div>
+          <div class="quiz-nav" style="margin-top:14px">
+            <button class="quiz-btn" id="qprev" onclick="qnav(-1)" disabled>← Back</button>
+            <span style="font-size:12px;color:var(--ink-faint)" id="qct"></span>
+            <button class="quiz-btn primary" id="qnext" onclick="qnav(1)" disabled>Next →</button>
+          </div>
+        </div>
+        <div id="qres" style="display:none;flex-direction:column;gap:12px"></div>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<!-- ══════════════════════════
+     FINAL CTA
+══════════════════════════ -->
+<section style="border-top:none;padding-top:0">
+  <div class="wrap">
+    <div class="final-cta reveal">
+      <div class="final-cta-inner">
+        <div class="final-cta-label">Explore the Alignment Matrix™ System</div>
+        <div class="final-cta-title">Ready to fix your posture <em>for good?</em></div>
+        <div class="final-cta-desc">The Orthos System combines targeted exercise, nutritional support, and real-time biofeedback — the only three things that actually matter for lasting postural change.</div>
+        <a href="#" class="cta-btn gold" style="margin-top:8px">
+          Get the Orthos System <span class="arrow">→</span>
+        </a>
+        <div class="final-cta-guarantee">
+          <svg viewBox="0 0 13 13"><circle cx="6.5" cy="6.5" r="5.5"/><polyline points="4 6.5 6 8.5 9.5 5"/></svg>
+          30-day money-back guarantee &nbsp;·&nbsp; Free shipping &nbsp;·&nbsp; Ships in 2–3 days
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="wrap">
+  <div class="footer">
+    This page is an advertorial. Results may vary. The Orthos System is not intended to diagnose, treat, cure, or prevent any medical condition.<br>
+    © 2026 Orthos Health. All rights reserved. &nbsp;·&nbsp;
+    <a href="#">Privacy Policy</a> &nbsp;·&nbsp; <a href="#">Terms of Service</a>
+  </div>
+</div>
+
+<script>
+// ── Scroll reveal ──
+const observer = new IntersectionObserver((entries) => {
+  entries.forEach(e => { if (e.isIntersecting) { e.target.classList.add('visible'); observer.unobserve(e.target); } });
+}, { threshold: 0.1, rootMargin: '0px 0px -40px 0px' });
+document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+
+// ── Quiz ──
+const Qs = [
+  { q:'How often do you experience neck or upper back pain?',                                opts:['Rarely or never','A few times a week','Daily or almost always'] },
+  { q:'When standing against a wall, can your head, shoulders, and heels all touch at once?',opts:['Yes, easily','With some effort','No — not at all'] },
+  { q:'How many hours per day do you typically spend sitting?',                              opts:['Under 4 hours','4–8 hours','More than 8 hours'] },
+  { q:'Do people ever comment that you slouch or hunch forward?',                            opts:['Never','Occasionally','Often or always'] },
+  { q:'Do you feel lower back pain or stiffness when rising from a chair?',                  opts:['Rarely','Sometimes','Most of the time'] },
+  { q:'Do you feel shoulder or mid-back tension by end of day?',                             opts:['Rarely','A few times a week','Every day'] },
+  { q:'Has a doctor, physio, or therapist ever said your posture needs attention?',          opts:['Never','Once or twice','Yes, multiple times'] },
+];
+let cur = 0, ans = new Array(Qs.length).fill(null);
+
+function renderQ() {
+  const q = Qs[cur];
+  document.getElementById('qq').textContent = q.q;
+  document.getElementById('qct').textContent = (cur+1) + ' of ' + Qs.length;
+  const prog = document.getElementById('qprog');
+  prog.innerHTML = Qs.map((_,i) => `<div class="q-dot${i<cur?' done':i===cur?' active':''}"></div>`).join('');
+  const opts = document.getElementById('qopts');
+  opts.innerHTML = q.opts.map((o,i) => `
+    <button class="quiz-opt${ans[cur]===i?' sel':''}" onclick="selAns(${i})">
+      <div class="quiz-radio"></div>${o}
+    </button>`).join('');
+  document.getElementById('qprev').disabled = cur === 0;
+  const nx = document.getElementById('qnext');
+  nx.disabled = ans[cur] === null;
+  nx.textContent = cur === Qs.length-1 ? 'See my result' : 'Next →';
+}
+
+function selAns(i) { ans[cur]=i; renderQ(); }
+
+function qnav(d) {
+  if (d===1 && cur===Qs.length-1) { showRes(); return; }
+  cur = Math.max(0, Math.min(Qs.length-1, cur+d));
+  renderQ();
+}
+
+function showRes() {
+  const score = ans.reduce((s,a)=>s+(a||0),0);
+  document.getElementById('quiz-screen').style.display = 'none';
+  const rs = document.getElementById('qres');
+  rs.style.display = 'flex';
+  let cls, label, title, desc, cta;
+  if (score<=4) {
+    cls='mild'; label='Mild posture issues';
+    title='Your posture is slightly off — and easy to correct.';
+    desc='You have some minor postural habits that, left unaddressed, can compound over time. The Orthos System will help you build the right foundation before problems develop.';
+    cta=true;
+  } else if (score<=9) {
+    cls='moderate'; label='Moderate posture problems';
+    title='Your posture needs real, structured attention.';
+    desc='You\'re already experiencing regular discomfort and visible postural imbalance. The Orthos System — all three steps of the Alignment Matrix™ — is designed for exactly this stage.';
+    cta=true;
+  } else {
+    cls='severe'; label='Consult a physician';
+    title='Your symptoms may need professional evaluation first.';
+    desc='Your responses indicate postural and pain patterns that may go beyond what a self-directed program can safely address. We recommend consulting a physician or physical therapist before starting any new program.';
+    cta=false;
+  }
+  rs.innerHTML =
+    `<div class="result-card ${cls}">
+      <div class="result-badge">${label}</div>
+      <div class="result-title">${title}</div>
+      <div class="result-desc">${desc}</div>
+    </div>` +
+    (cta ? `<a href="#" class="cta-btn" style="width:100%;justify-content:center">Get the Orthos System <span class="arrow">→</span></a>` : '') +
+    `<button class="retake-btn" onclick="retake()">Retake the quiz</button>`;
+}
+
+function retake() {
+  cur=0; ans=new Array(Qs.length).fill(null);
+  document.getElementById('quiz-screen').style.display='';
+  const rs=document.getElementById('qres');
+  rs.style.display='none'; rs.innerHTML='';
+  renderQ();
+}
+
+renderQ();
+</script>
+</body>
+</html>
