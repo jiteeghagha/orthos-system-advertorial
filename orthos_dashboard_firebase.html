@@ -3,1235 +3,596 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Orthos System — My Dashboard</title>
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;1,400&family=DM+Sans:opsz,wght@9..40,300;9..40,400;9..40,500&display=swap" rel="stylesheet">
+<title>Orthos System — Dashboard</title>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;1,300;1,400&family=Jost:wght@300;400;500;600&display=swap" rel="stylesheet">
 <style>
-*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-:root {
-  --cream:      #f7f3ee;
-  --cream-dark: #ede8e0;
-  --cream-mid:  #f0ebe3;
-  --ink:        #1a1714;
-  --ink-soft:   #3d3830;
-  --ink-muted:  #7a7268;
-  --ink-faint:  #b0a99e;
-  --gold:       #b8935a;
-  --gold-light: #d4b07a;
-  --gold-pale:  #f5ead8;
-  --gold-deep:  #8a6a35;
-  --green:      #3a6b4a;
-  --green-pale: #eaf3ed;
-  --green-mid:  #c6dece;
-  --red:        #a83232;
-  --red-pale:   #fdf0f0;
-  --amber-pale: #fdf4e3;
-  --border:     rgba(26,23,20,0.10);
-  --border-md:  rgba(26,23,20,0.18);
-  --serif: 'Playfair Display', Georgia, serif;
-  --sans:  'DM Sans', system-ui, sans-serif;
-  --r:    12px;
-  --r-sm: 8px;
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --cream:#F7F3EC;--cream-dark:#EDE7DA;
+  --forest:#2D3D2E;--forest-light:#3D5440;--forest-faint:rgba(45,61,46,0.06);
+  --gold:#9C7A3C;--gold-light:#C4A05A;--gold-pale:#F0E6C8;--gold-faint:rgba(156,122,60,0.08);
+  --ink:#2A2820;--ink-soft:#4A4640;--ink-muted:#7A7568;--ink-faint:#B0A99E;
+  --white:#FFFFFF;--green:#3A6B4A;--green-pale:#EAF3ED;
+  --border:rgba(26,23,20,0.10);--border-md:rgba(26,23,20,0.16);
+  --serif:'Cormorant Garamond',Georgia,serif;
+  --sans:'Jost',system-ui,sans-serif;
 }
-html { scroll-behavior: smooth; }
-body { font-family: var(--sans); background: var(--cream); color: var(--ink); font-size: 14px; line-height: 1.6; min-height: 100vh; }
-button { font-family: var(--sans); cursor: pointer; }
+html{scroll-behavior:smooth}
+body{font-family:var(--sans);background:var(--cream);color:var(--ink);font-size:14px;line-height:1.6;min-height:100vh;font-weight:300}
+button{font-family:var(--sans);cursor:pointer;border:none;background:none}
 
-/* ── Loading screen ── */
-#loading-screen {
-  position: fixed; inset: 0; background: var(--cream);
-  display: flex; align-items: center; justify-content: center; z-index: 200;
-  flex-direction: column; gap: 16px;
+/* LOADING */
+#loading-screen{position:fixed;inset:0;background:var(--forest);display:flex;align-items:center;justify-content:center;z-index:300;flex-direction:column;gap:20px}
+.loading-logo{font-family:var(--serif);font-size:36px;font-weight:400;color:var(--white);letter-spacing:0.04em}
+.loading-logo span{color:var(--gold-light)}
+.loading-sub{font-size:11px;letter-spacing:0.2em;text-transform:uppercase;color:rgba(247,243,236,0.4)}
+.loading-dots{display:flex;gap:8px;margin-top:4px}
+.loading-dot{width:6px;height:6px;border-radius:50%;background:var(--gold-light);animation:dp 1.4s ease-in-out infinite}
+.loading-dot:nth-child(2){animation-delay:.2s}.loading-dot:nth-child(3){animation-delay:.4s}
+@keyframes dp{0%,80%,100%{opacity:.2;transform:scale(.8)}40%{opacity:1;transform:scale(1)}}
+
+/* LOGIN */
+#login-screen{display:none;min-height:100vh;align-items:center;justify-content:center;background:var(--forest);position:relative;overflow:hidden}
+#login-screen::before{content:'';position:absolute;inset:0;background:radial-gradient(ellipse at 30% 50%,rgba(156,122,60,0.15) 0%,transparent 60%)}
+.login-card{position:relative;z-index:2;background:var(--cream);padding:56px 48px;max-width:420px;width:90%;text-align:center}
+.login-logo{font-family:var(--serif);font-size:40px;font-weight:400;color:var(--forest);margin-bottom:8px}
+.login-logo span{color:var(--gold)}
+.login-tagline{font-family:var(--serif);font-style:italic;font-size:17px;color:var(--ink-muted);margin-bottom:32px}
+.login-divider{width:40px;height:1px;background:var(--gold);margin:0 auto 32px;opacity:.5}
+.google-btn{display:flex;align-items:center;justify-content:center;gap:12px;width:100%;padding:15px 24px;background:var(--forest);color:var(--white);font-family:var(--sans);font-size:12px;letter-spacing:0.14em;text-transform:uppercase;font-weight:500;border:none;cursor:pointer;transition:background .3s}
+.google-btn:hover{background:var(--gold)}.google-btn:disabled{opacity:.6;cursor:not-allowed}
+#login-error{display:none;margin-top:16px;font-size:12px;color:#a83232;text-align:center;line-height:1.5}
+.login-disc{font-size:11px;color:var(--ink-faint);margin-top:20px;line-height:1.5}
+
+/* APP */
+#app{display:none;flex-direction:column;min-height:100vh}
+.topbar{background:var(--forest);padding:0 32px;height:60px;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:100}
+.topbar-logo{font-family:var(--serif);font-size:22px;font-weight:400;color:var(--white);letter-spacing:0.04em}
+.topbar-logo span{color:var(--gold-light)}
+.topbar-right{display:flex;align-items:center;gap:16px}
+.user-avatar{width:32px;height:32px;border-radius:50%;background:var(--gold);display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:500;color:var(--white);overflow:hidden;flex-shrink:0}
+.user-avatar img{width:100%;height:100%;object-fit:cover}
+.user-name{font-size:12px;color:rgba(247,243,236,0.6);font-weight:300}
+.signout-btn{font-size:11px;letter-spacing:0.12em;text-transform:uppercase;color:rgba(247,243,236,0.35);cursor:pointer;transition:color .2s;background:none;border:none;font-family:var(--sans)}
+.signout-btn:hover{color:var(--gold-light)}
+.program-banner{background:var(--gold);padding:10px 32px;display:flex;align-items:center;justify-content:space-between}
+.banner-day{font-family:var(--serif);font-size:15px;font-style:italic;color:var(--white)}
+.banner-streak{font-size:11px;letter-spacing:0.14em;text-transform:uppercase;color:rgba(255,255,255,0.8);display:flex;align-items:center;gap:6px}
+.tabs-bar{background:var(--cream-dark);border-bottom:1px solid var(--border);display:flex;overflow-x:auto;padding:0 32px;scrollbar-width:none}
+.tabs-bar::-webkit-scrollbar{display:none}
+.tab-btn{padding:14px 18px;font-size:11px;letter-spacing:0.12em;text-transform:uppercase;font-weight:500;color:var(--ink-muted);border-bottom:2px solid transparent;white-space:nowrap;transition:all .2s;background:none;border-left:none;border-right:none;border-top:none;font-family:var(--sans);cursor:pointer;flex-shrink:0}
+.tab-btn:hover{color:var(--forest)}.tab-btn.active{color:var(--forest);border-bottom-color:var(--gold)}
+.content{flex:1;padding:32px;max-width:860px;margin:0 auto;width:100%}
+.panel{display:none}.panel.active{display:block}
+
+/* TODAY'S PRACTICE */
+.practice-hero{background:var(--forest);padding:40px;margin-bottom:24px;position:relative;overflow:hidden}
+.practice-hero::before{content:'';position:absolute;top:-80px;right:-80px;width:240px;height:240px;border-radius:50%;background:radial-gradient(circle,rgba(156,122,60,0.18) 0%,transparent 70%)}
+.practice-day-badge{font-size:10px;letter-spacing:0.2em;text-transform:uppercase;color:var(--gold-light);margin-bottom:14px;display:block}
+.practice-title{font-family:var(--serif);font-size:clamp(28px,4vw,44px);font-weight:300;color:var(--white);line-height:1.1;margin-bottom:8px}
+.practice-subtitle{font-family:var(--serif);font-style:italic;font-size:16px;color:rgba(247,243,236,0.6)}
+.module-card{background:var(--white);border-top:3px solid var(--gold);padding:40px;margin-bottom:24px}
+.module-section-label{font-size:10px;letter-spacing:0.2em;text-transform:uppercase;color:var(--gold);margin-bottom:20px;display:block}
+.module-reading{font-family:var(--serif);font-size:clamp(17px,2vw,20px);font-weight:300;line-height:1.85;color:var(--forest)}
+.module-reading p{margin-bottom:20px}.module-reading p:last-child{margin-bottom:0}.module-reading em{font-style:italic}
+.practice-instruction{background:var(--gold-faint);border-left:2px solid var(--gold);padding:24px 28px;margin-bottom:24px}
+.practice-instruction-label{font-size:10px;letter-spacing:0.18em;text-transform:uppercase;color:var(--gold);margin-bottom:10px;display:block}
+.practice-instruction p{font-family:var(--serif);font-size:17px;font-style:italic;color:var(--forest);line-height:1.65;margin:0}
+.reflection-card{background:var(--cream-dark);border:1px solid var(--border);padding:32px;margin-bottom:24px}
+.reflection-label{font-size:10px;letter-spacing:0.18em;text-transform:uppercase;color:var(--ink-muted);margin-bottom:12px;display:block}
+.reflection-question{font-family:var(--serif);font-size:19px;font-weight:400;color:var(--forest);line-height:1.4;margin-bottom:20px}
+.reflection-textarea{width:100%;padding:14px 16px;border:1px solid var(--border-md);background:var(--white);font-family:var(--sans);font-size:14px;color:var(--ink);resize:vertical;min-height:100px;line-height:1.6;font-weight:300;outline:none;transition:border-color .2s}
+.reflection-textarea:focus{border-color:var(--gold)}.reflection-textarea::placeholder{color:var(--ink-faint)}
+.save-refl-btn{margin-top:10px;padding:9px 20px;background:var(--forest);color:var(--white);font-size:10px;letter-spacing:0.14em;text-transform:uppercase;font-family:var(--sans);font-weight:500;border:none;cursor:pointer;transition:background .2s}
+.save-refl-btn:hover{background:var(--gold)}.save-refl-btn.saved{background:var(--green);cursor:default}
+.checklist-card{background:var(--white);padding:32px;margin-bottom:24px;border-top:3px solid var(--forest)}
+.checklist-title{font-family:var(--serif);font-size:20px;font-weight:400;color:var(--forest);margin-bottom:20px}
+.checklist-group{margin-bottom:24px}.checklist-group:last-child{margin-bottom:0}
+.checklist-group-label{font-size:10px;letter-spacing:0.18em;text-transform:uppercase;color:var(--ink-muted);margin-bottom:12px;display:block;padding-bottom:8px;border-bottom:1px solid var(--border)}
+.check-item{display:flex;align-items:center;gap:14px;padding:12px 0;border-bottom:1px solid var(--border);cursor:pointer}
+.check-item:last-child{border-bottom:none}
+.check-box{width:20px;height:20px;border:1px solid var(--border-md);border-radius:50%;flex-shrink:0;display:flex;align-items:center;justify-content:center;transition:all .2s}
+.check-item.done .check-box{background:var(--gold);border-color:var(--gold)}
+.check-item.done .check-box::after{content:'✓';font-size:11px;color:var(--white);font-weight:600}
+.check-item-text{font-size:14px;color:var(--ink-soft);flex:1;font-weight:300;transition:all .2s}
+.check-item.done .check-item-text{text-decoration:line-through;color:var(--ink-faint)}
+.complete-day-btn{width:100%;padding:18px;background:var(--forest);color:var(--white);font-family:var(--serif);font-size:20px;font-style:italic;letter-spacing:0.02em;border:none;cursor:pointer;transition:background .3s;margin-bottom:40px}
+.complete-day-btn:hover:not(:disabled){background:var(--gold)}.complete-day-btn.completed{background:var(--green);cursor:default}
+
+/* JOURNEY */
+.week-section{margin-bottom:48px}
+.week-header-row{display:flex;align-items:center;gap:16px;margin-bottom:20px}
+.week-num{font-family:var(--serif);font-size:60px;font-weight:300;color:var(--gold-pale);line-height:1;flex-shrink:0}
+.week-meta{flex:1}
+.week-name{font-family:var(--serif);font-size:24px;font-weight:400;color:var(--forest);line-height:1.1}
+.week-theme-text{font-size:12px;color:var(--ink-muted);margin-top:3px}
+.week-rule{flex:1;height:1px;background:linear-gradient(to right,var(--gold-pale),transparent)}
+.journey-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:2px}
+.journey-card{background:var(--white);padding:24px 20px;border-top:2px solid var(--border);transition:border-color .2s,transform .15s;cursor:pointer;position:relative}
+.journey-card:hover:not(.locked){border-top-color:var(--gold);transform:translateY(-2px)}
+.journey-card.active-day{border-top-color:var(--gold);background:var(--gold-faint)}
+.journey-card.completed{border-top-color:var(--green)}.journey-card.locked{opacity:.4;cursor:default}
+.jcard-day{font-size:9px;letter-spacing:0.2em;text-transform:uppercase;color:var(--gold);margin-bottom:8px;display:block}
+.journey-card.completed .jcard-day{color:var(--green)}.journey-card.locked .jcard-day{color:var(--ink-faint)}
+.jcard-title{font-family:var(--serif);font-size:17px;font-weight:400;color:var(--forest);line-height:1.2;margin-bottom:6px}
+.jcard-subtitle{font-size:11px;color:var(--ink-muted);font-style:italic;line-height:1.4}
+.jcard-status{position:absolute;top:14px;right:14px;width:20px;height:20px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:600}
+.journey-card.completed .jcard-status{background:var(--green);color:var(--white)}
+.journey-card.active-day .jcard-status{background:var(--gold);color:var(--white)}
+.journey-card.locked .jcard-status{background:var(--border);color:var(--ink-faint)}
+
+/* EXERCISES & SUPPLEMENTS */
+.tab-header{display:flex;align-items:flex-start;justify-content:space-between;margin-bottom:28px;gap:16px;flex-wrap:wrap}
+.section-heading{font-family:var(--serif);font-size:28px;font-weight:400;color:var(--forest);margin-bottom:4px}
+.section-sub{font-size:13px;color:var(--ink-muted)}
+.streak-badge{background:var(--gold-faint);border:1px solid var(--gold-pale);padding:8px 16px;font-size:12px;color:var(--gold);display:flex;align-items:center;gap:6px;white-space:nowrap}
+.exercise-card{background:var(--white);padding:28px;margin-bottom:16px;border-top:2px solid var(--border);transition:border-color .2s}
+.exercise-card.done-ex{border-top-color:var(--green)}
+.ex-card-top{display:flex;align-items:center;justify-content:space-between;margin-bottom:8px;gap:12px}
+.ex-name{font-family:var(--serif);font-size:19px;font-weight:400;color:var(--forest)}
+.ex-tag{font-size:9px;letter-spacing:0.12em;text-transform:uppercase;padding:4px 10px;background:var(--forest-faint);color:var(--forest-light);flex-shrink:0}
+.ex-detail{font-size:13px;color:var(--ink-muted);margin-bottom:16px;line-height:1.5}
+.ex-btn{padding:10px 24px;background:var(--forest);color:var(--white);font-size:10px;letter-spacing:0.14em;text-transform:uppercase;font-family:var(--sans);font-weight:500;border:none;cursor:pointer;transition:background .2s}
+.ex-btn:hover:not(:disabled){background:var(--gold)}.ex-btn.done{background:var(--green);cursor:default}
+.supp-card{background:var(--white);padding:28px;margin-bottom:16px;border-top:2px solid var(--border);transition:border-color .2s}
+.supp-card.all-done{border-top-color:var(--green)}
+.supp-name{font-family:var(--serif);font-size:19px;font-weight:400;color:var(--forest);margin-bottom:6px}
+.supp-desc{font-size:13px;color:var(--ink-muted);margin-bottom:16px;line-height:1.6}
+.supp-times{display:flex;gap:10px;flex-wrap:wrap}
+.supp-btn{padding:9px 20px;font-size:11px;letter-spacing:0.1em;text-transform:uppercase;font-family:var(--sans);font-weight:500;border:1px solid var(--border-md);color:var(--ink-soft);background:var(--cream);transition:all .2s;cursor:pointer}
+.supp-btn:hover:not(.checked){border-color:var(--gold);color:var(--gold)}.supp-btn.checked{background:var(--green);border-color:var(--green);color:var(--white)}
+
+/* DEVICE */
+.score-hero{background:var(--forest);padding:40px;margin-bottom:24px;text-align:center;position:relative;overflow:hidden}
+.score-hero::before{content:'';position:absolute;inset:0;background:radial-gradient(ellipse at 50% 100%,rgba(156,122,60,0.12) 0%,transparent 60%)}
+.score-number{font-family:var(--serif);font-size:88px;font-weight:300;color:var(--white);line-height:1;position:relative}
+.score-label{font-size:11px;letter-spacing:0.18em;text-transform:uppercase;color:var(--gold-light);margin-top:8px;position:relative}
+.stat-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:2px;margin-bottom:24px}
+.stat-card{background:var(--white);padding:20px;text-align:center}
+.stat-value{font-family:var(--serif);font-size:30px;font-weight:300;color:var(--forest);line-height:1}
+.stat-label{font-size:10px;letter-spacing:0.14em;text-transform:uppercase;color:var(--ink-muted);margin-top:6px}
+.chart-wrap{background:var(--white);padding:28px;margin-bottom:24px}
+.chart-title{font-family:var(--serif);font-size:18px;font-weight:400;color:var(--forest);margin-bottom:20px}
+.chart-bars{display:flex;align-items:flex-end;gap:4px;height:120px}
+.chart-bar-col{flex:1;display:flex;flex-direction:column;align-items:center;gap:4px}
+.chart-bar{width:100%;background:var(--gold-pale);min-height:4px}
+.chart-bar.today-bar{background:var(--gold)}
+.chart-val{font-size:9px;color:var(--ink-muted)}.chart-day{font-size:9px;color:var(--ink-faint)}
+
+@media(max-width:600px){
+  .content{padding:20px 16px}.topbar{padding:0 16px}.program-banner{padding:10px 16px}
+  .tabs-bar{padding:0 16px}.practice-hero{padding:28px 20px}.module-card{padding:28px 20px}
+  .stat-grid{grid-template-columns:1fr 1fr}.user-name{display:none}.login-card{padding:40px 28px}
 }
-.loading-logo { width: 52px; height: 52px; border-radius: 50%; background: var(--ink); display: flex; align-items: center; justify-content: center; }
-.loading-logo svg { width: 22px; height: 22px; fill: var(--gold); }
-.loading-dots { display: flex; gap: 6px; }
-.loading-dot { width: 6px; height: 6px; border-radius: 50%; background: var(--ink-faint); animation: pulse 1.2s ease-in-out infinite; }
-.loading-dot:nth-child(2) { animation-delay: .2s; }
-.loading-dot:nth-child(3) { animation-delay: .4s; }
-@keyframes pulse { 0%,80%,100%{opacity:.3;transform:scale(.8)} 40%{opacity:1;transform:scale(1)} }
-
-/* ── Login screen ── */
-#login-screen {
-  min-height: 100vh; display: none; align-items: center; justify-content: center; padding: 24px;
-  background: var(--cream);
-  background-image: radial-gradient(ellipse 600px 400px at 80% 20%, rgba(184,147,90,0.08) 0%, transparent 70%),
-    radial-gradient(ellipse 400px 500px at 10% 80%, rgba(58,107,74,0.05) 0%, transparent 70%);
-}
-.login-card {
-  width: 100%; max-width: 400px; background: #fff; border: 1px solid var(--border-md);
-  border-radius: 20px; padding: 44px 40px; display: flex; flex-direction: column;
-  align-items: center; gap: 28px;
-  box-shadow: 0 8px 48px rgba(26,23,20,0.08), 0 1px 3px rgba(26,23,20,0.06);
-  animation: cardIn .5s cubic-bezier(0.34,1.56,0.64,1) both;
-}
-@keyframes cardIn { from{opacity:0;transform:translateY(16px) scale(0.97)} to{opacity:1;transform:none} }
-.login-logo { display: flex; flex-direction: column; align-items: center; gap: 8px; }
-.login-logo-mark {
-  width: 52px; height: 52px; border-radius: 50%; background: var(--ink);
-  display: flex; align-items: center; justify-content: center; position: relative;
-}
-.login-logo-mark::after { content:''; position:absolute; inset:3px; border-radius:50%; border:1px solid rgba(184,147,90,0.4); }
-.login-logo-mark svg { width: 22px; height: 22px; fill: var(--gold); }
-.login-logo-name { font-family: var(--serif); font-size: 22px; color: var(--ink); }
-.login-tagline { text-align: center; }
-.login-tagline h2 { font-family: var(--serif); font-size: 20px; color: var(--ink); margin-bottom: 6px; line-height: 1.25; }
-.login-tagline p { font-size: 13px; color: var(--ink-muted); line-height: 1.5; }
-.login-divider { width:100%; display:flex; align-items:center; gap:12px; }
-.login-divider::before,.login-divider::after { content:''; flex:1; height:1px; background:var(--border); }
-.login-divider span { font-size:11px; color:var(--ink-faint); letter-spacing:.06em; text-transform:uppercase; }
-.google-btn {
-  width: 100%; display: flex; align-items: center; justify-content: center; gap: 12px;
-  padding: 13px 20px; border: 1.5px solid var(--border-md); border-radius: var(--r-sm);
-  background: #fff; color: var(--ink-soft); font-size: 14px; font-weight: 500;
-  transition: border-color .2s, box-shadow .2s, transform .15s;
-}
-.google-btn:hover { box-shadow: 0 2px 12px rgba(26,23,20,0.08); transform: translateY(-1px); }
-.google-btn:disabled { opacity: .5; cursor: default; transform: none; }
-.google-btn svg { width: 20px; height: 20px; flex-shrink: 0; }
-.login-error { font-size: 12px; color: var(--red); text-align: center; background: var(--red-pale); padding: 8px 12px; border-radius: 6px; width: 100%; display: none; }
-.login-legal { font-size: 11px; color: var(--ink-faint); text-align: center; line-height: 1.6; }
-.login-legal a { color: var(--gold); }
-
-/* ── App shell ── */
-#app { display: none; min-height: 100vh; flex-direction: column; }
-#app.visible { display: flex; animation: fadeIn .4s ease both; }
-@keyframes fadeIn { from{opacity:0} to{opacity:1} }
-
-/* ── Top nav ── */
-.topnav {
-  position: sticky; top: 0; z-index: 100;
-  background: rgba(247,243,238,0.92); backdrop-filter: blur(12px);
-  border-bottom: 1px solid var(--border); padding: 0 24px; height: 58px;
-  display: flex; align-items: center; justify-content: space-between; gap: 16px;
-}
-.nav-logo { display: flex; align-items: center; gap: 10px; font-family: var(--serif); font-size: 18px; color: var(--ink); }
-.nav-logo-mark { flex-shrink: 0; }
-.nav-logo-mark img { width: 40px; height: 40px; display: block; object-fit: contain; }
-.nav-center { display: flex; gap: 4px; }
-.nav-tab { padding: 6px 14px; border-radius: 20px; border: none; background: none; font-size: 13px; color: var(--ink-muted); transition: background .15s, color .15s; white-space: nowrap; }
-.nav-tab:hover { background: var(--cream-dark); color: var(--ink); }
-.nav-tab.active { background: var(--ink); color: #fff; font-weight: 500; }
-.nav-right { display: flex; align-items: center; gap: 12px; }
-.nav-avatar {
-  width: 34px; height: 34px; border-radius: 50%; background: var(--gold-pale);
-  border: 1.5px solid rgba(184,147,90,0.3); overflow: hidden;
-  display: flex; align-items: center; justify-content: center;
-  font-family: var(--serif); font-size: 13px; color: var(--gold-deep); font-weight: 600; cursor: pointer;
-}
-.nav-avatar img { width: 100%; height: 100%; object-fit: cover; border-radius: 50%; }
-.logout-btn { font-size: 12px; color: var(--ink-faint); background: none; border: none; padding: 4px 8px; border-radius: 4px; transition: color .15s, background .15s; }
-.logout-btn:hover { color: var(--ink); background: var(--cream-dark); }
-
-.main { flex: 1; padding: 32px 24px 60px; max-width: 820px; margin: 0 auto; width: 100%; }
-
-/* ── Welcome banner ── */
-.welcome-banner {
-  background: var(--ink); border-radius: var(--r); padding: 28px 32px;
-  margin-bottom: 28px; display: flex; align-items: center; justify-content: space-between;
-  gap: 20px; position: relative; overflow: hidden;
-}
-.welcome-banner::before { content:''; position:absolute; top:-60px; right:-40px; width:200px; height:200px; border-radius:50%; background:radial-gradient(circle,rgba(184,147,90,0.18) 0%,transparent 70%); }
-.welcome-banner::after { content:''; position:absolute; bottom:-80px; left:30%; width:260px; height:260px; border-radius:50%; background:radial-gradient(circle,rgba(58,107,74,0.1) 0%,transparent 70%); }
-.welcome-text { position: relative; z-index: 1; }
-.welcome-label { font-size: 11px; letter-spacing: .12em; text-transform: uppercase; color: var(--gold); font-weight: 500; margin-bottom: 4px; }
-.welcome-name { font-family: var(--serif); font-size: 26px; color: #fff; line-height: 1.2; margin-bottom: 6px; }
-.welcome-name em { color: var(--gold-light); font-style: italic; }
-.welcome-sub { font-size: 13px; color: rgba(255,255,255,0.5); }
-.welcome-score-ring { position: relative; z-index: 1; flex-shrink: 0; text-align: center; }
-.ring-label { font-family: var(--serif); font-size: 22px; color: #fff; position: absolute; top: 50%; left: 50%; transform: translate(-50%,-54%); }
-.ring-sub { font-size: 10px; color: rgba(255,255,255,0.45); letter-spacing: .08em; text-transform: uppercase; margin-top: 4px; }
-
-/* ── Section pages ── */
-.section-page { display: none; flex-direction: column; gap: 20px; }
-.section-page.active { display: flex; animation: fadeUp .3s ease both; }
-@keyframes fadeUp { from{opacity:0;transform:translateY(8px)} to{opacity:1;transform:none} }
-
-/* ── Page header ── */
-.page-header { margin-bottom: 4px; }
-.page-header-label { font-size: 10px; letter-spacing: .14em; text-transform: uppercase; color: var(--ink-faint); font-weight: 500; margin-bottom: 4px; }
-.page-header-title { font-family: var(--serif); font-size: 26px; color: var(--ink); line-height: 1.2; }
-.page-header-sub { font-size: 13px; color: var(--ink-muted); margin-top: 4px; }
-
-/* ── Cards ── */
-.card { background: #fff; border: 1px solid var(--border); border-radius: var(--r); overflow: hidden; transition: box-shadow .2s; }
-.card:hover { box-shadow: 0 4px 24px rgba(26,23,20,0.07); }
-.card-hdr { padding: 18px 20px 14px; display: flex; align-items: center; justify-content: space-between; border-bottom: 1px solid var(--border); gap: 12px; flex-wrap: wrap; }
-.card-hdr-title { font-family: var(--serif); font-size: 17px; color: var(--ink); }
-.card-hdr-badge { font-size: 10px; font-weight: 500; letter-spacing: .08em; text-transform: uppercase; padding: 3px 9px; border-radius: 20px; white-space: nowrap; }
-.card-hdr-badge.green { background: var(--green-pale); color: var(--green); }
-.card-hdr-badge.gold { background: var(--gold-pale); color: var(--gold-deep); }
-.card-hdr-badge.ink { background: var(--cream-dark); color: var(--ink-muted); }
-.card-body { padding: 18px 20px; }
-
-/* ── Stat row ── */
-.stat-row { display: grid; grid-template-columns: repeat(3,1fr); gap: 12px; }
-.stat-card { background: var(--cream); border: 1px solid var(--border); border-radius: var(--r-sm); padding: 14px 16px; }
-.stat-label { font-size: 10px; text-transform: uppercase; letter-spacing: .1em; color: var(--ink-faint); font-weight: 500; margin-bottom: 4px; }
-.stat-val { font-family: var(--serif); font-size: 26px; color: var(--ink); line-height: 1; }
-.stat-val span { font-family: var(--sans); font-size: 13px; color: var(--ink-muted); margin-left: 2px; }
-.stat-delta { font-size: 11px; color: var(--green); margin-top: 3px; }
-.stat-delta.down { color: var(--red); }
-
-/* ── Day tabs ── */
-.day-tabs { display: flex; gap: 6px; overflow-x: auto; padding-bottom: 2px; }
-.day-tab { flex-shrink:0; padding:6px 14px; border-radius:20px; border:1px solid var(--border); background:#fff; font-size:12px; color:var(--ink-muted); transition:all .15s; }
-.day-tab:hover { border-color:var(--border-md); color:var(--ink); }
-.day-tab.active { background:var(--ink); color:#fff; border-color:transparent; }
-.day-tab.done { background:var(--green-pale); color:var(--green); border-color:var(--green-mid); }
-
-/* ── Exercise list ── */
-.exercise-list { display: flex; flex-direction: column; gap: 10px; margin-top: 16px; }
-.ex-item { display:flex; align-items:center; gap:14px; padding:12px 14px; border:1px solid var(--border); border-radius:var(--r-sm); background:var(--cream); transition:border-color .2s; }
-.ex-item:hover { border-color: var(--border-md); }
-.ex-item.done { opacity: .6; }
-.ex-item.done .ex-name { text-decoration: line-through; color: var(--ink-faint); }
-.ex-check { width:22px; height:22px; border-radius:50%; border:1.5px solid var(--border-md); background:#fff; flex-shrink:0; display:flex; align-items:center; justify-content:center; cursor:pointer; transition:all .2s; }
-.ex-item.done .ex-check { background:var(--green); border-color:var(--green); }
-.ex-check svg { width:11px; height:11px; stroke:#fff; fill:none; stroke-width:2.5; stroke-linecap:round; stroke-linejoin:round; opacity:0; }
-.ex-item.done .ex-check svg { opacity:1; }
-.ex-vid { width:60px; height:44px; background:var(--ink); border-radius:6px; display:flex; align-items:center; justify-content:center; flex-shrink:0; cursor:pointer; overflow:hidden; position:relative; }
-.ex-vid-bg { position:absolute; inset:0; background:linear-gradient(135deg,#2e2a26,#1a1714); }
-.ex-vid-play { position:relative; width:20px; height:20px; border-radius:50%; background:rgba(255,255,255,.18); border:1px solid rgba(255,255,255,.3); display:flex; align-items:center; justify-content:center; transition:background .2s; }
-.ex-vid:hover .ex-vid-play { background:rgba(255,255,255,.28); }
-.ex-vid-play svg { width:8px; height:8px; fill:#fff; margin-left:1px; }
-.ex-info { flex:1; min-width:0; }
-.ex-name { font-size:13px; font-weight:500; color:var(--ink); margin-bottom:2px; }
-.ex-meta { font-size:11px; color:var(--ink-muted); }
-.ex-sets { font-size:11px; font-weight:500; color:var(--ink-muted); white-space:nowrap; flex-shrink:0; }
-.progress-bar-wrap { margin-top: 14px; }
-.progress-bar-label { display:flex; justify-content:space-between; font-size:11px; color:var(--ink-muted); margin-bottom:6px; }
-.progress-bar-track { height:5px; background:var(--cream-dark); border-radius:3px; overflow:hidden; }
-.progress-bar-fill { height:100%; background:var(--green); border-radius:3px; transition:width .6s cubic-bezier(.4,0,.2,1); }
-
-/* ── Supplements ── */
-.supp-grid { display: flex; flex-direction: column; gap: 10px; }
-.supp-row { display:flex; align-items:center; gap:14px; padding:14px 16px; border:1px solid var(--border); border-radius:var(--r-sm); background:var(--cream); transition:border-color .2s; }
-.supp-row:hover { border-color:var(--border-md); }
-.supp-icon { width:40px; height:40px; border-radius:10px; display:flex; align-items:center; justify-content:center; font-size:20px; flex-shrink:0; }
-.supp-detail { flex:1; min-width:0; }
-.supp-row-name { font-size:13px; font-weight:500; color:var(--ink); }
-.supp-row-dose { font-size:11px; color:var(--ink-muted); margin-top:1px; }
-.supp-row-time { font-size:11px; color:var(--ink-faint); }
-.supp-checks { display:flex; gap:6px; flex-shrink:0; }
-.supp-check-btn { width:30px; height:30px; border-radius:50%; border:1.5px solid var(--border-md); background:#fff; font-size:10px; font-weight:600; color:var(--ink-muted); transition:all .2s; display:flex; align-items:center; justify-content:center; }
-.supp-check-btn:hover { border-color:var(--gold); color:var(--gold); background:var(--gold-pale); }
-.supp-check-btn.checked { background:var(--ink); border-color:var(--ink); color:#fff; }
-.supp-check-btn svg { width:12px; height:12px; stroke:#fff; fill:none; stroke-width:2.5; stroke-linecap:round; stroke-linejoin:round; }
-.streak-banner { display:flex; align-items:center; gap:14px; padding:14px 18px; background:linear-gradient(135deg,var(--gold-pale),#fdf6e8); border:1px solid rgba(184,147,90,0.25); border-radius:var(--r-sm); }
-.streak-num { font-family:var(--serif); font-size:32px; color:var(--gold-deep); line-height:1; }
-
-/* ── Charts ── */
-.chart-wrap { margin-top: 16px; position: relative; }
-.chart-label-y { position:absolute; left:0; top:0; bottom:24px; display:flex; flex-direction:column; justify-content:space-between; font-size:10px; color:var(--ink-faint); text-align:right; width:26px; }
-.chart-inner { margin-left: 34px; }
-.bar-chart { display:flex; align-items:flex-end; gap:5px; height:120px; }
-.bar-col { flex:1; display:flex; flex-direction:column; align-items:center; gap:4px; }
-.bar { width:100%; border-radius:4px 4px 0 0; transition:height .6s cubic-bezier(.4,0,.2,1),background .3s; position:relative; cursor:pointer; min-height:4px; }
-.bar.today { background:var(--gold); }
-.bar:not(.today) { background:var(--cream-dark); }
-.bar:hover { filter:brightness(0.9); }
-.bar-tooltip { display:none; position:absolute; bottom:calc(100% + 6px); left:50%; transform:translateX(-50%); background:var(--ink); color:#fff; font-size:11px; padding:4px 8px; border-radius:4px; white-space:nowrap; z-index:10; }
-.bar:hover .bar-tooltip { display:block; }
-.bar-x-label { font-size:10px; color:var(--ink-faint); text-align:center; }
-
-/* ── Device info ── */
-.device-info-grid { display:grid; grid-template-columns:1fr 1fr; gap:10px; margin-top:16px; }
-.device-info-item { padding:12px 14px; background:var(--cream); border:1px solid var(--border); border-radius:var(--r-sm); }
-.device-info-label { font-size:10px; text-transform:uppercase; letter-spacing:.1em; color:var(--ink-faint); font-weight:500; margin-bottom:4px; }
-.device-info-val { font-size:15px; font-weight:500; color:var(--ink); }
-.battery-wrap { display:flex; align-items:center; gap:8px; }
-.battery-bar { flex:1; height:8px; background:var(--cream-dark); border-radius:4px; overflow:hidden; }
-.battery-fill { height:100%; background:var(--green); border-radius:4px; }
-
-/* ── Quiz / progress ── */
-.quiz-history { display:flex; flex-direction:column; gap:10px; }
-.quiz-entry { display:flex; align-items:center; gap:14px; padding:14px 16px; border:1px solid var(--border); border-radius:var(--r-sm); background:var(--cream); }
-.quiz-date { font-size:12px; color:var(--ink-muted); min-width:80px; }
-.quiz-result-pill { font-size:10px; font-weight:600; letter-spacing:.08em; text-transform:uppercase; padding:3px 10px; border-radius:20px; flex-shrink:0; }
-.quiz-result-pill.mild { background:var(--green-pale); color:var(--green); }
-.quiz-result-pill.moderate { background:var(--amber-pale); color:#7a5a20; }
-.quiz-result-pill.severe { background:var(--red-pale); color:var(--red); }
-.quiz-score-bar { flex:1; height:6px; background:var(--cream-dark); border-radius:3px; overflow:hidden; }
-.quiz-score-fill { height:100%; border-radius:3px; }
-.quiz-score-fill.mild { background:var(--green); }
-.quiz-score-fill.moderate { background:var(--gold); }
-.quiz-score-fill.severe { background:var(--red); }
-.quiz-score-num { font-size:12px; font-weight:500; color:var(--ink-muted); min-width:36px; text-align:right; }
-
-/* ── Live quiz ── */
-.dquiz-prog { display:flex; gap:5px; align-items:center; margin-bottom:14px; }
-.dq-dot { flex:1; height:3px; border-radius:2px; background:var(--cream-dark); }
-.dq-dot.done { background:var(--ink); }
-.dq-dot.active { background:var(--gold); }
-.dquiz-q { font-family:var(--serif); font-size:17px; color:var(--ink); margin-bottom:14px; line-height:1.35; }
-.dquiz-opts { display:flex; flex-direction:column; gap:8px; margin-bottom:16px; }
-.dquiz-opt { display:flex; align-items:center; gap:12px; padding:11px 14px; border:1px solid var(--border); border-radius:var(--r-sm); background:var(--cream); cursor:pointer; font-size:13px; color:var(--ink-soft); transition:all .15s; text-align:left; width:100%; }
-.dquiz-opt:hover { border-color:var(--border-md); background:var(--cream-dark); }
-.dquiz-opt.sel { border-color:var(--gold); background:var(--gold-pale); font-weight:500; color:var(--ink); }
-.dquiz-radio { width:16px; height:16px; border-radius:50%; border:1.5px solid var(--border-md); flex-shrink:0; transition:all .15s; display:flex; align-items:center; justify-content:center; }
-.dquiz-opt.sel .dquiz-radio { background:var(--gold); border-color:var(--gold); }
-.dquiz-opt.sel .dquiz-radio::after { content:''; width:6px; height:6px; border-radius:50%; background:#fff; }
-.dquiz-nav { display:flex; justify-content:space-between; align-items:center; }
-.dquiz-btn { padding:8px 18px; border:1px solid var(--border-md); border-radius:var(--r-sm); background:#fff; color:var(--ink); font-size:13px; font-weight:500; transition:all .15s; }
-.dquiz-btn:hover { background:var(--cream-dark); }
-.dquiz-btn:disabled { opacity:.3; cursor:default; }
-.dquiz-btn.primary { background:var(--ink); color:#fff; border-color:transparent; }
-.dquiz-btn.primary:hover { background:#2e2a26; }
-.retake-quiz-btn { padding:10px 18px; border:1.5px solid var(--border-md); border-radius:var(--r-sm); background:#fff; color:var(--ink); font-size:13px; font-weight:500; transition:all .15s; display:flex; align-items:center; gap:8px; }
-.retake-quiz-btn:hover { background:var(--cream-dark); transform:translateY(-1px); }
-
-/* ── Timeline ── */
-.timeline { display:flex; flex-direction:column; position:relative; }
-.timeline::before { content:''; position:absolute; left:16px; top:20px; bottom:20px; width:1px; background:var(--border); }
-.tl-item { display:flex; gap:16px; align-items:flex-start; padding:10px 0; }
-.tl-dot { width:34px; height:34px; border-radius:50%; flex-shrink:0; display:flex; align-items:center; justify-content:center; border:1.5px solid var(--border-md); background:#fff; position:relative; z-index:1; font-size:13px; }
-.tl-dot.gold { background:var(--gold-pale); border-color:rgba(184,147,90,0.4); }
-.tl-dot.green { background:var(--green-pale); border-color:rgba(58,107,74,0.3); }
-.tl-content { flex:1; padding-top:6px; }
-.tl-date { font-size:10px; color:var(--ink-faint); text-transform:uppercase; letter-spacing:.1em; margin-bottom:2px; }
-.tl-text { font-size:13px; color:var(--ink-soft); line-height:1.45; }
-.tl-text strong { color:var(--ink); font-weight:500; }
-
-/* ── CTA btn ── */
-.cta-btn { display:block; width:100%; padding:14px; background:var(--ink); color:#fff; border:none; border-radius:var(--r-sm); font-size:14px; font-weight:500; cursor:pointer; transition:background .2s,transform .15s; text-align:center; }
-.cta-btn:hover { background:#2e2a26; transform:translateY(-1px); }
-
-/* ── Saving indicator ── */
-.save-indicator { position:fixed; bottom:24px; right:24px; background:var(--ink); color:#fff; font-size:12px; padding:8px 16px; border-radius:20px; opacity:0; transform:translateY(8px); transition:opacity .3s,transform .3s; pointer-events:none; z-index:200; }
-.save-indicator.show { opacity:1; transform:translateY(0); }
-
-/* ── Skeleton loaders ── */
-.skeleton { background:linear-gradient(90deg,var(--cream-dark) 25%,var(--cream-mid) 50%,var(--cream-dark) 75%); background-size:200% 100%; animation:shimmer 1.4s infinite; border-radius:6px; }
-@keyframes shimmer { 0%{background-position:200% 0} 100%{background-position:-200% 0} }
-
-/* ── Error state ── */
-.error-banner { background:var(--red-pale); border:1px solid rgba(168,50,50,.25); border-radius:var(--r-sm); padding:12px 16px; font-size:13px; color:var(--red); display:flex; align-items:center; gap:8px; }
-
-/* ── Responsive ── */
-@media (max-width:600px) {
-  .nav-center { display:none; }
-  .main { padding:20px 16px 80px; }
-  .stat-row { grid-template-columns:1fr 1fr; }
-  .welcome-score-ring { display:none; }
-  .welcome-banner { padding:22px 20px; }
-  .device-info-grid { grid-template-columns:1fr; }
-}
-.mobile-nav { display:none; position:fixed; bottom:0; left:0; right:0; background:rgba(247,243,238,0.96); backdrop-filter:blur(12px); border-top:1px solid var(--border); padding:8px 0 env(safe-area-inset-bottom,8px); z-index:100; justify-content:space-around; }
-@media (max-width:600px) { .mobile-nav { display:flex; } }
-.mobile-nav-btn { flex:1; display:flex; flex-direction:column; align-items:center; gap:3px; background:none; border:none; padding:4px 0; color:var(--ink-faint); font-size:10px; font-weight:500; transition:color .15s; }
-.mobile-nav-btn svg { width:20px; height:20px; stroke:currentColor; fill:none; stroke-width:1.5; stroke-linecap:round; stroke-linejoin:round; }
-.mobile-nav-btn.active { color:var(--ink); }
 </style>
 </head>
 <body>
 
-<!-- Loading -->
+<!-- LOADING -->
 <div id="loading-screen">
-  <div class="loading-logo"><svg viewBox="0 0 24 24"><path d="M12 2C7 2 4 6 4 10c0 5 4 9 8 12 4-3 8-7 8-12 0-4-3-8-8-8z"/></svg></div>
-  <div class="loading-dots"><div class="loading-dot"></div><div class="loading-dot"></div><div class="loading-dot"></div></div>
+  <div class="loading-logo">Orthos<span>™</span></div>
+  <div class="loading-sub">Come home to your body</div>
+  <div class="loading-dots">
+    <div class="loading-dot"></div><div class="loading-dot"></div><div class="loading-dot"></div>
+  </div>
 </div>
 
-<!-- Login -->
+<!-- LOGIN -->
 <div id="login-screen">
   <div class="login-card">
-    <div class="login-logo">
-      <div class="login-logo-mark"><svg viewBox="0 0 24 24"><path d="M12 2C7 2 4 6 4 10c0 5 4 9 8 12 4-3 8-7 8-12 0-4-3-8-8-8z"/></svg></div>
-      <div class="login-logo-name">Orthos System</div>
-    </div>
-    <div class="login-tagline">
-      <h2>Welcome back to your personal recovery program</h2>
-      <p>Sign in to access your personalized exercise plan, supplement tracker, device data, and progress history.</p>
-    </div>
-    <div class="login-divider"><span>Sign in with</span></div>
-    <button class="google-btn" id="google-signin-btn" onclick="signInWithGoogle()">
-      <svg viewBox="0 0 24 24"><path d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z" fill="#4285F4"/><path d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z" fill="#34A853"/><path d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l3.66-2.84z" fill="#FBBC05"/><path d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z" fill="#EA4335"/></svg>
+    <div class="login-logo">Orthos<span>™</span></div>
+    <div class="login-tagline">Come home to your body.</div>
+    <div class="login-divider"></div>
+    <button class="google-btn" id="googleBtn" onclick="signInWithGoogle()">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none"><path d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z" fill="rgba(255,255,255,0.75)"/><path d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z" fill="rgba(255,255,255,0.75)"/><path d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l3.66-2.84z" fill="rgba(255,255,255,0.75)"/><path d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z" fill="rgba(255,255,255,0.75)"/></svg>
       Continue with Google
     </button>
-    <div class="login-error" id="login-error"></div>
-    <div class="login-legal">By signing in you agree to Orthos Health's <a href="#">Terms of Service</a> and <a href="#">Privacy Policy</a>.</div>
+    <div id="login-error"></div>
+    <p class="login-disc">By signing in you agree to our Terms of Service and Privacy Policy.</p>
   </div>
 </div>
 
-<!-- App -->
+<!-- APP -->
 <div id="app">
-  <nav class="topnav">
-    <div class="nav-logo">
-      <div class="nav-logo-mark"><img src="assets/logo.png" alt="Orthos logo"></div>
-      Orthos
+  <div class="topbar">
+    <div class="topbar-logo">Orthos<span>™</span></div>
+    <div class="topbar-right">
+      <div style="display:flex;align-items:center;gap:10px">
+        <div class="user-avatar" id="userAvatar"></div>
+        <span class="user-name" id="userName"></span>
+      </div>
+      <button class="signout-btn" onclick="doSignOut()">Sign Out</button>
     </div>
-    <div class="nav-center">
-      <button class="nav-tab active" onclick="showTab('exercise',this)">Exercise</button>
-      <button class="nav-tab" onclick="showTab('supplements',this)">Supplements</button>
-      <button class="nav-tab" onclick="showTab('device',this)">Device</button>
-      <button class="nav-tab" onclick="showTab('progress',this)">Progress</button>
+  </div>
+  <div class="program-banner">
+    <div class="banner-day" id="bannerDay">Loading…</div>
+    <div class="banner-streak">🔥 <span id="bannerStreak">0 day streak</span></div>
+  </div>
+  <div class="tabs-bar">
+    <button class="tab-btn active" onclick="switchTab('today')">Today's Practice</button>
+    <button class="tab-btn" onclick="switchTab('journey')">21-Day Journey</button>
+    <button class="tab-btn" onclick="switchTab('exercises')">Exercise</button>
+    <button class="tab-btn" onclick="switchTab('supplements')">Supplements</button>
+    <button class="tab-btn" onclick="switchTab('device')">Device</button>
+  </div>
+  <div class="content">
+    <div class="panel active" id="panel-today"></div>
+    <div class="panel" id="panel-journey"></div>
+    <div class="panel" id="panel-exercises">
+      <div class="tab-header">
+        <div><div class="section-heading">Daily Movement</div><div class="section-sub">Posterior chain reactivation — 5 to 10 minutes</div></div>
+        <div class="streak-badge">🔥 <span id="exStreakVal">0</span> day streak</div>
+      </div>
+      <div id="exerciseList"></div>
     </div>
-    <div class="nav-right">
-      <div class="nav-avatar" id="nav-avatar">?</div>
-      <button class="logout-btn" onclick="signOut()">Sign out</button>
+    <div class="panel" id="panel-supplements">
+      <div class="tab-header">
+        <div><div class="section-heading">Daily Supplements</div><div class="section-sub">The structural foundation — taken consistently</div></div>
+        <div class="streak-badge">🔥 <span id="suppStreakVal">0</span> day streak</div>
+      </div>
+      <div id="supplementList"></div>
     </div>
-  </nav>
-
-  <main class="main">
-    <div class="welcome-banner">
-      <div class="welcome-text">
-        <div class="welcome-label" id="banner-label">Loading…</div>
-        <div class="welcome-name">Good <span id="time-greeting">morning</span>, <em id="user-first-name">…</em></div>
-        <div class="welcome-sub" id="banner-sub"></div>
+    <div class="panel" id="panel-device">
+      <div class="score-hero">
+        <div class="score-number" id="postureScore">--</div>
+        <div class="score-label">Today's Posture Score</div>
       </div>
-      <div class="welcome-score-ring">
-        <svg width="80" height="80" viewBox="0 0 80 80">
-          <circle cx="40" cy="40" r="32" fill="none" stroke="rgba(255,255,255,0.08)" stroke-width="6"/>
-          <circle id="score-ring-arc" cx="40" cy="40" r="32" fill="none" stroke="rgba(184,147,90,0.7)" stroke-width="6"
-            stroke-dasharray="201" stroke-dashoffset="201" stroke-linecap="round" transform="rotate(-90 40 40)" style="transition:stroke-dashoffset 1s ease"/>
-        </svg>
-        <div class="ring-label" id="score-ring-val">–</div>
-        <div class="ring-sub">Posture Score</div>
+      <div class="stat-grid">
+        <div class="stat-card"><div class="stat-value" id="wearTime">--</div><div class="stat-label">Hours Worn</div></div>
+        <div class="stat-card"><div class="stat-value" id="goodPct">--%</div><div class="stat-label">Good Posture</div></div>
+        <div class="stat-card"><div class="stat-value" id="alertCount">--</div><div class="stat-label">Returns Today</div></div>
       </div>
-    </div>
-
-    <!-- Exercise tab -->
-    <div class="section-page active" id="tab-exercise">
-      <div class="page-header">
-        <div class="page-header-label">Step One</div>
-        <div class="page-header-title">Your Exercise Plan</div>
-        <div class="page-header-sub">Personalized 21-Day Postural Reset</div>
-      </div>
-      <div class="stat-row">
-        <div class="stat-card"><div class="stat-label">Sessions done</div><div class="stat-val" id="ex-stat-done">–</div><div class="stat-delta" id="ex-stat-delta"></div></div>
-        <div class="stat-card"><div class="stat-label">Streak</div><div class="stat-val" id="ex-stat-streak">–</div><div class="stat-delta">days</div></div>
-        <div class="stat-card"><div class="stat-label">Program day</div><div class="stat-val" id="ex-stat-day">–</div><div class="stat-delta" id="ex-stat-week"></div></div>
-      </div>
-      <div class="card">
-        <div class="card-hdr">
-          <div class="card-hdr-title" id="ex-card-title">Today's Session</div>
-          <div class="card-hdr-badge gold" id="ex-card-badge">Loading</div>
-        </div>
-        <div class="card-body">
-          <div class="day-tabs" id="day-tabs"></div>
-          <div class="exercise-list" id="exercise-list"><div class="skeleton" style="height:60px"></div><div class="skeleton" style="height:60px;margin-top:10px"></div></div>
-          <div class="progress-bar-wrap">
-            <div class="progress-bar-label"><span>Session progress</span><span id="ex-progress-label">0 / 0</span></div>
-            <div class="progress-bar-track"><div class="progress-bar-fill" id="ex-progress-bar" style="width:0%"></div></div>
-          </div>
-        </div>
-      </div>
-      <div class="card">
-        <div class="card-hdr"><div class="card-hdr-title">Program Overview</div><div class="card-hdr-badge ink">21 Days</div></div>
-        <div class="card-body">
-          <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px">
-            <div style="padding:12px;background:var(--green-pale);border:1px solid var(--green-mid);border-radius:var(--r-sm);text-align:center"><div style="font-size:10px;text-transform:uppercase;letter-spacing:.1em;color:var(--green);font-weight:500;margin-bottom:4px">Week 1</div><div style="font-family:var(--serif);font-size:15px">Mobility</div><div id="w1-status" style="font-size:11px;color:var(--ink-muted);margin-top:2px"></div></div>
-            <div style="padding:12px;background:var(--gold-pale);border:1px solid rgba(184,147,90,.3);border-radius:var(--r-sm);text-align:center"><div style="font-size:10px;text-transform:uppercase;letter-spacing:.1em;color:var(--gold-deep);font-weight:500;margin-bottom:4px">Week 2</div><div style="font-family:var(--serif);font-size:15px">Strength</div><div id="w2-status" style="font-size:11px;color:var(--gold-deep);margin-top:2px"></div></div>
-            <div style="padding:12px;background:var(--cream);border:1px solid var(--border);border-radius:var(--r-sm);text-align:center"><div style="font-size:10px;text-transform:uppercase;letter-spacing:.1em;color:var(--ink-faint);font-weight:500;margin-bottom:4px">Week 3</div><div style="font-family:var(--serif);font-size:15px;color:var(--ink-muted)">Endurance</div><div id="w3-status" style="font-size:11px;color:var(--ink-faint);margin-top:2px"></div></div>
-          </div>
-        </div>
+      <div class="chart-wrap">
+        <div class="chart-title">14-Day Score History</div>
+        <div class="chart-bars" id="scoreChart"></div>
       </div>
     </div>
-
-    <!-- Supplements tab -->
-    <div class="section-page" id="tab-supplements">
-      <div class="page-header">
-        <div class="page-header-label">Step Two</div>
-        <div class="page-header-title">Supplement Tracker</div>
-        <div class="page-header-sub">Check off each supplement as you take it. Consistency is everything.</div>
-      </div>
-      <div class="streak-banner">
-        <div class="streak-num" id="supp-streak">–</div>
-        <div><strong style="font-size:13px;font-weight:500;color:var(--ink);display:block;margin-bottom:2px">Day supplement streak 🔥</strong><span style="font-size:12px;color:var(--ink-muted)">Keep your streak alive — take your supplements today.</span></div>
-      </div>
-      <div class="card">
-        <div class="card-hdr">
-          <div class="card-hdr-title">Today — <span id="supp-today-date"></span></div>
-          <div class="card-hdr-badge green" id="supp-all-done-badge" style="display:none">All done ✓</div>
-        </div>
-        <div class="card-body"><div class="supp-grid" id="supp-grid"><div class="skeleton" style="height:70px"></div><div class="skeleton" style="height:70px;margin-top:10px"></div><div class="skeleton" style="height:70px;margin-top:10px"></div></div></div>
-      </div>
-      <div class="card">
-        <div class="card-hdr"><div class="card-hdr-title">Why these three?</div></div>
-        <div class="card-body" style="display:flex;flex-direction:column;gap:14px">
-          <div style="display:flex;gap:12px;align-items:flex-start"><div style="font-size:24px;flex-shrink:0;width:36px;text-align:center">☀️</div><div><div style="font-size:13px;font-weight:500;margin-bottom:3px">D₃ + K₂ — The Foundation</div><div style="font-size:12px;color:var(--ink-soft);line-height:1.5">D₃ stimulates calcium absorption; K₂ ensures it goes into bone. Together they build the skeletal density your posture depends on. Most adults over 40 are severely deficient.</div></div></div>
-          <div style="display:flex;gap:12px;align-items:flex-start"><div style="font-size:24px;flex-shrink:0;width:36px;text-align:center">🌙</div><div><div style="font-size:13px;font-weight:500;margin-bottom:3px">Magnesium Glycinate — The Relaxer</div><div style="font-size:12px;color:var(--ink-soft);line-height:1.5">Chronically tight postural muscles pull the spine out of alignment. Magnesium acts as a natural muscle relaxant and helps the nervous system downregulate the tension patterns that cause poor posture.</div></div></div>
-          <div style="display:flex;gap:12px;align-items:flex-start"><div style="font-size:24px;flex-shrink:0;width:36px;text-align:center">🦴</div><div><div style="font-size:13px;font-weight:500;margin-bottom:3px">Collagen Peptides — The Rebuild</div><div style="font-size:12px;color:var(--ink-soft);line-height:1.5">Ligaments, tendons, and intervertebral discs are made largely of collagen. Supplementing provides the raw material to rebuild the connective tissue that holds spinal alignment.</div></div></div>
-        </div>
-      </div>
-    </div>
-
-    <!-- Device tab -->
-    <div class="section-page" id="tab-device">
-      <div class="page-header">
-        <div class="page-header-label">Step Three</div>
-        <div class="page-header-title">Device &amp; Posture Scores</div>
-        <div class="page-header-sub">Data from your Orthos Postural Trainer</div>
-      </div>
-      <div class="stat-row">
-        <div class="stat-card"><div class="stat-label">Today's score</div><div class="stat-val" id="dev-score">–</div><div class="stat-delta" id="dev-score-delta"></div></div>
-        <div class="stat-card"><div class="stat-label">Good posture</div><div class="stat-val" id="dev-good-pct">–</div><div class="stat-delta">of wear time</div></div>
-        <div class="stat-card"><div class="stat-label">Alerts today</div><div class="stat-val" id="dev-alerts">–</div><div class="stat-delta" id="dev-alerts-delta"></div></div>
-      </div>
-      <div class="card">
-        <div class="card-hdr"><div class="card-hdr-title">Posture Score — Last 14 Days</div><div class="card-hdr-badge green" id="chart-trend">Loading</div></div>
-        <div class="card-body">
-          <div class="chart-wrap">
-            <div class="chart-label-y"><span>100</span><span>75</span><span>50</span><span>25</span><span>0</span></div>
-            <div class="chart-inner"><div class="bar-chart" id="posture-chart"><div class="skeleton" style="width:100%;height:120px;border-radius:6px"></div></div></div>
-          </div>
-        </div>
-      </div>
-      <div class="card">
-        <div class="card-hdr"><div class="card-hdr-title">Device Status</div><div class="card-hdr-badge green">Connected</div></div>
-        <div class="card-body" style="display:flex;flex-direction:column;gap:14px">
-          <div class="device-info-grid">
-            <div class="device-info-item"><div class="device-info-label">Battery</div><div class="battery-wrap" style="margin-top:4px"><div class="battery-bar"><div class="battery-fill" id="dev-battery-fill" style="width:73%"></div></div><div style="font-size:13px;font-weight:500;color:var(--green);min-width:36px;text-align:right" id="dev-battery-label">73%</div></div></div>
-            <div class="device-info-item"><div class="device-info-label">Last sync</div><div class="device-info-val" style="color:var(--gold-deep)" id="dev-sync">–</div></div>
-            <div class="device-info-item"><div class="device-info-label">Firmware</div><div class="device-info-val">v2.4.1</div></div>
-            <div class="device-info-item"><div class="device-info-label">Wear time today</div><div class="device-info-val" style="color:var(--green)" id="dev-wear">–</div></div>
-            <div class="device-info-item"><div class="device-info-label">Sensitivity</div><div class="device-info-val">Medium</div></div>
-            <div class="device-info-item"><div class="device-info-label">Alert mode</div><div class="device-info-val">Vibration</div></div>
-          </div>
-        </div>
-      </div>
-    </div>
-
-    <!-- Progress tab -->
-    <div class="section-page" id="tab-progress">
-      <div class="page-header">
-        <div class="page-header-label">Your Journey</div>
-        <div class="page-header-title">Quiz Results &amp; Progress</div>
-        <div class="page-header-sub">Track how your posture assessment has changed since you started</div>
-      </div>
-      <div class="card">
-        <div class="card-hdr">
-          <div class="card-hdr-title">Assessment History</div>
-          <button class="retake-quiz-btn" onclick="toggleRetakePanel()">
-            <svg width="13" height="13" viewBox="0 0 13 13" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="1 4 1 1 4 1"/><path d="M1 1l3 3a6 6 0 1 1-1.5 4"/></svg>
-            Retake Quiz
-          </button>
-        </div>
-        <div class="card-body"><div class="quiz-history" id="quiz-history"><div class="skeleton" style="height:48px"></div><div class="skeleton" style="height:48px;margin-top:10px"></div></div></div>
-      </div>
-      <div class="card" id="retake-panel" style="display:none">
-        <div class="card-hdr"><div class="card-hdr-title">Posture Self-Assessment</div><div class="card-hdr-badge gold">7 Questions</div></div>
-        <div class="card-body" id="retake-body"></div>
-      </div>
-      <div class="card">
-        <div class="card-hdr"><div class="card-hdr-title">Overall Metrics</div><div class="card-hdr-badge green" id="prog-days-badge">–</div></div>
-        <div class="card-body">
-          <div class="stat-row" style="grid-template-columns:1fr 1fr">
-            <div class="stat-card"><div class="stat-label">Posture score</div><div class="stat-val" id="prog-score-range">–</div><div class="stat-delta" id="prog-score-delta"></div></div>
-            <div class="stat-card"><div class="stat-label">Quiz score</div><div class="stat-val" id="prog-quiz-range">–</div><div class="stat-delta" id="prog-quiz-delta"></div></div>
-            <div class="stat-card"><div class="stat-label">Exercise streak</div><div class="stat-val" id="prog-ex-streak">–</div><div class="stat-delta">days</div></div>
-            <div class="stat-card"><div class="stat-label">Supplement streak</div><div class="stat-val" id="prog-supp-streak">–</div><div class="stat-delta">days</div></div>
-          </div>
-        </div>
-      </div>
-    </div>
-  </main>
-
-  <div class="mobile-nav">
-    <button class="mobile-nav-btn active" id="mob-exercise" onclick="showTab('exercise',null,true)"><svg viewBox="0 0 24 24"><path d="M3 12h4l3-9 4 18 3-9h4"/></svg>Exercise</button>
-    <button class="mobile-nav-btn" id="mob-supplements" onclick="showTab('supplements',null,true)"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"/><path d="M12 2v3M12 19v3M4.22 4.22l2.12 2.12M17.66 17.66l2.12 2.12M2 12h3M19 12h3M4.22 19.78l2.12-2.12M17.66 6.34l2.12-2.12"/></svg>Supps</button>
-    <button class="mobile-nav-btn" id="mob-device" onclick="showTab('device',null,true)"><svg viewBox="0 0 24 24"><rect x="5" y="2" width="14" height="20" rx="2"/><line x1="12" y1="18" x2="12" y2="18"/></svg>Device</button>
-    <button class="mobile-nav-btn" id="mob-progress" onclick="showTab('progress',null,true)"><svg viewBox="0 0 24 24"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>Progress</button>
   </div>
 </div>
 
-<div class="save-indicator" id="save-indicator">Saved ✓</div>
-
-<!-- ══════════════════════════
-     FIREBASE SDK
-══════════════════════════ -->
 <script type="module">
-// ─────────────────────────────────────────
-// STEP 1: REPLACE THIS WITH YOUR CONFIG
-// Firebase Console → Project Settings → Your apps → SDK setup
-// ─────────────────────────────────────────
-const FIREBASE_CONFIG = {
+import { initializeApp } from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js';
+import { getAuth, GoogleAuthProvider, signInWithPopup, signOut, onAuthStateChanged } from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js';
+import { getFirestore, doc, getDoc, setDoc, updateDoc, serverTimestamp } from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js';
+
+const firebaseConfig = {
   apiKey: "AIzaSyCPY9pPnrqPzoPGauogswffsEbU2XxInxE",
   authDomain: "orthos-systems-fbdb1.firebaseapp.com",
   projectId: "orthos-systems-fbdb1",
   storageBucket: "orthos-systems-fbdb1.firebasestorage.app",
   messagingSenderId: "87027449226",
-  appId: "1:87027449226:web:d465d57416ead73d9c9c73",
+  appId: "1:87027449226:web:d465d57416ead73d9c9c73"
 };
 
-// ─────────────────────────────────────────
-// Firebase imports (modular v10 SDK via CDN)
-// ─────────────────────────────────────────
-import { initializeApp }                                         from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
-import { getAuth, GoogleAuthProvider, signInWithPopup,
-         signOut as fbSignOut, onAuthStateChanged }              from "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
-import { getFirestore, doc, getDoc, setDoc, collection,
-         addDoc, query, orderBy, limit, getDocs,
-         serverTimestamp, updateDoc, increment }                 from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
-
-// ─────────────────────────────────────────
-// Init
-// ─────────────────────────────────────────
-const app      = initializeApp(FIREBASE_CONFIG);
+const app      = initializeApp(firebaseConfig);
 const auth     = getAuth(app);
 const db       = getFirestore(app);
 const provider = new GoogleAuthProvider();
 
-let currentUser   = null;
-let userProfile   = null;
-let todayStr      = new Date().toISOString().split('T')[0]; // "YYYY-MM-DD"
-let currentExDay  = null;
-
-// Exercise definitions per program day
-const EXERCISE_PLANS = {
-  // Week 1 — Mobility (days 1–7)
-  default_w1: [
-    { name:'Cat-Cow Mobilisation',       sets:'2 × 10 reps',    duration:'3 min' },
-    { name:'Hip Flexor Stretch',          sets:'3 × 45 sec each',duration:'5 min' },
-    { name:'Thoracic Rotation',           sets:'2 × 10 each side',duration:'4 min'},
-    { name:'Chin Tucks (supine)',          sets:'3 × 12 reps',   duration:'3 min' },
-    { name:'Childs Pose Hold',             sets:'3 × 60 sec',     duration:'4 min' },
-  ],
-  // Week 2 — Strength (days 8–14)
-  default_w2: [
-    { name:'Wall Angels',                 sets:'3 × 12 reps',    duration:'4 min' },
-    { name:'Chin Tucks with Band',        sets:'3 × 15 reps',    duration:'3 min' },
-    { name:'Romanian Deadlift',           sets:'3 × 10 reps',    duration:'4 min' },
-    { name:'Thoracic Extension on Roller',sets:'2 × 60 sec',     duration:'3 min' },
-    { name:'Dead Bug Core Hold',          sets:'3 × 30 sec',     duration:'3 min' },
-  ],
-  // Week 3 — Endurance (days 15–21)
-  default_w3: [
-    { name:'Loaded Carries (Farmer\'s Walk)', sets:'3 × 40 m',   duration:'5 min' },
-    { name:'Single-Leg Deadlift',         sets:'3 × 8 each side',duration:'5 min' },
-    { name:'Plank with Shoulder Tap',     sets:'3 × 20 reps',    duration:'4 min' },
-    { name:'Band Pull-Apart',             sets:'3 × 20 reps',    duration:'3 min' },
-    { name:'Copenhagen Side Plank',       sets:'3 × 30 sec each',duration:'4 min' },
-  ],
-};
-
-const QUIZ_QUESTIONS = [
-  { q:'How often do you experience neck or upper back pain?',                                      opts:['Rarely or never','A few times a week','Daily or almost always'] },
-  { q:'When standing against a wall, can your head, shoulders, and heels all touch at once?',      opts:['Yes, easily','With some effort','No — not at all'] },
-  { q:'How many hours per day do you typically spend sitting?',                                    opts:['Under 4 hours','4–8 hours','More than 8 hours'] },
-  { q:'Do people ever comment that you slouch or hunch forward?',                                  opts:['Never','Occasionally','Often or always'] },
-  { q:'Do you feel lower back pain or stiffness when rising from a chair?',                        opts:['Rarely','Sometimes','Most of the time'] },
-  { q:'Do you feel shoulder or mid-back tension by end of day?',                                   opts:['Rarely','A few times a week','Every day'] },
-  { q:'Has a doctor, physio, or therapist ever said your posture needs attention?',                opts:['Never','Once or twice','Yes, multiple times'] },
+// ── MODULES ──────────────────────────────────────────────────────────
+const MODULES = [
+  {day:1,week:1,title:"The Return",subtitle:"Becoming aware you were gone",
+   reading:`<p>There is a moment that happens several times each day — a small, almost imperceptible awakening. You are doing something. And then, suddenly, you are <em>aware</em> that you are doing something. The task is the same. The body is in the same place. But something has shifted.</p><p>You have returned.</p><p>Most people spend their entire lives without noticing this moment. They drift from thought to thought, from one internal story to the next, while the body carries them faithfully through the world. The kitchen. The desk. The commute. All of it experienced from somewhere slightly above and behind the actual moment.</p><p>Your practice today is not to stop the drifting. The mind will drift — that is its nature, and it is not something to fight. Your practice is simply to notice the moment of return. Each time the device buzzes, pause. Ask yourself one question before you straighten up: <em>Where was I just now?</em></p><p>That question, asked sincerely, is not a question at all. It is the door — and the asking of it is already the walking through.</p>`,
+   practice:"Every time the device buzzes today, pause for three seconds before correcting. Ask: where was my mind just now? Notice the answer without judgment. Then return.",
+   reflection:"How many times today did you notice you had been somewhere else? What were you most commonly thinking about when you drifted?"},
+  {day:2,week:1,title:"The Body Knows",subtitle:"Reading physical signals before the mind catches up",
+   reading:`<p>There is a conversation happening in your body right now that your mind has not been invited to.</p><p>The slight tightening across the upper back that began forty minutes ago — before the thought arrived, before the mood shifted, before you noticed anything at all. The body knew first. It always does.</p><p>The nervous system processes postural and somatic information continuously, updating its map of the body's position in space thousands of times per second. Long before the conscious mind registers that something has shifted, the body has already registered it, already begun its compensations, already started the slow negotiation with gravity that, left unattended, becomes what we call bad posture.</p><p>Today you begin learning to read the body's earlier language. Not the shout. The whisper.</p><p>Begin with the upper back. Right now, bring your awareness to the space between your shoulder blades. Not to correct anything — simply to feel what is there. Is there tension? Dullness? A sense of compression? Whatever you find, do not immediately adjust it. Just feel it. Stay with it for ten seconds. Let the sensation be information rather than a problem to solve.</p>`,
+   practice:"During your band exercises today, perform at least one full set with your eyes closed. Remove the visual channel and rely entirely on felt sensation. After each exercise, pause for five seconds and feel the residual sensation in the activated muscle groups.",
+   reflection:"Right now — without adjusting anything first — what does your body feel like from the inside? Start at the base of the spine and move your awareness slowly upward. What does each area communicate before you try to correct it?"},
+  {day:3,week:1,title:"The Bell",subtitle:"What the device is really doing",
+   reading:`<p>In certain contemplative traditions, a bell is rung at intervals throughout the day. Not to signal anything urgent. Not to correct anything wrong. Simply to invite return.</p><p>Monks in these traditions learn to stop whatever they are doing when the bell rings. Not to finish the thought first. To stop — and in stopping, to come back to the present moment, however briefly, before continuing.</p><p>The bell is not a correction. It carries no judgment about where the mind was. It simply offers an invitation: <em>You have been somewhere else. Here is the door back.</em></p><p>This is what the device is doing. Every haptic pulse is not a failure notification. It is saying something precise: your awareness has left your body, and your body has shown it. Here is the door back.</p><p>The difference between these two understandings is significant. One creates a relationship of correction — you against the device, the device keeping score. The other creates a relationship of practice. You are not being corrected. You are being invited.</p>`,
+   practice:"When the device buzzes today, before doing anything else — take one slow breath. Just one. Then return to your body, to the room, to whatever you were doing. Let the breath be the transition.",
+   reflection:"How does it feel to think of the device as a bell rather than a correction? Does that framing change anything about how you relate to it?"},
+  {day:4,week:1,title:"The Wandering Mind",subtitle:"Understanding why you drift — and why that's not failure",
+   reading:`<p>Neuroscientists have identified what happens in the brain when it is not actively engaged in a task. A network of regions activates in a pattern so consistent and predictable that researchers named it the Default Mode Network.</p><p>The name is precise. This is not malfunction. This is default. This is what the brain does when nothing else is demanding its attention. It wanders into memory, into anticipation, into the continuous quiet narration of a self that is rarely satisfied with where it is.</p><p>Studies suggest the average person spends between 40 and 50 percent of their waking hours in this state. Half of life, experienced from somewhere other than where life is actually happening.</p><p>This is not a character flaw. The wandering is not something to be ashamed of or conquered. It is simply the starting condition — the place from which the practice begins.</p><p>What changes with practice is not the wandering. What changes is the return. The gap between leaving and coming back begins to shorten. That is what we are building. Not a mind that never wanders. A mind that finds its way home faster each time.</p>`,
+   practice:"Today, pick one ordinary task — making coffee, eating lunch, walking between rooms — and commit to staying fully present for its entire duration. When you drift, note it neutrally and return. No judgment.",
+   reflection:"When you notice your mind wandering today, where does it most often go? Past, future, or somewhere else?"},
+  {day:5,week:1,title:"Presence Has a Posture",subtitle:"The connection made explicit",
+   reading:`<p>Try something right now. Let your awareness settle fully into your body — not the idea of your body, but the actual felt sense of it from the inside. The weight in the chair or the floor. The rise and fall of the breath. The subtle aliveness in the hands.</p><p>Hold that for a moment.</p><p>Did something shift in your body when you did that? Most people find that a small, effortless correction happened. The shoulders moved. The chest opened slightly. The spine lengthened without any instruction to do so.</p><p>This is not coincidence. Awareness and posture are not two separate things that occasionally influence each other. They are two expressions of the same underlying state. When consciousness inhabits the body fully, the body responds — not because you told it to, but because presence itself has a particular quality, and that quality is upright.</p><p>Consciousness is upright. Unconsciousness collapses.</p>`,
+   practice:"Three times today — morning, midday, evening — stop wherever you are and spend thirty seconds fully inhabiting your body. No effort required. Just arrive. Notice what happens to your posture without touching it.",
+   reflection:"Can you feel the difference between sitting while thinking about posture versus sitting while simply being present? Describe what that difference feels like from the inside."},
+  {day:6,week:1,title:"The Observer",subtitle:"Watching yourself without judgment",
+   reading:`<p>There is a part of you that is reading these words. And there is a part of you that is watching the part of you that is reading. That second part — the one that can observe your own thoughts, notice your own patterns, catch yourself in the middle of a drift — is what we are developing in this practice.</p><p>Contemplative traditions have many names for it. The witness. The inner observer. The awareness behind awareness. What these traditions all point toward is the same recognition: you are not your thoughts. You are the one who notices them.</p><p>This distinction matters practically. When you are identified with a thought — when you are the thought rather than the one watching it — you have no choice but to follow it wherever it goes. When you are the observer, you have the capacity to watch the thought arise, notice it, and return without being swept away.</p>`,
+   practice:"For five minutes today, sit quietly and simply watch your thoughts as they arise. Don't engage them, don't push them away. Just watch them the way you might watch clouds moving across a sky you are not attached to.",
+   reflection:"What is it like to watch your own mind? Is the observer ever anxious, or is the anxiety only in what is being observed?"},
+  {day:7,week:1,title:"Rest & Reflect",subtitle:"Week One integration",
+   reading:`<p>You have completed the first week of the practice. Before moving forward, there is value in pausing to see what has already happened.</p><p>The physical protocol has been established. The supplements are in your system. The device has buzzed, and each time it did, you had the opportunity to return — to ask the question, to arrive, however briefly, in the present moment.</p><p>The question for today is not what you did correctly or incorrectly. The question is simpler: what did you notice? Not the posture. The noticing. The moments of recognition. The times you caught yourself mid-drift and felt the slight surprise of realizing you had been somewhere else.</p><p>Today is for rest. The band work is optional. The device continues. Sit with what the first week has shown you, and let it settle before the second week begins.</p>`,
+   practice:"Rest from structured band work today. Spend ten minutes in quiet — outside if possible. Let the week settle without analysis. Just be somewhere, fully.",
+   reflection:"Looking back at the past six days, what surprised you most? Not about posture — about your own mind, your own patterns of attention."},
+  {day:8,week:2,title:"The Gap",subtitle:"The space between stimulus and response",
+   reading:`<p>Between the haptic pulse and your response, there is a moment. Most people experience it as nearly instantaneous — buzz, correct, continue. The gap is so small it seems not to exist.</p><p>But it does exist. And within it is something important.</p><p>Viktor Frankl observed that between stimulus and response there is a space — and in that space lies human freedom. The choice of how to respond. The capacity to be something other than simply reactive.</p><p>The buzz is the stimulus. The correction is the response. What we are developing in Week Two is the capacity to live in the space between them — even for just a breath — rather than moving automatically from one to the other.</p><p>In that gap, presence has room to establish itself. You are not simply adjusting your body. You are arriving. Choosing, consciously, to be here.</p>`,
+   practice:"When the device buzzes today, practice making the gap as long as comfortable — up to five seconds. Breathe in the gap. Arrive in the gap. Then correct from within the gap rather than before it.",
+   reflection:"What does it feel like to pause before responding? Is there anything in that pause beyond just a delay?"},
+  {day:9,week:2,title:"Unconscious Doing",subtitle:"Tasks done in absence",
+   reading:`<p>There is a version of everything you do today that happens without you. The emails written while your mind is on the meeting afterward. The meal eaten while watching something else. The conversation held while composing your response before the other person has finished speaking.</p><p>This is unconscious doing — the performance of actions from which awareness has withdrawn. The body executes. The result appears. But nobody was home for the doing of it.</p><p>Today you are going to choose one activity and do it consciously. Not better. Not with more effort. With more presence. The same task, with you actually in it.</p><p>Notice what changes. The quality of the attention you bring to the activity changes the quality of the activity itself — not always measurably, but always perceptibly.</p>`,
+   practice:"Choose one task today to do with complete presence: cooking, writing, a conversation, a walk. Commit to it fully for its entire duration.",
+   reflection:"What was the quality of the task you chose to do consciously? Did it feel different? Did the result feel different?"},
+  {day:10,week:2,title:"Sensory Anchors",subtitle:"Using the body's senses as a return path",
+   reading:`<p>The senses are always in the present. That is their nature and their gift. You cannot hear yesterday's sound. You cannot feel tomorrow's texture. Every sensation that arrives through the body arrives in the only moment that actually exists.</p><p>This makes the senses among the most reliable doors back to the present moment available to us. When the mind has drifted far into the future or deep into the past, the senses provide an immediate return path. Not a thought about returning. An actual return.</p><p>The sound of rain on a window. The warmth of a cup in the hands. The temperature of the air at the moment of breathing in. Any of these, attended to fully for even a second, collapses the distance between where you are and where your mind has gone.</p>`,
+   practice:"Choose one sensory anchor to return to throughout the day — the feeling of your feet on the floor, the temperature of the air, the weight of your hands. Each time you drift, use it consciously before the device prompts you.",
+   reflection:"Which sense felt most effective as a return path for you? Which surprised you with its power to bring you back?"},
+  {day:11,week:2,title:"The Pain Body",subtitle:"Stored tension as stored absence",
+   reading:`<p>The tension in your upper back is not only mechanical. Chronic forward posture does cause muscle shortening and connective tissue adaptation. But if you sit with the tension for a moment, without immediately trying to correct it, you may notice something else in it.</p><p>Tension often carries a texture beyond the purely physical. The tightening across the shoulders that appears before a difficult meeting. The closing of the chest that arrives with certain thoughts. The collapse of the spine that follows a period of low mood.</p><p>The body stores more than just physical habit. It stores the residue of absence itself.</p><p>The practice of presence does not just improve posture. Over time, it begins to release what chronic absence has deposited. Not through effort or analysis, but through the simple, repeated act of returning — of inhabiting the body again, gently, without judgment, day by day.</p>`,
+   practice:"During band exercises today, when you feel tension or resistance, pause for five seconds and breathe directly into that area before continuing. Don't push through. Arrive first.",
+   reflection:"Does the tension in your body feel purely physical, or does it carry any emotional texture?"},
+  {day:12,week:2,title:"Inner Body Awareness",subtitle:"Inhabiting the body from the inside",
+   reading:`<p>Most people live on the surface of their bodies. They are aware of the body from the outside — as it appears in mirrors, as others see it, as it performs in the world. This is the body as object, as instrument, as something to be managed.</p><p>There is another way of inhabiting the body — from the inside. Not seeing it but feeling it. Not thinking about it but being it.</p><p>Find it right now. Close your eyes for a moment and feel your hands. Not the idea of your hands — their actual felt presence. The subtle tingling. The warmth. The slight pulsing that, once you attend to it, is unmistakable.</p><p>That aliveness is always there. It is the most immediate access point to the present moment that exists, because it is the present moment made felt.</p><p>As you inhabit the inner body more consistently, you will notice: it is impossible to be fully in the inner body and simultaneously lost in thought. Presence in the body naturally quiets the mind.</p>`,
+   practice:"Set three reminders today at random times. When each alarm sounds, close your eyes for sixty seconds and feel your inner body — the aliveness in the hands first, then spreading through the whole body. Notice what happens to your posture without touching it.",
+   reflection:"What did it feel like to sense the inner body? Did you notice any relationship between inhabiting the inner body and the position of your spine?"},
+  {day:13,week:2,title:"Stillness in Motion",subtitle:"Presence during activity",
+   reading:`<p>There is a common misunderstanding about presence — that it requires stillness. That to be truly here, one must be sitting, quiet, away from the noise and activity of ordinary life.</p><p>This misunderstanding is costly. It makes presence into something rare and special, available only under ideal conditions, rather than what it actually is: the natural state of an awareness that is not lost in thought.</p><p>The Zen tradition speaks of chopping wood and carrying water — the recognition that the most ordinary activities, done with full attention, are as complete a practice as any formal meditation.</p><p>Today you practice this. Not in stillness but in motion. Walking. Working. Moving through the ordinary requirements of your day. Can you bring the same quality of inner attention to these activities that you bring to the morning moments when you first put on the device?</p>`,
+   practice:"Choose a period of at least twenty minutes today — a walk, a commute, a work session — and commit to maintaining continuous gentle awareness of your inner body throughout.",
+   reflection:"Is presence harder to maintain during activity than at rest? What makes it difficult? What helps?"},
+  {day:14,week:2,title:"Rest & Reflect",subtitle:"Week Two integration",
+   reading:`<p>Two weeks in. Pause here and notice what has changed — not what you hoped would change, but what actually has.</p><p>The device has been buzzing. You have been returning. The band work has been activating the muscles that absence allowed to go quiet. The supplements have been building the foundation beneath all of it. But something else has been happening too — something that doesn't show up on any metric.</p><p>The gap between drifting and returning is almost certainly shorter than it was on Day 1. The noticing has become more automatic. There are probably moments now where you find yourself present without any prompt — just arriving in the middle of something, fully, without needing the bell.</p><p>Those moments are the practice working. Rest today. Let Week Two settle.</p>`,
+   practice:"Rest from structured band work. Spend time outside if possible. No agenda for presence today — just let yourself be wherever you are, as you are.",
+   reflection:"Compare how it feels to be in your body today versus Day 1. Not how it looks — how it feels. What has quietly changed?"},
+  {day:15,week:3,title:"The Ego and the Slump",subtitle:"Identity and posture",
+   reading:`<p>The collapse of the body is rarely random. If you pay close attention over time, you may notice that certain states of mind reliably precede the slump. Not just distraction — specific kinds of distraction.</p><p>The replay of a difficult conversation. The anticipation of something feared. The low-grade dissatisfaction with the current moment — the sense that here is slightly less than where you'd rather be.</p><p>The ego is almost always subtly uncomfortable with the present moment. It is in a continuous state of wanting things to be other than they are.</p><p>This discomfort has a posture. It is the posture of contraction, of withdrawal, of the person who has removed themselves slightly from the room they are physically occupying.</p><p>Today, when the device buzzes, don't just ask where your mind was. Ask what quality of mind you were in.</p>`,
+   practice:"Today, when you drift and return, spend a moment identifying the emotional tone of the drift — not just the content of the thoughts, but their feeling-quality. Are you escaping something? Seeking something?",
+   reflection:"Is there a particular emotional state that most reliably accompanies your postural collapse? What does that tell you?"},
+  {day:16,week:3,title:"Conscious Doing",subtitle:"Ordinary tasks as practice",
+   reading:`<p>There is no task too ordinary to be a practice. This is perhaps the most radical and the most practical insight the contemplative traditions offer. Because if it is true, then the practice is not something you do before the day begins or after it ends. The practice is the day itself.</p><p>The email. The commute. The meal. The conversation. The dishes. Every moment a potential arrival. Every task a potential return.</p><p>You have been practicing for sixteen days with a device that catches you leaving. Today the practice is to arrive without being caught — to choose presence proactively rather than reactively. Not waiting for the bell, but ringing it yourself, whenever you remember, throughout the ordinary hours of an ordinary day.</p>`,
+   practice:"Today, try to proactively return to presence — without waiting for the device — at least once per hour.",
+   reflection:"What percentage of today did you spend consciously present versus on autopilot? If that number could double, what would the quality of your life look like?"},
+  {day:17,week:3,title:"Relationships and Presence",subtitle:"How others feel when you are actually here",
+   reading:`<p>Presence is not only personal. What happens when you are fully here — when your awareness is genuinely in the room rather than divided between the conversation and your own internal commentary — is perceptible to the people around you.</p><p>Most people have had the experience of feeling truly heard. Not just listened to in a technical sense, but heard — by someone who was actually there, whose attention was complete, who was not already formulating a response while you were still speaking. It is a rare experience, and when it happens, it matters.</p><p>Today you practice presence not for your own benefit but as a gift to the people you encounter. You will likely find it is a gift that returns to you.</p>`,
+   practice:"In your most important conversation today, practice listening completely — without formulating your response until the other person has fully finished.",
+   reflection:"Did the quality of any interaction today feel different because of the quality of attention you brought to it?"},
+  {day:18,week:3,title:"The Compound Effect",subtitle:"What 18 days of returning adds up to",
+   reading:`<p>Every return, however brief, was real. Even the ones that lasted only a few seconds before the mind drifted again. Even the ones you're not sure counted. Even the ones on the days when the practice felt mechanical rather than alive.</p><p>They all accumulated. That is the nature of practice — it compounds in ways that are invisible until suddenly they are not. There is no particular day when posture becomes better. There is a morning, somewhere around now, when you notice that you've been sitting upright for an hour without thinking about it.</p><p>You are at eighteen days. Look back across them — not to evaluate your performance, but to see the arc. Three days remain. Not as a finish line — there is no finish line in presence. As a marker.</p>`,
+   practice:"Today, after your morning supplements and band work, spend five minutes sitting quietly and reviewing the past 18 days in your memory. Notice what stands out.",
+   reflection:"What is different about you — not your posture, but you — after 18 days of this practice?"},
+  {day:19,week:3,title:"Beyond the Device",subtitle:"The practice without the tool",
+   reading:`<p>The goal of the device was always to make itself unnecessary.</p><p>Not because the device isn't useful — it is. But because the deepest aim of the practice is not a body that responds correctly to external prompts. It is a nervous system that has internalized the feedback loop and can regulate itself without being told to.</p><p>You have been building toward this for nineteen days. Each buzz that you responded to with genuine presence rather than mechanical correction. Each moment in the gap between stimulus and response. Each proactive return — the days you arrived without waiting to be caught.</p><p>Today, try spending a portion of your day without waiting for the device at all. Not turning it off. Just practicing as if you were the bell.</p>`,
+   practice:"For at least one hour today, practice returning to presence proactively, before the device prompts you.",
+   reflection:"What is the ratio of proactive to reactive returns today? What would you need for that ratio to keep shifting?"},
+  {day:20,week:3,title:"A New Earth, A New Body",subtitle:"The larger picture",
+   reading:`<p>Consider what you have been doing for twenty days.</p><p>You have been, day by day, withdrawing from unconscious living. Not dramatically. Not through renunciation or transformation. Through the simple, repeated act of noticing you had left and choosing to return. Through building a body that can sustain the return — that has the structural integrity, the neuromuscular capacity, the nutritional foundation to hold presence when presence arrives.</p><p>Your posture is straighter than it was twenty days ago. Your mind returns faster than it did. But the larger thing — the thing that this practice was always in service of — is the life you are living inside that body. Which is, every day, a little more inhabited.</p>`,
+   practice:"Spend time today with the question: what does a fully inhabited life look like? Not as a fantasy — as a felt sense.",
+   reflection:"If you think of the Orthos practice not as a posture program but as a participation in a shift in how you inhabit yourself — does that feel true?"},
+  {day:21,week:3,title:"Coming Home",subtitle:"The practice continues — it simply stops being a practice",
+   reading:`<p>You have returned, hundreds of times, over twenty-one days. To your body. To the present moment. To the simple, immediate fact of being here, in this room, in this breath, in this life.</p><p>Today the program ends. The practice does not.</p><p>What changes on Day 22 is not the returning — you will continue returning for the rest of your life, as will everyone who is alive and paying attention. What changes is the structure around it. The daily module. The twenty-one day arc.</p><p>The return itself is not a program. It is simply what happens when awareness remembers what it is.</p><p>Your body is different than it was on Day 1. The posterior chain has been reactivated. The connective tissue is being rebuilt. The neuromuscular feedback loop has been restored enough that self-regulation is beginning to happen automatically.</p><p>Come home to your body. As many times as it takes. For as long as you are alive.</p>`,
+   practice:"Mark this day however feels right. Sit quietly for ten minutes and feel your body from the inside — from the feet upward, slowly. Then carry that quality of attention into whatever comes next.",
+   reflection:"What will you carry from these twenty-one days? Not the habits — the understanding. What do you now know about the relationship between your mind and your body that you didn't know before?"}
 ];
 
-// ─────────────────────────────────────────
-// Auth state observer
-// ─────────────────────────────────────────
-onAuthStateChanged(auth, async (user) => {
-  hideLoading();
-  if (user) {
-    currentUser = user;
-    await loadUserAndShow(user);
-  } else {
-    showLogin();
+// ── STATIC DATA ───────────────────────────────────────────────────────
+const EXERCISES = [
+  {id:'ex1',name:'Band Pull-Apart',detail:'3 sets × 15 reps · Posterior deltoids, rhomboids',tag:'Upper Back'},
+  {id:'ex2',name:'Face Pull',detail:'3 sets × 12 reps · Rear deltoids, external rotators',tag:'Shoulder Health'},
+  {id:'ex3',name:'Band Row',detail:'3 sets × 12 reps · Mid-trapezius, rhomboids',tag:'Scapular Stability'},
+  {id:'ex4',name:'Deep Neck Flexor Chin Tuck',detail:'3 sets × 10 reps, 5s hold · Cervical alignment',tag:'Cervical Spine'},
+  {id:'ex5',name:'Cat-Cow Spinal Wave',detail:'2 sets × 10 reps · Full spinal mobility',tag:'Mobility'}
+];
+const SUPPLEMENTS = [
+  {id:'supp1',name:'Collagen Peptides',desc:'Rebuilds the connective tissue matrix — tendons, ligaments, and the fascial network that chronic forward posture degrades.',times:['Morning']},
+  {id:'supp2',name:'Magnesium Glycinate',desc:'Supports neuromuscular signaling — the communication between nervous system and muscles that postural correction depends on.',times:['Evening']},
+  {id:'supp3',name:'Vitamin K2 + D3',desc:'Directs calcium into bone matrix. Supports the skeletal density that upright posture requires at its deepest level.',times:['Morning']}
+];
+
+// ── STATE ─────────────────────────────────────────────────────────────
+let currentUser    = null;
+let programDay     = 1;
+let practiceStreak = 0;
+let exStreak       = 0;
+let suppStreak     = 0;
+const TODAY = new Date().toISOString().split('T')[0];
+let S = { exercises:{}, supplements:{}, practiceComplete:false, reflectionText:'', postureScore:0, wearTime:0, goodPct:0, alertCount:0 };
+
+// ── AUTH ──────────────────────────────────────────────────────────────
+window.signInWithGoogle = async () => {
+  const btn = document.getElementById('googleBtn');
+  const err = document.getElementById('login-error');
+  btn.disabled = true; btn.textContent = 'Signing in…'; err.style.display = 'none';
+  try { await signInWithPopup(auth, provider); }
+  catch(e) {
+    err.style.display = 'block';
+    err.textContent = 'Sign-in failed. ' + (e.code === 'auth/unauthorized-domain'
+      ? 'This domain is not authorized. Add it in Firebase Console → Authentication → Settings → Authorized domains.'
+      : e.message);
+    btn.disabled = false; btn.textContent = 'Continue with Google';
   }
+};
+
+window.doSignOut = () => signOut(auth);
+
+onAuthStateChanged(auth, async user => {
+  if (user) { currentUser = user; await loadData(); showApp(); }
+  else       { currentUser = null; showLogin(); }
 });
 
-// ─────────────────────────────────────────
-// Auth actions
-// ─────────────────────────────────────────
-window.signInWithGoogle = async () => {
-  const btn = document.getElementById('google-signin-btn');
-  const errEl = document.getElementById('login-error');
-  btn.disabled = true;
-  btn.textContent = 'Signing in…';
-  errEl.style.display = 'none';
-  try {
-    await signInWithPopup(auth, provider);
-    // onAuthStateChanged will fire and handle the rest
-  } catch (err) {
-    btn.disabled = false;
-    btn.innerHTML = `<svg viewBox="0 0 24 24" style="width:20px;height:20px;flex-shrink:0"><path d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z" fill="#4285F4"/><path d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z" fill="#34A853"/><path d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l3.66-2.84z" fill="#FBBC05"/><path d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z" fill="#EA4335"/></svg>Continue with Google`;
-    errEl.textContent = err.code === 'auth/popup-closed-by-user' ? 'Sign-in cancelled.' : 'Sign-in failed. Please try again.';
-    errEl.style.display = 'block';
-  }
-};
-
-window.signOut = async () => {
-  await fbSignOut(auth);
-  currentUser = null;
-  userProfile = null;
-  showLogin();
-};
-
-// ─────────────────────────────────────────
-// Load user profile + all data
-// ─────────────────────────────────────────
-async function loadUserAndShow(user) {
-  const uid      = user.uid;
-  const userRef  = doc(db, 'users', uid);
-  const snap     = await getDoc(userRef);
-
-  if (!snap.exists()) {
-    // First-time user — create profile
-    const profile = {
-      uid,
-      email:          user.email,
-      displayName:    user.displayName || user.email,
-      photoURL:       user.photoURL || '',
-      joinedAt:       serverTimestamp(),
-      programDay:     1,
-      programStarted: todayStr,
-      quizTier:       'moderate',
-      latestScore:    0,
-      suppStreak:     0,
-      exStreak:       0,
-    };
-    await setDoc(userRef, profile);
-    userProfile = profile;
-  } else {
-    userProfile = snap.data();
-
-    // Advance programDay based on calendar days elapsed since programStarted
-    if (userProfile.programStarted) {
-      const started  = new Date(userProfile.programStarted + 'T00:00:00');
-      const today    = new Date(todayStr + 'T00:00:00');
-      const elapsed  = Math.floor((today - started) / 86400000); // days since start
-      const newDay   = Math.min(Math.max(elapsed + 1, 1), 21);   // clamp 1–21
-      if (newDay !== userProfile.programDay) {
-        userProfile.programDay = newDay;
-        await updateDoc(doc(db, 'users', currentUser.uid), { programDay: newDay });
-      }
-    }
-  }
-
-  // If latestScore is missing or 0, pull it from the most recent quiz result
-  if (!userProfile.latestScore) {
-    const qSnap = await getDocs(query(
-      collection(db, 'users', currentUser.uid, 'quiz_results'),
-      orderBy('takenAt', 'desc'),
-      limit(1)
-    ));
-    if (!qSnap.empty) {
-      const latest = qSnap.docs[0].data();
-      userProfile.latestScore = latest.score || 0;
-      await updateDoc(doc(db, 'users', currentUser.uid), { latestScore: userProfile.latestScore });
-    }
-  }
-
-  renderNav(user);
-  renderWelcomeBanner();
-  await Promise.all([
-    loadExerciseTab(),
-    loadSupplementTab(),
-    loadDeviceTab(),
-    loadProgressTab(),
-  ]);
-  showApp();
-}
-
-// ─────────────────────────────────────────
-// Nav / banner
-// ─────────────────────────────────────────
-function renderNav(user) {
-  const avatar = document.getElementById('nav-avatar');
-  if (user.photoURL) {
-    avatar.innerHTML = `<img src="${user.photoURL}" alt="avatar">`;
-  } else {
-    const initials = (user.displayName || user.email || '?').split(' ').map(w=>w[0]).slice(0,2).join('').toUpperCase();
-    avatar.textContent = initials;
-  }
-}
-
-function renderWelcomeBanner() {
-  const hour  = new Date().getHours();
-  const greet = hour < 12 ? 'morning' : hour < 17 ? 'afternoon' : 'evening';
-  document.getElementById('time-greeting').textContent = greet;
-  const first = (userProfile.displayName || '').split(' ')[0] || 'there';
-  document.getElementById('user-first-name').textContent = first;
-  const day = userProfile.programDay || 1;
-  const week = Math.ceil(day / 7);
-  document.getElementById('banner-label').textContent = `Day ${day} of 21 · Week ${week}`;
-  document.getElementById('banner-sub').textContent = day <= 7
-    ? 'Week 1 focus: Mobility & flexibility — build the foundation.'
-    : day <= 14
-    ? 'Week 2 focus: Strength — this is where the real change begins.'
-    : 'Week 3 focus: Endurance — lock in the habit for good.';
-
-  // Score ring
-  const score = userProfile.latestScore || 0;
-  document.getElementById('score-ring-val').textContent = score || '–';
-  const circumference = 201;
-  const offset = circumference - (score / 100) * circumference;
-  setTimeout(() => { document.getElementById('score-ring-arc').style.strokeDashoffset = offset; }, 300);
-}
-
-// ─────────────────────────────────────────
-// EXERCISE TAB
-// ─────────────────────────────────────────
-async function loadExerciseTab() {
-  const day    = userProfile.programDay || 1;
-  currentExDay = day;
-  document.getElementById('ex-stat-done').textContent  = `${Math.max(0,day-1)} / 21`;
-  document.getElementById('ex-stat-streak').textContent = userProfile.exStreak || 0;
-  document.getElementById('ex-stat-day').textContent    = day;
-  document.getElementById('ex-stat-week').textContent   = `Week ${Math.ceil(day/7)}`;
-  document.getElementById('ex-card-title').textContent  = `Day ${day} — Today's Session`;
-  document.getElementById('ex-card-badge').textContent  = day<=7 ? 'Week 1 · Mobility' : day<=14 ? 'Week 2 · Strength' : 'Week 3 · Endurance';
-
-  const w = Math.ceil(day/7);
-  document.getElementById('w1-status').textContent = w>1 ? 'Complete ✓' : w===1 ? 'In progress' : 'Upcoming';
-  document.getElementById('w2-status').textContent = w>2 ? 'Complete ✓' : w===2 ? 'In progress' : 'Upcoming';
-  document.getElementById('w3-status').textContent = w>3 ? 'Complete ✓' : w===3 ? 'In progress' : 'Upcoming';
-
-  // Build day tabs (show ±3 days)
-  const tabs = document.getElementById('day-tabs');
-  tabs.innerHTML = '';
-  const start = Math.max(1, day-3);
-  const end   = Math.min(21, day+3);
-  for (let d = start; d <= end; d++) {
-    const btn = document.createElement('button');
-    btn.className = `day-tab${d < day ? ' done' : d === day ? ' active' : ''}`;
-    btn.textContent = `Day ${d}`;
-    btn.onclick = () => switchDay(d, btn);
-    tabs.appendChild(btn);
-  }
-
-  await renderExercisesForDay(day);
-}
-
-function dateStrForDay(day) {
-  const started = new Date(userProfile.programStarted + 'T00:00:00');
-  started.setDate(started.getDate() + (day - 1));
-  return started.toISOString().split('T')[0];
-}
-
-async function renderExercisesForDay(day) {
-  const uid    = currentUser.uid;
-  const docRef = doc(db, 'users', uid, 'exercises', `${dateStrForDay(day)}-d${day}`);
-  const snap   = await getDoc(docRef);
-  const saved  = snap.exists() ? snap.data() : null;
-
-  const plan = day<=7 ? EXERCISE_PLANS.default_w1 : day<=14 ? EXERCISE_PLANS.default_w2 : EXERCISE_PLANS.default_w3;
-  const completions = saved ? (saved.completions || []) : [];
-
-  const list = document.getElementById('exercise-list');
-  list.innerHTML = plan.map((ex, i) => {
-    const done = completions.includes(ex.name);
-    const safeName = ex.name.replace(/"/g, '&quot;');
-    return `
-      <div class="ex-item${done?' done':''}" id="exi-${i}">
-        <div class="ex-check" data-idx="${i}" data-name="${safeName}" data-day="${day}" onclick="toggleExercise(this.dataset.idx,this.dataset.name,this.dataset.day)">
-          <svg viewBox="0 0 12 12"><polyline points="2 6 5 9 10 3"/></svg>
-        </div>
-        <div class="ex-vid"><div class="ex-vid-bg"></div><div class="ex-vid-play"><svg viewBox="0 0 10 10"><path d="M2 1l7 4.5-7 4.5V1z"/></svg></div></div>
-        <div class="ex-info"><div class="ex-name">${ex.name}</div><div class="ex-meta">${ex.duration}</div></div>
-        <div class="ex-sets">${ex.sets}</div>
-      </div>`;
-  }).join('');
-
-  updateExProgress(plan, completions);
-}
-
-window._exPlanCache = {};
-window.toggleExercise = async (idx, name, day) => {
-  idx = parseInt(idx);
-  day = parseInt(day);
-  const uid    = currentUser.uid;
-  const key    = `${dateStrForDay(day)}-d${day}`;
-  const docRef = doc(db, 'users', uid, 'exercises', key);
-  const snap   = await getDoc(docRef);
-  let completions = snap.exists() ? (snap.data().completions || []) : [];
-
-  const alreadyDone = completions.includes(name);
-  if (alreadyDone) {
-    completions = completions.filter(n => n !== name);
-  } else {
-    completions.push(name);
-  }
-
-  const plan = day<=7 ? EXERCISE_PLANS.default_w1 : day<=14 ? EXERCISE_PLANS.default_w2 : EXERCISE_PLANS.default_w3;
-  const allDone = completions.length >= plan.length;
-
-  await setDoc(docRef, {
-    date: dateStrForDay(day), programDay: day,
-    completions, totalCount: plan.length,
-    doneCount: completions.length, completed: allDone,
-    updatedAt: serverTimestamp(),
-  }, { merge: true });
-
-  if (allDone && !alreadyDone) {
-    // Update streak on profile
-    await updateDoc(doc(db, 'users', uid), { exStreak: increment(1) });
-    userProfile.exStreak = (userProfile.exStreak || 0) + 1;
-    document.getElementById('ex-stat-streak').textContent = userProfile.exStreak;
-  }
-
-  // Update UI
-  const item = document.getElementById(`exi-${idx}`);
-  if (!alreadyDone) item.classList.add('done'); else item.classList.remove('done');
-  updateExProgress(plan, completions);
-  showSaved();
-};
-
-window.switchDay = async (day, btn) => {
-  currentExDay = day;
-  document.querySelectorAll('.day-tab').forEach(t => { if(!t.classList.contains('done')) t.classList.remove('active'); });
-  document.querySelectorAll('.day-tab').forEach(t => t.classList.remove('active'));
-  btn.classList.add('active');
-  await renderExercisesForDay(day);
-};
-
-function updateExProgress(plan, completions) {
-  const done = completions.length;
-  const total = plan.length;
-  const pct = total ? Math.round(done/total*100) : 0;
-  document.getElementById('ex-progress-bar').style.width = pct + '%';
-  document.getElementById('ex-progress-label').textContent = `${done} / ${total} complete`;
-}
-
-// ─────────────────────────────────────────
-// SUPPLEMENTS TAB
-// ─────────────────────────────────────────
-const SUPPS = [
-  { key:'d3k2',    name:'Vitamin D₃ + K₂',     dose:'5,000 IU D₃ · 100 mcg K₂',      time:'With breakfast',            icon:'☀️' },
-  { key:'magnesium',name:'Magnesium Glycinate', dose:'400 mg',                          time:'Before bed',                 icon:'🌙' },
-  { key:'collagen', name:'Collagen Peptides',   dose:'10 g in water or coffee',         time:'Morning, on empty stomach',  icon:'🦴' },
-];
-
-async function loadSupplementTab() {
-  const suppStreakCapped = Math.min(userProfile.suppStreak || 0, (userProfile.programDay || 1) - 1);
-  document.getElementById('supp-streak').textContent = suppStreakCapped;
-  document.getElementById('supp-today-date').textContent = new Date().toLocaleDateString('en-US',{weekday:'long',month:'long',day:'numeric'});
-
-  const uid    = currentUser.uid;
-  const docRef = doc(db, 'users', uid, 'supplements', todayStr);
-  const snap   = await getDoc(docRef);
-  const data   = snap.exists() ? snap.data() : {};
-
-  renderSuppGrid(data);
-}
-
-function renderSuppGrid(data) {
-  const grid = document.getElementById('supp-grid');
-  grid.innerHTML = SUPPS.map((s,i) => {
-    const am = data[`${s.key}_am`] || false;
-    const pm = data[`${s.key}_pm`] || false;
-    return `
-      <div class="supp-row">
-        <div class="supp-icon">${s.icon}</div>
-        <div class="supp-detail">
-          <div class="supp-row-name">${s.name}</div>
-          <div class="supp-row-dose">${s.dose}</div>
-          <div class="supp-row-time">${s.time}</div>
-        </div>
-        <div class="supp-checks">
-          <button class="supp-check-btn${am?' checked':''}" onclick="toggleSupp('${s.key}','am')" title="Morning">
-            ${am ? '<svg viewBox="0 0 12 12"><polyline points="2 6 5 9 10 3"/></svg>' : 'AM'}
-          </button>
-          <button class="supp-check-btn${pm?' checked':''}" onclick="toggleSupp('${s.key}','pm')" title="Evening">
-            ${pm ? '<svg viewBox="0 0 12 12"><polyline points="2 6 5 9 10 3"/></svg>' : 'PM'}
-          </button>
-        </div>
-      </div>`;
-  }).join('');
-}
-
-window.toggleSupp = async (key, slot) => {
-  const uid    = currentUser.uid;
-  const docRef = doc(db, 'users', uid, 'supplements', todayStr);
-  const snap   = await getDoc(docRef);
-  const data   = snap.exists() ? snap.data() : {};
-  const field  = `${key}_${slot}`;
-  data[field]  = !data[field];
-
-  // Check if all required doses are done (am for all 3)
-  const allDone = SUPPS.every(s => data[`${s.key}_am`] || data[`${s.key}_pm`]);
-  data.allDone  = allDone;
-  data.date     = todayStr;
-  data.updatedAt = serverTimestamp();
-
-  await setDoc(docRef, data, { merge: true });
-
-  if (allDone) {
-    await updateDoc(doc(db, 'users', uid), { suppStreak: increment(1) });
-    userProfile.suppStreak = (userProfile.suppStreak || 0) + 1;
-    document.getElementById('supp-streak').textContent = userProfile.suppStreak;
-  }
-
-  renderSuppGrid(data);
-  document.getElementById('supp-all-done-badge').style.display = allDone ? '' : 'none';
-  showSaved();
-};
-
-// ─────────────────────────────────────────
-// DEVICE TAB
-// ─────────────────────────────────────────
-async function loadDeviceTab() {
-  const uid    = currentUser.uid;
-  const docRef = doc(db, 'users', uid, 'posture_scores', todayStr);
-  const snap   = await getDoc(docRef);
-
-  if (snap.exists()) {
-    const d = snap.data();
-    document.getElementById('dev-score').innerHTML = `${d.score}<span> / 100</span>`;
-    document.getElementById('dev-good-pct').innerHTML = `${d.goodPct}<span>%</span>`;
-    document.getElementById('dev-alerts').textContent = d.alertCount;
-    document.getElementById('dev-wear').textContent = minutesToHours(d.wearMinutes);
-    document.getElementById('dev-sync').textContent = timeAgo(d.syncedAt?.toDate?.() || new Date());
-  } else {
-    // No data today — show placeholder
-    document.getElementById('dev-score').innerHTML = `–`;
-    document.getElementById('dev-score-delta').textContent = 'No sync today yet';
-    document.getElementById('dev-good-pct').textContent = '–';
-    document.getElementById('dev-alerts').textContent = '–';
-    document.getElementById('dev-wear').textContent = '–';
-    document.getElementById('dev-sync').textContent = 'Never';
-  }
-
-  // Load last 14 days for chart
-  const q    = query(collection(db, 'users', uid, 'posture_scores'), orderBy('date','desc'), limit(14));
-  const docs = await getDocs(q);
-  const scores = [];
-  docs.forEach(d => scores.unshift(d.data()));
-
-  renderPostureChart(scores);
-}
-
-function renderPostureChart(scores) {
-  const chart = document.getElementById('posture-chart');
-  if (!scores.length) { chart.innerHTML = '<div style="font-size:13px;color:var(--ink-faint);padding:20px 0">No posture data yet. Sync your device to see your scores here.</div>'; return; }
-
-  const maxH = 120;
-  chart.innerHTML = scores.map((s, i) => {
-    const h      = Math.round((s.score / 100) * maxH);
-    const isToday = s.date === todayStr;
-    const label  = s.date ? s.date.slice(5).replace('-','/') : '';
-    return `
-      <div class="bar-col">
-        <div class="bar${isToday?' today':''}" style="height:${h}px">
-          <div class="bar-tooltip">${s.score}</div>
-        </div>
-        <div class="bar-x-label">${label}</div>
-      </div>`;
-  }).join('');
-
-  // Trend badge
-  if (scores.length >= 2) {
-    const first = scores[0].score;
-    const last  = scores[scores.length-1].score;
-    const trend = last > first ? 'Improving' : last < first ? 'Declining' : 'Stable';
-    const badge = document.getElementById('chart-trend');
-    badge.textContent = trend;
-    badge.className = `card-hdr-badge ${trend==='Improving'?'green':trend==='Declining'?'':' gold'}`;
-  } else {
-    document.getElementById('chart-trend').textContent = 'Building history';
-  }
-}
-
-// ─────────────────────────────────────────
-// PROGRESS TAB
-// ─────────────────────────────────────────
-async function loadProgressTab() {
+// ── FIRESTORE LOAD ────────────────────────────────────────────────────
+async function loadData() {
   const uid = currentUser.uid;
-
-  // Quiz history
-  const q    = query(collection(db, 'users', uid, 'quiz_results'), orderBy('takenAt','desc'), limit(10));
-  const docs = await getDocs(q);
-  const results = [];
-  docs.forEach(d => results.push({ id: d.id, ...d.data() }));
-
-  renderQuizHistory(results);
-
-  // Metrics
-  const days = userProfile.programDay || 1;
-  const maxStreak = days - 1; // can't exceed days completed
-  document.getElementById('prog-days-badge').textContent = `${days} days active`;
-  document.getElementById('prog-ex-streak').textContent  = Math.min(userProfile.exStreak || 0, maxStreak);
-  document.getElementById('prog-supp-streak').textContent = Math.min(userProfile.suppStreak || 0, maxStreak);
-
-  if (results.length >= 2) {
-    const first = results[results.length-1];
-    const last  = results[0];
-    document.getElementById('prog-quiz-range').textContent = `${first.score}→${last.score}`;
-    document.getElementById('prog-quiz-delta').textContent = `${first.score > last.score ? '↑' : '↓'} ${Math.abs(first.score - last.score)} pts change`;
-  } else if (results.length === 1) {
-    document.getElementById('prog-quiz-range').textContent = results[0].score;
-    document.getElementById('prog-quiz-delta').textContent = 'First assessment';
+  const profileSnap = await getDoc(doc(db,'users',uid));
+  if (!profileSnap.exists()) {
+    await setDoc(doc(db,'users',uid), {
+      uid, email:currentUser.email, displayName:currentUser.displayName,
+      photoURL:currentUser.photoURL, programStartDate:TODAY,
+      programDay:1, practiceStreak:0, exStreak:0, suppStreak:0, createdAt:serverTimestamp()
+    });
+    programDay=1; practiceStreak=0; exStreak=0; suppStreak=0;
+  } else {
+    const d = profileSnap.data();
+    programDay=d.programDay||1; practiceStreak=d.practiceStreak||0;
+    exStreak=d.exStreak||0; suppStreak=d.suppStreak||0;
   }
-
-  // Posture score range — use device scores if available, fall back to latest quiz score
-  const scoreQ    = query(collection(db, 'users', uid, 'posture_scores'), orderBy('date','asc'), limit(30));
-  const scoreDocs = await getDocs(scoreQ);
-  const scores    = [];
-  scoreDocs.forEach(d => scores.push(d.data().score));
-  if (scores.length >= 2) {
-    document.getElementById('prog-score-range').textContent = `${scores[0]}→${scores[scores.length-1]}`;
-    const diff = scores[scores.length-1] - scores[0];
-    document.getElementById('prog-score-delta').textContent = `${diff>=0?'↑':'↓'} ${Math.abs(diff)} points`;
-  } else if (userProfile.latestScore) {
-    document.getElementById('prog-score-range').textContent = userProfile.latestScore;
-    document.getElementById('prog-score-delta').textContent = 'From quiz';
-  }
+  const exSnap   = await getDoc(doc(db,'users',uid,'exercises',TODAY));
+  S.exercises    = exSnap.exists() ? (exSnap.data().completions||{}) : {};
+  const suppSnap = await getDoc(doc(db,'users',uid,'supplements',TODAY));
+  S.supplements  = suppSnap.exists() ? (suppSnap.data().completions||{}) : {};
+  const dcSnap   = await getDoc(doc(db,'users',uid,'daily_completions',TODAY));
+  if (dcSnap.exists()) { S.practiceComplete=dcSnap.data().practiceComplete||false; S.reflectionText=dcSnap.data().reflectionText||''; }
+  const psSnap   = await getDoc(doc(db,'users',uid,'posture_scores',TODAY));
+  if (psSnap.exists()) { const p=psSnap.data(); S.postureScore=p.score||0; S.wearTime=p.wear_time||0; S.goodPct=p.good_pct||0; S.alertCount=p.alerts||0; }
 }
 
-function renderQuizHistory(results) {
-  const el = document.getElementById('quiz-history');
-  if (!results.length) {
-    el.innerHTML = '<div style="font-size:13px;color:var(--ink-muted);padding:8px 0">No quiz results yet. Take your first assessment above.</div>';
+// ── FIRESTORE SAVE ────────────────────────────────────────────────────
+const saveEx   = () => setDoc(doc(db,'users',currentUser.uid,'exercises',TODAY),{completions:S.exercises,updatedAt:serverTimestamp()},{merge:true});
+const saveSupp = () => setDoc(doc(db,'users',currentUser.uid,'supplements',TODAY),{completions:S.supplements,updatedAt:serverTimestamp()},{merge:true});
+const saveDC   = () => setDoc(doc(db,'users',currentUser.uid,'daily_completions',TODAY),{practiceComplete:S.practiceComplete,reflectionText:S.reflectionText,moduleRead:true,dayFullyComplete:true,completedAt:serverTimestamp()},{merge:true});
+const saveRefl = () => setDoc(doc(db,'users',currentUser.uid,'daily_completions',TODAY),{reflectionText:S.reflectionText,updatedAt:serverTimestamp()},{merge:true});
+const saveProfile = () => updateDoc(doc(db,'users',currentUser.uid),{programDay,practiceStreak,exStreak,suppStreak,updatedAt:serverTimestamp()});
+
+// ── SHOW/HIDE ─────────────────────────────────────────────────────────
+function showApp() {
+  document.getElementById('loading-screen').style.display='none';
+  document.getElementById('login-screen').style.display='none';
+  document.getElementById('app').style.display='flex';
+  const av = document.getElementById('userAvatar');
+  if (currentUser.photoURL) av.innerHTML=`<img src="${currentUser.photoURL}" alt="">`;
+  else av.textContent=(currentUser.displayName||currentUser.email||'U')[0].toUpperCase();
+  document.getElementById('userName').textContent = currentUser.displayName||'';
+  updateBanner();
+  renderTodayPanel(); renderJourneyGrid(); renderExercises(); renderSupplements(); renderDevice();
+}
+function showLogin() {
+  document.getElementById('loading-screen').style.display='none';
+  document.getElementById('app').style.display='none';
+  document.getElementById('login-screen').style.display='flex';
+  const btn=document.getElementById('googleBtn');
+  btn.disabled=false; btn.textContent='Continue with Google';
+}
+function updateBanner() {
+  const mod=getModule(programDay);
+  document.getElementById('bannerDay').textContent=`Day ${programDay} of 21 — ${mod?mod.title:'Practice Complete'}`;
+  document.getElementById('bannerStreak').textContent=`${practiceStreak} day${practiceStreak!==1?'s':''} streak`;
+}
+
+// ── MODULE HELPERS ────────────────────────────────────────────────────
+const getModule    = d => MODULES.find(m=>m.day===d)||null;
+const getWeekName  = w => ['','Awakening','Deepening','Embodiment'][w]||'';
+const getWeekTheme = w => ['','Establishing the protocol · First returns · Noticing absence','Neuromuscular retraining taking hold · Shortening the drift-to-return gap','Self-regulation beginning · Presence becoming natural'][w]||'';
+
+// ── TODAY'S PRACTICE ──────────────────────────────────────────────────
+function renderTodayPanel() {
+  const panel = document.getElementById('panel-today');
+  const mod   = getModule(programDay);
+  if (!mod) {
+    panel.innerHTML=`<div class="practice-hero"><span class="practice-day-badge">21-Day Practice Complete</span><div class="practice-title">You Have Come Home.</div><div class="practice-subtitle">The program is complete. The practice continues.</div></div><div class="module-card"><span class="module-section-label">What Comes Next</span><div class="module-reading"><p>The device continues. The supplements continue. The movement continues. The practice of returning — that was never a program. It was always just what presence does when it remembers what it is.</p></div></div>`;
     return;
   }
-  el.innerHTML = results.map(r => {
-    const date = r.takenAt?.toDate ? r.takenAt.toDate().toLocaleDateString('en-US',{month:'short',day:'numeric',year:'numeric'}) : '–';
-    const tier = r.tier || 'moderate';
-    const pct  = Math.round((r.score / (r.maxScore||14)) * 100);
-    return `
-      <div class="quiz-entry">
-        <div class="quiz-date">${date}</div>
-        <div class="quiz-result-pill ${tier}">${tier.charAt(0).toUpperCase()+tier.slice(1)}</div>
-        <div class="quiz-score-bar"><div class="quiz-score-fill ${tier}" style="width:${pct}%"></div></div>
-        <div class="quiz-score-num">${r.score} / ${r.maxScore||14}</div>
-      </div>`;
-  }).join('');
-}
-
-// ─────────────────────────────────────────
-// LIVE QUIZ (retake)
-// ─────────────────────────────────────────
-let qCur = 0, qAns = new Array(QUIZ_QUESTIONS.length).fill(null);
-
-window.toggleRetakePanel = () => {
-  const panel = document.getElementById('retake-panel');
-  const isHidden = panel.style.display === 'none';
-  panel.style.display = isHidden ? '' : 'none';
-  if (isHidden) { qCur=0; qAns=new Array(QUIZ_QUESTIONS.length).fill(null); renderLiveQuiz(); panel.scrollIntoView({behavior:'smooth',block:'start'}); }
-};
-
-function renderLiveQuiz() {
-  const body = document.getElementById('retake-body');
-  const q    = QUIZ_QUESTIONS[qCur];
-  const prog = QUIZ_QUESTIONS.map((_,i)=>`<div class="dq-dot${i<qCur?' done':i===qCur?' active':''}"></div>`).join('') +
-    `<span style="font-size:11px;color:var(--ink-faint);margin-left:6px">${qCur+1} / ${QUIZ_QUESTIONS.length}</span>`;
-
-  body.innerHTML = `
-    <div class="dquiz-prog">${prog}</div>
-    <div class="dquiz-q">${q.q}</div>
-    <div class="dquiz-opts">
-      ${q.opts.map((o,i)=>`
-        <button class="dquiz-opt${qAns[qCur]===i?' sel':''}" onclick="selectQA(${i})">
-          <div class="dquiz-radio"></div>${o}
-        </button>`).join('')}
+  panel.innerHTML=`
+    <div class="practice-hero">
+      <span class="practice-day-badge">Week ${mod.week} · Day ${mod.day} of 21</span>
+      <div class="practice-title">${mod.title}</div>
+      <div class="practice-subtitle">${mod.subtitle}</div>
     </div>
-    <div class="dquiz-nav">
-      <button class="dquiz-btn" onclick="liveQuizNav(-1)" ${qCur===0?'disabled':''}>← Back</button>
-      <button class="dquiz-btn primary" onclick="liveQuizNav(1)" ${qAns[qCur]===null?'disabled':''}>${qCur===QUIZ_QUESTIONS.length-1?'See result':'Next →'}</button>
-    </div>`;
-}
-
-window.selectQA = (i) => { qAns[qCur]=i; renderLiveQuiz(); };
-
-window.liveQuizNav = (d) => {
-  if (d===1 && qCur===QUIZ_QUESTIONS.length-1) { saveAndShowQuizResult(); return; }
-  qCur = Math.max(0, Math.min(QUIZ_QUESTIONS.length-1, qCur+d));
-  renderLiveQuiz();
-};
-
-async function saveAndShowQuizResult() {
-  const score = qAns.reduce((s,a)=>s+(a||0),0);
-  const tier  = score<=4 ? 'mild' : score<=9 ? 'moderate' : 'severe';
-
-  // Save to Firestore
-  const uid = currentUser.uid;
-  await addDoc(collection(db, 'users', uid, 'quiz_results'), {
-    takenAt:   serverTimestamp(),
-    score,
-    maxScore:  14,
-    tier,
-    answers:   qAns,
-    questions: QUIZ_QUESTIONS.map(q=>q.q),
-  });
-
-  // Update profile quiz tier and latest score
-  await updateDoc(doc(db, 'users', uid), { quizTier: tier, latestScore: score });
-  userProfile.quizTier = tier;
-  userProfile.latestScore = score;
-  // Refresh score ring
-  document.getElementById('score-ring-val').textContent = score;
-  const offset = 201 - (score / 14) * 201;
-  document.getElementById('score-ring-arc').style.strokeDashoffset = offset;
-
-  showSaved();
-
-  // Re-render history
-  await loadProgressTab();
-
-  // Show result inline
-  const colors = { mild:'var(--green-pale)', moderate:'var(--amber-pale)', severe:'var(--red-pale)' };
-  const textColors = { mild:'var(--green)', moderate:'#7a5a20', severe:'var(--red)' };
-  const titles = {
-    mild:     'Your posture is improving — you\'re on track.',
-    moderate: 'Still moderate, but trending the right direction.',
-    severe:   'Your symptoms suggest professional oversight is needed.',
-  };
-  const descs = {
-    mild:     'Your score shows real progress. Continue the Orthos System through Week 3 and you should reach the Mild tier comfortably.',
-    moderate: 'You\'ve improved from your intake score. Keep focusing on daily exercises and consistent supplementation.',
-    severe:   'Please continue to work with your physician or physical therapist alongside the Orthos program.',
-  };
-
-  document.getElementById('retake-body').innerHTML = `
-    <div style="border-radius:var(--r-sm);padding:16px;background:${colors[tier]};border:1px solid rgba(0,0,0,.08);display:flex;flex-direction:column;gap:6px">
-      <div style="font-size:10px;font-weight:600;letter-spacing:.1em;text-transform:uppercase;color:${textColors[tier]}">${tier.charAt(0).toUpperCase()+tier.slice(1)}</div>
-      <div style="font-family:var(--serif);font-size:17px;color:var(--ink)">${titles[tier]}</div>
-      <div style="font-size:13px;color:var(--ink-soft);line-height:1.5">${descs[tier]}</div>
-      <div style="font-size:12px;color:var(--ink-muted);margin-top:4px">Score: ${score} / 14 — saved to your history</div>
+    <div class="module-card">
+      <span class="module-section-label">Today's Reflection</span>
+      <div class="module-reading">${mod.reading}</div>
     </div>
-    <button class="dquiz-btn" style="margin-top:10px;width:100%;text-align:center" onclick="qCur=0;qAns=new Array(${QUIZ_QUESTIONS.length}).fill(null);renderLiveQuiz()">Retake</button>`;
+    <div class="practice-instruction">
+      <span class="practice-instruction-label">Today's Practice</span>
+      <p>${mod.practice}</p>
+    </div>
+    <div class="reflection-card">
+      <span class="reflection-label">Reflection Prompt</span>
+      <div class="reflection-question">${mod.reflection}</div>
+      <textarea class="reflection-textarea" id="reflTA" placeholder="Write your reflection here — or simply sit with the question…">${S.reflectionText}</textarea>
+      <button class="save-refl-btn" id="saveReflBtn" onclick="saveReflNow()">Save Reflection</button>
+    </div>
+    <div class="checklist-card">
+      <div class="checklist-title">Today's Physical Protocol</div>
+      <div class="checklist-group">
+        <span class="checklist-group-label">Supplements</span>
+        ${SUPPLEMENTS.map(s=>s.times.map(t=>{const k=`${s.id}_${t}`,done=!!S.supplements[k];return`<div class="check-item ${done?'done':''}" onclick="toggleSuppT('${s.id}','${t}',this)"><div class="check-box"></div><div class="check-item-text">${s.name} — ${t}</div></div>`;}).join('')).join('')}
+      </div>
+      <div class="checklist-group">
+        <span class="checklist-group-label">Movement</span>
+        ${EXERCISES.map(e=>{const done=!!S.exercises[e.id];return`<div class="check-item ${done?'done':''}" onclick="toggleExT('${e.id}',this)"><div class="check-box"></div><div class="check-item-text">${e.name}</div></div>`;}).join('')}
+      </div>
+      <div class="checklist-group">
+        <span class="checklist-group-label">Device</span>
+        <div class="check-item done"><div class="check-box"></div><div class="check-item-text">Haptic Device — Worn throughout the day</div></div>
+      </div>
+    </div>
+    <button class="complete-day-btn ${S.practiceComplete?'completed':''}" onclick="completeDay()" ${S.practiceComplete?'disabled':''}>
+      ${S.practiceComplete?'✓ Day '+mod.day+' Complete — Well done.':'Mark Day Complete — Return Complete'}
+    </button>`;
 }
 
-// Make renderLiveQuiz accessible globally for the retake button
-window.renderLiveQuiz = renderLiveQuiz;
-
-// ─────────────────────────────────────────
-// UI helpers
-// ─────────────────────────────────────────
-window.showTab = (tab, btn, mobile) => {
-  document.querySelectorAll('.section-page').forEach(p=>p.classList.remove('active'));
-  document.getElementById('tab-'+tab).classList.add('active');
-  document.querySelectorAll('.nav-tab').forEach(t=>t.classList.remove('active'));
-  document.querySelectorAll('.mobile-nav-btn').forEach(t=>t.classList.remove('active'));
-  if (btn) btn.classList.add('active');
-  document.querySelectorAll('.nav-tab').forEach(t=>{
-    if((t.getAttribute('onclick')||'').includes("'"+tab+"'")) t.classList.add('active');
-  });
-  const mob = document.getElementById('mob-'+tab);
-  if (mob) mob.classList.add('active');
+window.toggleExT = async (id,el) => { S.exercises[id]=!S.exercises[id]; el.classList.toggle('done',S.exercises[id]); await saveEx(); renderExercises(); };
+window.toggleSuppT = async (id,time,el) => { const k=`${id}_${time}`; S.supplements[k]=!S.supplements[k]; el.classList.toggle('done',S.supplements[k]); await saveSupp(); renderSupplements(); };
+window.saveReflNow = async () => {
+  const ta=document.getElementById('reflTA'),btn=document.getElementById('saveReflBtn');
+  if(!ta)return; S.reflectionText=ta.value;
+  btn.textContent='Saving…'; btn.disabled=true;
+  await saveRefl();
+  btn.textContent='Saved ✓'; btn.classList.add('saved');
+  setTimeout(()=>{btn.textContent='Save Reflection';btn.classList.remove('saved');btn.disabled=false;},2000);
+};
+window.completeDay = async () => {
+  S.practiceComplete=true; practiceStreak++;
+  if(programDay<21) programDay++;
+  S.practiceComplete=false; S.reflectionText='';
+  await saveDC(); await saveProfile();
+  updateBanner(); renderTodayPanel(); renderJourneyGrid();
 };
 
-function showSaved() {
-  const el = document.getElementById('save-indicator');
-  el.classList.add('show');
-  setTimeout(()=>el.classList.remove('show'), 1800);
+// ── JOURNEY ───────────────────────────────────────────────────────────
+function renderJourneyGrid() {
+  const p=document.getElementById('panel-journey');
+  let html=`<div class="section-heading" style="margin-bottom:4px">Your 21-Day Journey</div><div class="section-sub" style="margin-bottom:32px">Each day unlocks as you complete the previous. Tap any completed day to revisit its module.</div>`;
+  let cw=0;
+  MODULES.forEach(mod=>{
+    if(mod.week!==cw){if(cw>0)html+=`</div></div>`;cw=mod.week;html+=`<div class="week-section"><div class="week-header-row"><div class="week-num">${mod.week}</div><div class="week-meta"><div class="week-name">${getWeekName(mod.week)}</div><div class="week-theme-text">${getWeekTheme(mod.week)}</div></div><div class="week-rule"></div></div><div class="journey-grid">`;}
+    const isA=mod.day===programDay,isC=mod.day<programDay,isL=mod.day>programDay;
+    let cls='journey-card'+(isA?' active-day':isC?' completed':isL?' locked':'');
+    const icon=isC?'✓':isA?'→':'○';
+    html+=`<div class="${cls}" onclick="${!isL?`jumpTo(${mod.day})`:''}"><div class="jcard-status">${icon}</div><span class="jcard-day">Day ${mod.day}</span><div class="jcard-title">${mod.title}</div><div class="jcard-subtitle">${mod.subtitle}</div></div>`;
+  });
+  html+=`</div></div>`;
+  p.innerHTML=html;
+}
+window.jumpTo = d => { programDay=d; S.practiceComplete=false; renderTodayPanel(); switchTab('today'); window.scrollTo({top:0,behavior:'smooth'}); };
+
+// ── EXERCISES TAB ─────────────────────────────────────────────────────
+function renderExercises() {
+  document.getElementById('exStreakVal').textContent=exStreak;
+  document.getElementById('exerciseList').innerHTML=EXERCISES.map(e=>{const done=!!S.exercises[e.id];return`<div class="exercise-card ${done?'done-ex':''}"><div class="ex-card-top"><div class="ex-name">${e.name}</div><span class="ex-tag">${e.tag}</span></div><div class="ex-detail">${e.detail}</div><button class="ex-btn ${done?'done':''}" onclick="markEx('${e.id}',this)" ${done?'disabled':''}>${done?'✓ Complete':'Mark Complete'}</button></div>`;}).join('');
+}
+window.markEx = async (id,btn) => {
+  S.exercises[id]=true; btn.classList.add('done'); btn.textContent='✓ Complete'; btn.disabled=true;
+  btn.closest('.exercise-card').classList.add('done-ex');
+  if(EXERCISES.every(e=>S.exercises[e.id])){exStreak++;await saveProfile();document.getElementById('exStreakVal').textContent=exStreak;}
+  await saveEx(); renderTodayPanel();
+};
+
+// ── SUPPLEMENTS TAB ───────────────────────────────────────────────────
+function renderSupplements() {
+  document.getElementById('suppStreakVal').textContent=suppStreak;
+  document.getElementById('supplementList').innerHTML=SUPPLEMENTS.map(s=>{const allDone=s.times.every(t=>S.supplements[`${s.id}_${t}`]);return`<div class="supp-card ${allDone?'all-done':''}"><div class="supp-name">${s.name}</div><div class="supp-desc">${s.desc}</div><div class="supp-times">${s.times.map(t=>{const k=`${s.id}_${t}`,chk=!!S.supplements[k];return`<button class="supp-btn ${chk?'checked':''}" onclick="markSupp('${s.id}','${t}',this)">${chk?'✓ ':''} ${t} Dose</button>`;}).join('')}</div></div>`;}).join('');
+}
+window.markSupp = async (id,time,btn) => {
+  const k=`${id}_${time}`,was=S.supplements[k]; S.supplements[k]=!was;
+  btn.classList.toggle('checked',!was); btn.textContent=(!was?'✓ ':'')+time+' Dose';
+  const supp=SUPPLEMENTS.find(s=>s.id===id);
+  btn.closest('.supp-card').classList.toggle('all-done',supp.times.every(t=>S.supplements[`${id}_${t}`]));
+  if(!was&&SUPPLEMENTS.every(s=>s.times.every(t=>S.supplements[`${s.id}_${t}`]))){suppStreak++;await saveProfile();document.getElementById('suppStreakVal').textContent=suppStreak;}
+  await saveSupp(); renderTodayPanel();
+};
+
+// ── DEVICE TAB ────────────────────────────────────────────────────────
+function renderDevice() {
+  document.getElementById('postureScore').textContent=S.postureScore||'--';
+  document.getElementById('wearTime').textContent=S.wearTime?S.wearTime+'h':'--';
+  document.getElementById('goodPct').textContent=S.goodPct?S.goodPct+'%':'--%';
+  document.getElementById('alertCount').textContent=S.alertCount||'--';
+  const scores=[62,65,60,68,66,71,69,72,70,74,73,76,74,S.postureScore||74];
+  const maxS=Math.max(...scores);
+  const days=['M','T','W','T','F','S','S','M','T','W','T','F','S','T'];
+  document.getElementById('scoreChart').innerHTML=scores.map((s,i)=>`<div class="chart-bar-col"><div class="chart-val">${s}</div><div class="chart-bar ${i===scores.length-1?'today-bar':''}" style="height:${Math.round((s/maxS)*100)}%"></div><div class="chart-day">${days[i]}</div></div>`).join('');
 }
 
-function hideLoading() { document.getElementById('loading-screen').style.display = 'none'; }
-function showLogin() {
-  document.getElementById('login-screen').style.display = 'flex';
-  document.getElementById('app').classList.remove('visible');
-  document.getElementById('app').style.display = 'none';
-  const btn = document.getElementById('google-signin-btn');
-  if (btn) {
-    btn.disabled = false;
-    btn.innerHTML = `<svg viewBox="0 0 24 24" style="width:20px;height:20px;flex-shrink:0"><path d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z" fill="#4285F4"/><path d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z" fill="#34A853"/><path d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l3.66-2.84z" fill="#FBBC05"/><path d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z" fill="#EA4335"/></svg>Continue with Google`;
-  }
-}
-function showApp()     { document.getElementById('login-screen').style.display = 'none'; const app = document.getElementById('app'); app.style.display='flex'; app.classList.add('visible'); }
-
-function minutesToHours(m) {
-  if (!m) return '–';
-  const h = Math.floor(m/60), min = m%60;
-  return h ? `${h}h ${min}m` : `${min}m`;
-}
-
-function timeAgo(date) {
-  const diff = Math.floor((Date.now() - date.getTime()) / 1000);
-  if (diff < 60) return 'Just now';
-  if (diff < 3600) return `${Math.floor(diff/60)} min ago`;
-  if (diff < 86400) return `${Math.floor(diff/3600)}h ago`;
-  return `${Math.floor(diff/86400)}d ago`;
-}
+// ── TABS ──────────────────────────────────────────────────────────────
+const TAB_MAP={today:'panel-today',journey:'panel-journey',exercises:'panel-exercises',supplements:'panel-supplements',device:'panel-device'};
+window.switchTab = tab => {
+  document.querySelectorAll('.tab-btn').forEach((b,i)=>b.classList.toggle('active',Object.keys(TAB_MAP)[i]===tab));
+  document.querySelectorAll('.panel').forEach(p=>p.classList.remove('active'));
+  document.getElementById(TAB_MAP[tab]).classList.add('active');
+};
 
 </script>
 </body>
