@@ -981,6 +981,53 @@
     transition: opacity 0.7s ease, transform 0.7s ease;
   }
   .fade-in.visible { opacity: 1; transform: translateY(0); }
+
+  /* ── FHP CAROUSEL ── */
+  .fhp-carousel { position: relative; width: 100%; margin: 32px 0; }
+
+  .fhp-track {
+    position: relative;
+    width: 100%;
+    aspect-ratio: 1672 / 941;
+    overflow: hidden;
+    background: var(--cream-dark);
+  }
+
+  .fhp-slide {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+    opacity: 0;
+    transition: opacity 0.7s ease;
+    pointer-events: none;
+  }
+
+  .fhp-slide.active { opacity: 1; pointer-events: auto; }
+
+  .fhp-dots {
+    display: flex;
+    justify-content: center;
+    gap: 10px;
+    margin-top: 14px;
+  }
+
+  .fhp-dot {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    border: none;
+    background: rgba(168, 120, 42, 0.25);
+    cursor: pointer;
+    padding: 0;
+    transition: background 0.3s, transform 0.25s;
+  }
+
+  .fhp-dot.active {
+    background: var(--gold);
+    transform: scale(1.35);
+  }
 </style>
 </head>
 <body>
@@ -1054,12 +1101,15 @@
         <p>Everything about the Orthos System — the device, the supplements, the movement, the 21-day practice — was built from that single moment of noticing.</p>
       </div>
       <div>
-        <!-- IMAGE PLACEHOLDER 1 -->
-        <div class="placeholder placeholder-img-tall">
-          <div class="placeholder-icon">◻</div>
-          <div class="placeholder-label">Image Placeholder — Founder Portrait</div>
-          <p class="placeholder-desc">Natural, candid photo of Jite. Kitchen or home setting preferred. Warm light. Not a product shot — a human moment.</p>
-        </div>
+        <img
+          src="assets/kitchen.jpg"
+          alt="Jite in the kitchen — the moment of noticing that became the foundation of the Orthos System"
+          width="1537"
+          height="1023"
+          loading="lazy"
+          decoding="async"
+          style="width:100%; height:auto; display:block;"
+        />
       </div>
     </div>
   </div>
@@ -1076,11 +1126,32 @@
 
     <p class="lead">Posture doesn't fail because you're lazy. It fails because attention is designed to wander — and nobody built you a way back.</p>
 
-    <!-- IMAGE PLACEHOLDER 2 -->
-    <div class="placeholder placeholder-img">
-      <div class="placeholder-icon">◻</div>
-      <div class="placeholder-label">Image Placeholder — Forward Head Posture Progression</div>
-      <p class="placeholder-desc">Side-profile silhouette series showing gradual posture decline across a day. Clean, educational. Similar to FHP progression graphic in v2/v3.</p>
+    <p class="lead">On the surface, it looks like nothing. A shirt. A posture. Nothing alarming.</p>
+
+    <p>Strip away the layers, and the truth is mechanical: every inch your head drifts forward multiplies the load on your cervical spine — from <strong>12 lbs</strong> in normal alignment to <strong>42 lbs</strong> at just three inches forward.</p>
+
+    <p>The body doesn't announce this. It just adapts, quietly, one degree at a time — until the photo, the mirror, or the ache makes it impossible to ignore.</p>
+
+    <div class="fhp-carousel" id="fhpCarousel">
+      <div class="fhp-track">
+        <img class="fhp-slide active"
+             src="assets/fhp-shirt.jpg"
+             alt="Forward head posture progression — shirt layer view showing 12, 32, and 42 lbs of effective head weight"
+             width="1672" height="941" loading="lazy" decoding="async">
+        <img class="fhp-slide"
+             src="assets/fhp-skin.jpg"
+             alt="Forward head posture progression — skin layer view showing cervical spine curvature at each stage"
+             width="1672" height="941" loading="lazy" decoding="async">
+        <img class="fhp-slide"
+             src="assets/fhp-muscle.jpg"
+             alt="Forward head posture progression — muscle layer view showing strain on neck and upper back musculature"
+             width="1672" height="941" loading="lazy" decoding="async">
+      </div>
+      <div class="fhp-dots" role="tablist" aria-label="Posture progression slides">
+        <button class="fhp-dot active" data-index="0" aria-label="Slide 1: shirt layer" aria-selected="true" role="tab"></button>
+        <button class="fhp-dot" data-index="1" aria-label="Slide 2: skin layer" aria-selected="false" role="tab"></button>
+        <button class="fhp-dot" data-index="2" aria-label="Slide 3: muscle layer" aria-selected="false" role="tab"></button>
+      </div>
     </div>
 
     <p>There is an account in neuroscience of what happens when attention is not actively engaged. It is called the Default Mode Network — the brain's resting state. In that state, the mind drifts into memory, anticipation, internal dialogue. Research suggests the average person spends nearly half their waking hours in this state.</p>
@@ -1953,6 +2024,52 @@
 
   // Hide prev btn initially
   document.getElementById('prevBtn').style.visibility = 'hidden';
+
+  // ── FHP CAROUSEL ──
+  (function () {
+    const carousel = document.getElementById('fhpCarousel');
+    if (!carousel) return;
+
+    const slides = carousel.querySelectorAll('.fhp-slide');
+    const dots   = carousel.querySelectorAll('.fhp-dot');
+    let current  = 0;
+    let timer    = null;
+    let paused   = false;
+    const INTERVAL = 4000;
+
+    function goTo(n) {
+      slides[current].classList.remove('active');
+      dots[current].classList.remove('active');
+      dots[current].setAttribute('aria-selected', 'false');
+      current = (n + slides.length) % slides.length;
+      slides[current].classList.add('active');
+      dots[current].classList.add('active');
+      dots[current].setAttribute('aria-selected', 'true');
+    }
+
+    function start() { timer = setInterval(() => goTo(current + 1), INTERVAL); }
+    function stop()  { clearInterval(timer); timer = null; }
+
+    dots.forEach(dot => {
+      dot.addEventListener('click', () => {
+        stop();
+        goTo(parseInt(dot.dataset.index, 10));
+        start();
+      });
+    });
+
+    // Pause on hover (desktop)
+    carousel.addEventListener('mouseenter', stop);
+    carousel.addEventListener('mouseleave', () => { if (!paused) start(); });
+
+    // Toggle pause on tap (mobile)
+    carousel.addEventListener('touchstart', () => {
+      paused = !paused;
+      paused ? stop() : start();
+    }, { passive: true });
+
+    start();
+  }());
 </script>
 
 </body>
