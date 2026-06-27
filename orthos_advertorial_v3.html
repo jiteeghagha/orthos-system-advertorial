@@ -91,7 +91,7 @@
 
   /* ── HERO ── */
   .hero {
-    background: var(--forest);
+    background: url('assets/nordic.png') 70% center / cover no-repeat;
     min-height: 80vh;
     display: flex;
     align-items: center;
@@ -101,13 +101,18 @@
     padding: 80px 40px;
   }
 
+  /* Directional overlay: opaque forest on left (text), transparent on right (silhouettes) */
   .hero-bg-texture {
     position: absolute;
     inset: 0;
-    background:
-      radial-gradient(ellipse at 20% 50%, rgba(156,122,60,0.15) 0%, transparent 60%),
-      radial-gradient(ellipse at 80% 20%, rgba(61,84,64,0.4) 0%, transparent 50%),
-      radial-gradient(ellipse at 60% 80%, rgba(156,122,60,0.08) 0%, transparent 40%);
+    background: linear-gradient(
+      to right,
+      rgba(30, 48, 40, 0.90) 0%,
+      rgba(30, 48, 40, 0.82) 30%,
+      rgba(30, 48, 40, 0.50) 58%,
+      rgba(30, 48, 40, 0.18) 80%,
+      rgba(30, 48, 40, 0.08) 100%
+    );
   }
 
   /* Organic wave at bottom of hero */
@@ -987,7 +992,7 @@
 
 <!-- NAV -->
 <nav>
-  <div class="nav-logo">Orthos<span>™</span></div>
+  <div class="nav-logo">Orthos Systems<span>™</span></div>
   <a href="#pricing" class="nav-cta">Begin the Practice</a>
 </nav>
 
@@ -1004,7 +1009,7 @@
     <a href="#pricing" class="btn-primary">Begin Your Return</a>
   </div>
   <svg class="hero-wave" viewBox="0 0 1440 80" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="none">
-    <path d="M0,40 C360,80 1080,0 1440,40 L1440,80 L0,80 Z" fill="#F7F3EC"/>
+    <path d="M0,40 C360,80 1080,0 1440,40 L1440,80 L0,80 Z" fill="#F5F3EE"/>
   </svg>
 </section>
 
