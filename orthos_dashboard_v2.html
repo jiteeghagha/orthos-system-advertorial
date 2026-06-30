@@ -99,6 +99,19 @@ button{font-family:var(--sans);cursor:pointer;border:none;background:none}
 .check-item.done .check-item-text{text-decoration:line-through;color:var(--ink-faint)}
 .complete-day-btn{width:100%;padding:18px;background:var(--forest);color:var(--white);font-family:var(--serif);font-size:20px;font-style:italic;letter-spacing:0.02em;border:none;cursor:pointer;transition:background .3s;margin-bottom:40px}
 .complete-day-btn:hover:not(:disabled){background:var(--gold)}.complete-day-btn.completed{background:var(--green);cursor:default}
+.incomplete-prompt{background:var(--gold-faint);border:1px solid var(--gold-pale);padding:24px 28px;margin-bottom:40px}
+.incomplete-prompt-msg{font-family:var(--serif);font-size:17px;font-style:italic;color:var(--forest);line-height:1.65;margin-bottom:20px}
+.incomplete-prompt-actions{display:flex;gap:12px;flex-wrap:wrap}
+.incomplete-confirm-btn{padding:11px 24px;background:var(--forest);color:var(--white);font-size:10px;letter-spacing:0.14em;text-transform:uppercase;font-family:var(--sans);font-weight:500;border:none;cursor:pointer;transition:background .2s}
+.incomplete-confirm-btn:hover{background:var(--gold)}
+.incomplete-dismiss-btn{padding:11px 24px;background:transparent;color:var(--ink-muted);font-size:10px;letter-spacing:0.14em;text-transform:uppercase;font-family:var(--sans);font-weight:500;border:1px solid var(--border-md);cursor:pointer;transition:all .2s}
+.incomplete-dismiss-btn:hover{border-color:var(--ink-soft);color:var(--ink-soft)}
+.preview-banner{background:var(--cream-dark);border-bottom:1px solid var(--border-md);padding:12px 20px;display:flex;align-items:center;justify-content:space-between;gap:12px}
+.preview-banner-label{font-size:11px;letter-spacing:0.14em;text-transform:uppercase;color:var(--ink-muted)}
+.preview-return-btn{font-size:11px;letter-spacing:0.12em;text-transform:uppercase;color:var(--gold);font-family:var(--sans);font-weight:500;background:none;border:none;cursor:pointer;padding:0;white-space:nowrap}
+.preview-return-btn:hover{color:var(--forest)}
+.checklist-card.view-only .check-item{cursor:default;pointer-events:none}
+.reflection-textarea[readonly]{background:var(--cream-dark);color:var(--ink-muted);cursor:default}
 
 /* JOURNEY */
 .week-section{margin-bottom:48px}
@@ -121,6 +134,9 @@ button{font-family:var(--sans);cursor:pointer;border:none;background:none}
 .journey-card.completed .jcard-status{background:var(--green);color:var(--white)}
 .journey-card.active-day .jcard-status{background:var(--gold);color:var(--white)}
 .journey-card.locked .jcard-status{background:var(--border);color:var(--ink-faint)}
+.journey-card.missed{opacity:.6;border-top-color:var(--border-md);cursor:pointer}
+.journey-card.missed .jcard-day{color:var(--ink-faint)}
+.journey-card.missed .jcard-status{background:var(--border);color:var(--ink-muted)}
 
 /* EXERCISES & SUPPLEMENTS */
 .tab-header{display:flex;align-items:flex-start;justify-content:space-between;margin-bottom:28px;gap:16px;flex-wrap:wrap}
@@ -373,11 +389,15 @@ const SUPPLEMENTS = [
 ];
 
 // ── STATE ─────────────────────────────────────────────────────────────
-let currentUser    = null;
-let programDay     = 1;
-let practiceStreak = 0;
-let exStreak       = 0;
-let suppStreak     = 0;
+let currentUser      = null;
+let programDay       = 1;
+let practiceStreak   = 0;
+let exStreak         = 0;
+let suppStreak       = 0;
+let programStartDate = '';
+let completionCache  = {};
+let previewDay       = null;
+let previewState     = null;
 const TODAY = new Date().toISOString().split('T')[0];
 let S = { exercises:{}, supplements:{}, practiceComplete:false, reflectionText:'', postureScore:0, wearTime:0, goodPct:0, alertCount:0 };
 
@@ -413,11 +433,28 @@ async function loadData() {
       photoURL:currentUser.photoURL, programStartDate:TODAY,
       programDay:1, practiceStreak:0, exStreak:0, suppStreak:0, createdAt:serverTimestamp()
     });
-    programDay=1; practiceStreak=0; exStreak=0; suppStreak=0;
+    programDay=1; practiceStreak=0; exStreak=0; suppStreak=0; programStartDate=TODAY;
   } else {
     const d = profileSnap.data();
     programDay=d.programDay||1; practiceStreak=d.practiceStreak||0;
     exStreak=d.exStreak||0; suppStreak=d.suppStreak||0;
+    programStartDate=d.programStartDate||TODAY;
+  }
+  // Missed-day detection — only if user is past day 1
+  if (programDay > 1) {
+    const yd=new Date(); yd.setDate(yd.getDate()-1);
+    const yesterday=yd.toISOString().split('T')[0];
+    const ydcSnap=await getDoc(doc(db,'users',uid,'daily_completions',yesterday));
+    if (!ydcSnap.exists() || !ydcSnap.data().practiceComplete) {
+      await setDoc(doc(db,'users',uid,'daily_completions',yesterday),{missed:true},{merge:true});
+      practiceStreak=0;
+      await updateDoc(doc(db,'users',uid),{practiceStreak:0,updatedAt:serverTimestamp()});
+    }
+    // Load past daily-completion docs for journey grid missed-state rendering
+    completionCache={};
+    const pastDates=Array.from({length:programDay-1},(_,i)=>dateForDay(i+1));
+    const pastSnaps=await Promise.all(pastDates.map(d=>getDoc(doc(db,'users',uid,'daily_completions',d))));
+    pastSnaps.forEach((snap,i)=>{completionCache[pastDates[i]]=snap.exists()?snap.data():null;});
   }
   const exSnap   = await getDoc(doc(db,'users',uid,'exercises',TODAY));
   S.exercises    = exSnap.exists() ? (exSnap.data().completions||{}) : {};
@@ -432,7 +469,11 @@ async function loadData() {
 // ── FIRESTORE SAVE ────────────────────────────────────────────────────
 const saveEx   = () => setDoc(doc(db,'users',currentUser.uid,'exercises',TODAY),{completions:S.exercises,updatedAt:serverTimestamp()},{merge:true});
 const saveSupp = () => setDoc(doc(db,'users',currentUser.uid,'supplements',TODAY),{completions:S.supplements,updatedAt:serverTimestamp()},{merge:true});
-const saveDC   = () => setDoc(doc(db,'users',currentUser.uid,'daily_completions',TODAY),{practiceComplete:S.practiceComplete,reflectionText:S.reflectionText,moduleRead:true,dayFullyComplete:true,completedAt:serverTimestamp()},{merge:true});
+const saveDC   = () => {
+  const exercisesComplete   = EXERCISES.every(e=>S.exercises[e.id]);
+  const supplementsComplete = SUPPLEMENTS.every(s=>s.times.every(t=>S.supplements[`${s.id}_${t}`]));
+  return setDoc(doc(db,'users',currentUser.uid,'daily_completions',TODAY),{practiceComplete:S.practiceComplete,reflectionText:S.reflectionText,moduleRead:true,dayFullyComplete:true,exercisesComplete,supplementsComplete,completedAt:serverTimestamp()},{merge:true});
+};
 const saveRefl = () => setDoc(doc(db,'users',currentUser.uid,'daily_completions',TODAY),{reflectionText:S.reflectionText,updatedAt:serverTimestamp()},{merge:true});
 const saveProfile = () => updateDoc(doc(db,'users',currentUser.uid),{programDay,practiceStreak,exStreak,suppStreak,updatedAt:serverTimestamp()});
 
@@ -462,19 +503,57 @@ function updateBanner() {
 }
 
 // ── MODULE HELPERS ────────────────────────────────────────────────────
+const dateForDay   = dayNum => { const dt=new Date(programStartDate+'T00:00:00'); dt.setDate(dt.getDate()+dayNum-1); return dt.toISOString().split('T')[0]; };
 const getModule    = d => MODULES.find(m=>m.day===d)||null;
 const getWeekName  = w => ['','Awakening','Deepening','Embodiment'][w]||'';
 const getWeekTheme = w => ['','Establishing the protocol · First returns · Noticing absence','Neuromuscular retraining taking hold · Shortening the drift-to-return gap','Self-regulation beginning · Presence becoming natural'][w]||'';
 
 // ── TODAY'S PRACTICE ──────────────────────────────────────────────────
 function renderTodayPanel() {
-  const panel = document.getElementById('panel-today');
-  const mod   = getModule(programDay);
-  if (!mod) {
+  const panel     = document.getElementById('panel-today');
+  const isPreview = previewDay !== null && previewDay !== programDay;
+  const viewDay   = isPreview ? previewDay   : programDay;
+  const viewS     = isPreview ? previewState : S;
+  const mod       = getModule(viewDay);
+
+  if (!mod && !isPreview) {
     panel.innerHTML=`<div class="practice-hero"><span class="practice-day-badge">21-Day Practice Complete</span><div class="practice-title">You Have Come Home.</div><div class="practice-subtitle">The program is complete. The practice continues.</div></div><div class="module-card"><span class="module-section-label">What Comes Next</span><div class="module-reading"><p>The device continues. The supplements continue. The movement continues. The practice of returning — that was never a program. It was always just what presence does when it remembers what it is.</p></div></div>`;
     return;
   }
+  if (!mod) return;
+
+  const previewBanner = isPreview
+    ? `<div class="preview-banner"><span class="preview-banner-label">Viewing Day ${viewDay}</span><button class="preview-return-btn" onclick="jumpTo(${programDay})">Return to Day ${programDay} →</button></div>`
+    : '';
+
+  const suppItems = SUPPLEMENTS.map(s=>s.times.map(t=>{
+    const k=`${s.id}_${t}`,done=!!viewS.supplements[k];
+    const oc=isPreview?'':`onclick="toggleSuppT('${s.id}','${t}',this)"`;
+    return`<div class="check-item ${done?'done':''}" ${oc}><div class="check-box"></div><div class="check-item-text">${s.name} — ${t}</div></div>`;
+  }).join('')).join('');
+
+  const exItems = EXERCISES.map(e=>{
+    const done=!!viewS.exercises[e.id];
+    const oc=isPreview?'':`onclick="toggleExT('${e.id}',this)"`;
+    return`<div class="check-item ${done?'done':''}" ${oc}><div class="check-box"></div><div class="check-item-text">${e.name}</div></div>`;
+  }).join('');
+
+  const reflSection = isPreview
+    ? `<textarea class="reflection-textarea" readonly placeholder="No reflection recorded.">${viewS.reflectionText}</textarea>`
+    : `<textarea class="reflection-textarea" id="reflTA" placeholder="Write your reflection here — or simply sit with the question…">${viewS.reflectionText}</textarea>
+       <button class="save-refl-btn" id="saveReflBtn" onclick="saveReflNow()">Save Reflection</button>`;
+
+  let completeBtnHtml;
+  if (isPreview) {
+    const isMissed=viewS.missed;
+    const label=isMissed?`Day ${viewDay} — Missed`:`Day ${viewDay} — Previously Completed`;
+    completeBtnHtml=`<button class="complete-day-btn${isMissed?'':' completed'}" disabled>${label}</button>`;
+  } else {
+    completeBtnHtml=`<button class="complete-day-btn${viewS.practiceComplete?' completed':''}" id="completeDayBtn" onclick="completeDay()" ${viewS.practiceComplete?'disabled':''}>${viewS.practiceComplete?'✓ Day '+mod.day+' Complete — Well done.':'Mark Day Complete — Return Complete'}</button>`;
+  }
+
   panel.innerHTML=`
+    ${previewBanner}
     <div class="practice-hero">
       <span class="practice-day-badge">Week ${mod.week} · Day ${mod.day} of 21</span>
       <div class="practice-title">${mod.title}</div>
@@ -491,27 +570,24 @@ function renderTodayPanel() {
     <div class="reflection-card">
       <span class="reflection-label">Reflection Prompt</span>
       <div class="reflection-question">${mod.reflection}</div>
-      <textarea class="reflection-textarea" id="reflTA" placeholder="Write your reflection here — or simply sit with the question…">${S.reflectionText}</textarea>
-      <button class="save-refl-btn" id="saveReflBtn" onclick="saveReflNow()">Save Reflection</button>
+      ${reflSection}
     </div>
-    <div class="checklist-card">
-      <div class="checklist-title">Today's Physical Protocol</div>
+    <div class="checklist-card${isPreview?' view-only':''}">
+      <div class="checklist-title">${isPreview?`Day ${viewDay}'s Physical Protocol`:"Today's Physical Protocol"}</div>
       <div class="checklist-group">
         <span class="checklist-group-label">Supplements</span>
-        ${SUPPLEMENTS.map(s=>s.times.map(t=>{const k=`${s.id}_${t}`,done=!!S.supplements[k];return`<div class="check-item ${done?'done':''}" onclick="toggleSuppT('${s.id}','${t}',this)"><div class="check-box"></div><div class="check-item-text">${s.name} — ${t}</div></div>`;}).join('')).join('')}
+        ${suppItems}
       </div>
       <div class="checklist-group">
         <span class="checklist-group-label">Movement</span>
-        ${EXERCISES.map(e=>{const done=!!S.exercises[e.id];return`<div class="check-item ${done?'done':''}" onclick="toggleExT('${e.id}',this)"><div class="check-box"></div><div class="check-item-text">${e.name}</div></div>`;}).join('')}
+        ${exItems}
       </div>
       <div class="checklist-group">
         <span class="checklist-group-label">Device</span>
         <div class="check-item done"><div class="check-box"></div><div class="check-item-text">Haptic Device — Worn throughout the day</div></div>
       </div>
     </div>
-    <button class="complete-day-btn ${S.practiceComplete?'completed':''}" onclick="completeDay()" ${S.practiceComplete?'disabled':''}>
-      ${S.practiceComplete?'✓ Day '+mod.day+' Complete — Well done.':'Mark Day Complete — Return Complete'}
-    </button>`;
+    ${completeBtnHtml}`;
 }
 
 window.toggleExT = async (id,el) => { S.exercises[id]=!S.exercises[id]; el.classList.toggle('done',S.exercises[id]); await saveEx(); renderExercises(); };
@@ -524,12 +600,36 @@ window.saveReflNow = async () => {
   btn.textContent='Saved ✓'; btn.classList.add('saved');
   setTimeout(()=>{btn.textContent='Save Reflection';btn.classList.remove('saved');btn.disabled=false;},2000);
 };
-window.completeDay = async () => {
-  S.practiceComplete=true; practiceStreak++;
+async function doCompleteDay() {
+  S.practiceComplete=true;
+  await saveDC();
+  practiceStreak++;
   if(programDay<21) programDay++;
-  S.practiceComplete=false; S.reflectionText='';
-  await saveDC(); await saveProfile();
-  updateBanner(); renderTodayPanel(); renderJourneyGrid();
+  await saveProfile();
+  updateBanner(); renderTodayPanel(); renderJourneyGrid(); switchTab('journey');
+}
+window.completeDay = async () => {
+  const exDone   = EXERCISES.every(e=>S.exercises[e.id]);
+  const suppDone = SUPPLEMENTS.every(s=>s.times.every(t=>S.supplements[`${s.id}_${t}`]));
+  if (!exDone || !suppDone) {
+    const btn=document.getElementById('completeDayBtn');
+    if (!btn || document.getElementById('incomplete-prompt')) return;
+    btn.style.display='none';
+    const prompt=document.createElement('div');
+    prompt.id='incomplete-prompt'; prompt.className='incomplete-prompt';
+    prompt.innerHTML=`<p class="incomplete-prompt-msg">You're completing today without finishing the full physical protocol. That's okay — the practice meets you where you are. Tap confirm to continue.</p><div class="incomplete-prompt-actions"><button class="incomplete-confirm-btn" onclick="confirmCompleteDay()">Confirm</button><button class="incomplete-dismiss-btn" onclick="dismissCompletePrompt()">Not yet</button></div>`;
+    btn.parentNode.insertBefore(prompt, btn.nextSibling);
+    return;
+  }
+  await doCompleteDay();
+};
+window.confirmCompleteDay = async () => {
+  const p=document.getElementById('incomplete-prompt'); if(p) p.remove();
+  await doCompleteDay();
+};
+window.dismissCompletePrompt = () => {
+  const p=document.getElementById('incomplete-prompt'); if(p) p.remove();
+  const btn=document.getElementById('completeDayBtn'); if(btn) btn.style.display='';
 };
 
 // ── JOURNEY ───────────────────────────────────────────────────────────
@@ -540,14 +640,40 @@ function renderJourneyGrid() {
   MODULES.forEach(mod=>{
     if(mod.week!==cw){if(cw>0)html+=`</div></div>`;cw=mod.week;html+=`<div class="week-section"><div class="week-header-row"><div class="week-num">${mod.week}</div><div class="week-meta"><div class="week-name">${getWeekName(mod.week)}</div><div class="week-theme-text">${getWeekTheme(mod.week)}</div></div><div class="week-rule"></div></div><div class="journey-grid">`;}
     const isA=mod.day===programDay,isC=mod.day<programDay,isL=mod.day>programDay;
-    let cls='journey-card'+(isA?' active-day':isC?' completed':isL?' locked':'');
-    const icon=isC?'✓':isA?'→':'○';
+    const isMissed=isC&&completionCache[dateForDay(mod.day)]?.missed===true;
+    let cls='journey-card'+(isA?' active-day':isMissed?' missed':isC?' completed':isL?' locked':'');
+    const icon=isMissed?'—':isC?'✓':isA?'→':'○';
     html+=`<div class="${cls}" onclick="${!isL?`jumpTo(${mod.day})`:''}"><div class="jcard-status">${icon}</div><span class="jcard-day">Day ${mod.day}</span><div class="jcard-title">${mod.title}</div><div class="jcard-subtitle">${mod.subtitle}</div></div>`;
   });
   html+=`</div></div>`;
   p.innerHTML=html;
 }
-window.jumpTo = d => { programDay=d; S.practiceComplete=false; renderTodayPanel(); switchTab('today'); window.scrollTo({top:0,behavior:'smooth'}); };
+window.jumpTo = async d => {
+  if (d === programDay) {
+    previewDay=null; previewState=null;
+    updateBanner(); renderTodayPanel(); renderJourneyGrid();
+    switchTab('today'); window.scrollTo({top:0,behavior:'smooth'});
+    return;
+  }
+  if (d > programDay) return;
+  const uid=currentUser.uid, date=dateForDay(d);
+  const [exSnap,suppSnap,dcSnap] = await Promise.all([
+    getDoc(doc(db,'users',uid,'exercises',date)),
+    getDoc(doc(db,'users',uid,'supplements',date)),
+    getDoc(doc(db,'users',uid,'daily_completions',date)),
+  ]);
+  const dc=dcSnap.exists()?dcSnap.data():{};
+  previewState={
+    exercises:        exSnap.exists()?(exSnap.data().completions||{}):{},
+    supplements:      suppSnap.exists()?(suppSnap.data().completions||{}):{},
+    practiceComplete: dc.practiceComplete||false,
+    reflectionText:   dc.reflectionText||'',
+    missed:           dc.missed||false,
+  };
+  previewDay=d;
+  updateBanner(); renderTodayPanel(); renderJourneyGrid();
+  switchTab('today'); window.scrollTo({top:0,behavior:'smooth'});
+};
 
 // ── EXERCISES TAB ─────────────────────────────────────────────────────
 function renderExercises() {
