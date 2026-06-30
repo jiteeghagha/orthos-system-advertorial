@@ -607,6 +607,7 @@ async function doCompleteDay() {
   if(programDay<21) programDay++;
   await saveProfile();
   updateBanner(); renderTodayPanel(); renderJourneyGrid(); switchTab('journey');
+  setTimeout(()=>{ const el=document.querySelector('#panel-journey .active-day'); if(el) el.scrollIntoView({behavior:'smooth',block:'center'}); },100);
 }
 window.completeDay = async () => {
   const exDone   = EXERCISES.every(e=>S.exercises[e.id]);
@@ -651,7 +652,17 @@ function renderJourneyGrid() {
 window.jumpTo = async d => {
   if (d === programDay) {
     previewDay=null; previewState=null;
-    updateBanner(); renderTodayPanel(); renderJourneyGrid();
+    const uid=currentUser.uid;
+    const [exSnap,suppSnap,dcSnap] = await Promise.all([
+      getDoc(doc(db,'users',uid,'exercises',TODAY)),
+      getDoc(doc(db,'users',uid,'supplements',TODAY)),
+      getDoc(doc(db,'users',uid,'daily_completions',TODAY)),
+    ]);
+    S.exercises    = exSnap.exists()   ? (exSnap.data().completions||{})         : {};
+    S.supplements  = suppSnap.exists() ? (suppSnap.data().completions||{})        : {};
+    S.practiceComplete = dcSnap.exists() ? (dcSnap.data().practiceComplete||false) : false;
+    S.reflectionText   = dcSnap.exists() ? (dcSnap.data().reflectionText||'')      : '';
+    updateBanner(); renderTodayPanel(); renderExercises(); renderSupplements(); renderJourneyGrid();
     switchTab('today'); window.scrollTo({top:0,behavior:'smooth'});
     return;
   }
