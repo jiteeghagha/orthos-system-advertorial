@@ -442,39 +442,38 @@ async function loadData() {
   }
   // Missed-day detection — only if user is past day 1
   if (programDay > 1) {
-    const yd=new Date(); yd.setDate(yd.getDate()-1);
-    const yesterday=yd.toISOString().split('T')[0];
-    const ydcSnap=await getDoc(doc(db,'users',uid,'daily_completions',yesterday));
+    const prevDayKey=String(programDay-1);
+    const ydcSnap=await getDoc(doc(db,'users',uid,'daily_completions',prevDayKey));
     if (!ydcSnap.exists() || !ydcSnap.data().practiceComplete) {
-      await setDoc(doc(db,'users',uid,'daily_completions',yesterday),{missed:true},{merge:true});
+      await setDoc(doc(db,'users',uid,'daily_completions',prevDayKey),{missed:true},{merge:true});
       practiceStreak=0;
       await updateDoc(doc(db,'users',uid),{practiceStreak:0,updatedAt:serverTimestamp()});
     }
     // Load past daily-completion docs for journey grid missed-state rendering
     completionCache={};
-    const pastDates=Array.from({length:programDay-1},(_,i)=>dateForDay(i+1));
-    const pastSnaps=await Promise.all(pastDates.map(d=>getDoc(doc(db,'users',uid,'daily_completions',d))));
-    pastSnaps.forEach((snap,i)=>{completionCache[pastDates[i]]=snap.exists()?snap.data():null;});
+    const pastKeys=Array.from({length:programDay-1},(_,i)=>String(i+1));
+    const pastSnaps=await Promise.all(pastKeys.map(k=>getDoc(doc(db,'users',uid,'daily_completions',k))));
+    pastSnaps.forEach((snap,i)=>{completionCache[pastKeys[i]]=snap.exists()?snap.data():null;});
   }
-  const exSnap   = await getDoc(doc(db,'users',uid,'exercises',TODAY));
+  const exSnap   = await getDoc(doc(db,'users',uid,'exercises',String(programDay)));
   S.exercises    = exSnap.exists() ? (exSnap.data().completions||{}) : {};
-  const suppSnap = await getDoc(doc(db,'users',uid,'supplements',TODAY));
+  const suppSnap = await getDoc(doc(db,'users',uid,'supplements',String(programDay)));
   S.supplements  = suppSnap.exists() ? (suppSnap.data().completions||{}) : {};
-  const dcSnap   = await getDoc(doc(db,'users',uid,'daily_completions',TODAY));
+  const dcSnap   = await getDoc(doc(db,'users',uid,'daily_completions',String(programDay)));
   if (dcSnap.exists()) { S.practiceComplete=dcSnap.data().practiceComplete||false; S.reflectionText=dcSnap.data().reflectionText||''; }
   const psSnap   = await getDoc(doc(db,'users',uid,'posture_scores',TODAY));
   if (psSnap.exists()) { const p=psSnap.data(); S.postureScore=p.score||0; S.wearTime=p.wear_time||0; S.goodPct=p.good_pct||0; S.alertCount=p.alerts||0; }
 }
 
 // ── FIRESTORE SAVE ────────────────────────────────────────────────────
-const saveEx   = () => setDoc(doc(db,'users',currentUser.uid,'exercises',TODAY),{completions:S.exercises,updatedAt:serverTimestamp()},{merge:true});
-const saveSupp = () => setDoc(doc(db,'users',currentUser.uid,'supplements',TODAY),{completions:S.supplements,updatedAt:serverTimestamp()},{merge:true});
+const saveEx   = () => setDoc(doc(db,'users',currentUser.uid,'exercises',String(programDay)),{completions:S.exercises,updatedAt:serverTimestamp()},{merge:true});
+const saveSupp = () => setDoc(doc(db,'users',currentUser.uid,'supplements',String(programDay)),{completions:S.supplements,updatedAt:serverTimestamp()},{merge:true});
 const saveDC   = () => {
   const exercisesComplete   = EXERCISES.every(e=>S.exercises[e.id]);
   const supplementsComplete = SUPPLEMENTS.every(s=>s.times.every(t=>S.supplements[`${s.id}_${t}`]));
-  return setDoc(doc(db,'users',currentUser.uid,'daily_completions',TODAY),{practiceComplete:S.practiceComplete,reflectionText:S.reflectionText,moduleRead:true,dayFullyComplete:true,exercisesComplete,supplementsComplete,completedAt:serverTimestamp()},{merge:true});
+  return setDoc(doc(db,'users',currentUser.uid,'daily_completions',String(programDay)),{practiceComplete:S.practiceComplete,reflectionText:S.reflectionText,moduleRead:true,dayFullyComplete:true,exercisesComplete,supplementsComplete,completedAt:serverTimestamp()},{merge:true});
 };
-const saveRefl = () => setDoc(doc(db,'users',currentUser.uid,'daily_completions',TODAY),{reflectionText:S.reflectionText,updatedAt:serverTimestamp()},{merge:true});
+const saveRefl = () => setDoc(doc(db,'users',currentUser.uid,'daily_completions',String(programDay)),{reflectionText:S.reflectionText,updatedAt:serverTimestamp()},{merge:true});
 const saveProfile = () => updateDoc(doc(db,'users',currentUser.uid),{programDay,practiceStreak,exStreak,suppStreak,updatedAt:serverTimestamp()});
 
 // ── SHOW/HIDE ─────────────────────────────────────────────────────────
@@ -606,7 +605,9 @@ async function doCompleteDay() {
   practiceStreak++;
   if(programDay<21) programDay++;
   await saveProfile();
-  updateBanner(); renderTodayPanel(); renderJourneyGrid(); switchTab('journey');
+  S.exercises={}; S.supplements={}; S.practiceComplete=false; S.reflectionText='';
+  previewDay=null; previewState=null;
+  updateBanner(); renderTodayPanel(); renderExercises(); renderSupplements(); renderJourneyGrid(); switchTab('journey');
   setTimeout(()=>{ const el=document.querySelector('#panel-journey .active-day'); if(el) el.scrollIntoView({behavior:'smooth',block:'center'}); },100);
 }
 window.completeDay = async () => {
@@ -641,7 +642,7 @@ function renderJourneyGrid() {
   MODULES.forEach(mod=>{
     if(mod.week!==cw){if(cw>0)html+=`</div></div>`;cw=mod.week;html+=`<div class="week-section"><div class="week-header-row"><div class="week-num">${mod.week}</div><div class="week-meta"><div class="week-name">${getWeekName(mod.week)}</div><div class="week-theme-text">${getWeekTheme(mod.week)}</div></div><div class="week-rule"></div></div><div class="journey-grid">`;}
     const isA=mod.day===programDay,isC=mod.day<programDay,isL=mod.day>programDay;
-    const isMissed=isC&&completionCache[dateForDay(mod.day)]?.missed===true;
+    const isMissed=isC&&completionCache[String(mod.day)]?.missed===true;
     let cls='journey-card'+(isA?' active-day':isMissed?' missed':isC?' completed':isL?' locked':'');
     const icon=isMissed?'—':isC?'✓':isA?'→':'○';
     html+=`<div class="${cls}" onclick="${!isL?`jumpTo(${mod.day})`:''}"><div class="jcard-status">${icon}</div><span class="jcard-day">Day ${mod.day}</span><div class="jcard-title">${mod.title}</div><div class="jcard-subtitle">${mod.subtitle}</div></div>`;
@@ -654,9 +655,9 @@ window.jumpTo = async d => {
     previewDay=null; previewState=null;
     const uid=currentUser.uid;
     const [exSnap,suppSnap,dcSnap] = await Promise.all([
-      getDoc(doc(db,'users',uid,'exercises',TODAY)),
-      getDoc(doc(db,'users',uid,'supplements',TODAY)),
-      getDoc(doc(db,'users',uid,'daily_completions',TODAY)),
+      getDoc(doc(db,'users',uid,'exercises',String(programDay))),
+      getDoc(doc(db,'users',uid,'supplements',String(programDay))),
+      getDoc(doc(db,'users',uid,'daily_completions',String(programDay))),
     ]);
     S.exercises    = exSnap.exists()   ? (exSnap.data().completions||{})         : {};
     S.supplements  = suppSnap.exists() ? (suppSnap.data().completions||{})        : {};
@@ -667,11 +668,11 @@ window.jumpTo = async d => {
     return;
   }
   if (d > programDay) return;
-  const uid=currentUser.uid, date=dateForDay(d);
+  const uid=currentUser.uid;
   const [exSnap,suppSnap,dcSnap] = await Promise.all([
-    getDoc(doc(db,'users',uid,'exercises',date)),
-    getDoc(doc(db,'users',uid,'supplements',date)),
-    getDoc(doc(db,'users',uid,'daily_completions',date)),
+    getDoc(doc(db,'users',uid,'exercises',String(d))),
+    getDoc(doc(db,'users',uid,'supplements',String(d))),
+    getDoc(doc(db,'users',uid,'daily_completions',String(d))),
   ]);
   const dc=dcSnap.exists()?dcSnap.data():{};
   previewState={
