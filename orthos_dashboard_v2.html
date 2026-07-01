@@ -163,14 +163,15 @@ button{font-family:var(--sans);cursor:pointer;border:none;background:none}
 .supp-btn:hover:not(.checked){border-color:var(--gold);color:var(--gold)}.supp-btn.checked{background:var(--green);border-color:var(--green);color:var(--white)}
 
 /* SUPPLEMENTS TAB — PRODUCT CARDS */
-.supp-product-card{background:var(--white);border-top:3px solid var(--gold);padding:24px;margin-bottom:20px;cursor:pointer;transition:box-shadow .2s}
-.supp-product-card:hover{box-shadow:0 4px 20px rgba(0,0,0,0.08)}
-.supp-product-img-wrap{aspect-ratio:1/1;background:var(--white);margin-bottom:16px;overflow:hidden;display:flex;align-items:center;justify-content:center}
+.supp-product-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;margin-bottom:28px}
+.supp-product-card{background:var(--white);border-top:2px solid var(--gold);padding:12px;cursor:pointer;transition:box-shadow .2s;display:flex;flex-direction:column}
+.supp-product-card:hover{box-shadow:0 4px 16px rgba(0,0,0,0.09)}
+.supp-product-img-wrap{width:120px;height:120px;background:var(--white);margin:0 auto 10px;display:flex;align-items:center;justify-content:center;overflow:hidden;flex-shrink:0}
 .supp-product-img{width:100%;height:100%;object-fit:contain;display:block}
-.supp-product-timing{font-size:10px;letter-spacing:0.18em;text-transform:uppercase;color:var(--gold);display:block;margin-bottom:10px}
-.supp-product-name{font-family:var(--serif);font-size:20px;font-weight:400;color:var(--forest);margin-bottom:12px}
-.supp-product-desc{font-size:14px;color:var(--ink-soft);line-height:1.7;margin-bottom:16px}
-.supp-product-link{font-size:12px;letter-spacing:0.1em;color:var(--gold);text-decoration:none;font-family:var(--sans);font-weight:500}
+.supp-product-timing{font-size:10px;letter-spacing:0.16em;text-transform:uppercase;color:var(--gold);display:block;margin-bottom:6px}
+.supp-product-name{font-family:var(--serif);font-size:13px;font-weight:500;color:var(--forest);margin-bottom:6px;line-height:1.3;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
+.supp-product-desc{font-size:11px;color:var(--ink-muted);line-height:1.5;margin-bottom:10px;display:-webkit-box;-webkit-line-clamp:3;-webkit-box-orient:vertical;overflow:hidden;flex:1}
+.supp-product-link{font-size:11px;color:var(--gold);text-decoration:none;font-family:var(--sans);font-weight:500;margin-top:auto}
 .supp-product-link:hover{color:var(--forest)}
 .supp-upsell-section{padding:32px 0 16px}
 
@@ -446,21 +447,21 @@ const BACK_VIDEOS = [
 const SUPPLEMENT_PRODUCTS = [
   {
     name:'Collagen Peptides',
-    image:'https://www.orthossystems.com/cdn/shop/files/COLLAGEN_label_mockup.jpg?v=1782921135&width=300',
+    image:'https://www.orthossystems.com/cdn/shop/files/COLLAGEN_label_mockup.jpg?v=1782921135&width=120',
     url:'https://www.orthossystems.com/products/collagen',
     timing:'Morning',
     description:'Rebuilds the connective tissue matrix — the tendons, ligaments, and fascial network that chronic forward posture degrades over time. Collagen is the structural protein your spine and shoulders rely on to hold alignment between sessions. Taken in the morning, it works throughout the day.'
   },
   {
     name:'Magnesium Glycinate',
-    image:'https://www.orthossystems.com/cdn/shop/files/magnesium_label_Mockup.jpg?v=1782921418&width=300',
+    image:'https://www.orthossystems.com/cdn/shop/files/magnesium_label_Mockup.jpg?v=1782921418&width=120',
     url:'https://www.orthossystems.com/products/magnesium',
     timing:'Evening',
     description:'Supports the neuromuscular signaling that postural correction depends on — the communication between your nervous system and the muscles being reactivated through the daily protocol. Magnesium Glycinate is the most bioavailable form, and taken in the evening it also supports the deep sleep your body needs to consolidate the physical changes happening during this program.'
   },
   {
     name:'Vitamin K2 + D3',
-    image:'https://www.orthossystems.com/cdn/shop/files/K2_D3_Label_Mockup.jpg?v=1782921311&width=300',
+    image:'https://www.orthossystems.com/cdn/shop/files/K2_D3_Label_Mockup.jpg?v=1782921311&width=120',
     url:'https://www.orthossystems.com/products/d3-k2',
     timing:'Morning',
     description:'Directs calcium into the bone matrix rather than soft tissue — supporting the skeletal density that upright posture requires at its deepest structural level. D3 drives calcium absorption. K2 ensures it goes where it belongs. Together they build the foundation beneath everything else the Orthos System is doing.'
@@ -789,7 +790,7 @@ function renderExercises() {
 
 // ── SUPPLEMENTS TAB ───────────────────────────────────────────────────
 function renderSupplements() {
-  const cardsHtml=SUPPLEMENT_PRODUCTS.map(p=>`<div class="supp-product-card" onclick="window.open('${p.url}','_blank')"><div class="supp-product-img-wrap"><img class="supp-product-img" src="${p.image}" alt="${p.name}" loading="lazy"></div><span class="supp-product-timing">${p.timing}</span><div class="supp-product-name">${p.name}</div><div class="supp-product-desc">${p.description}</div><a class="supp-product-link" href="${p.url}" target="_blank" rel="noopener" onclick="event.stopPropagation()">Shop Now →</a></div>`).join('');
+  const cardsHtml=`<div class="supp-product-grid">${SUPPLEMENT_PRODUCTS.map(p=>`<div class="supp-product-card" onclick="window.open('${p.url}','_blank')"><div class="supp-product-img-wrap"><img class="supp-product-img" src="${p.image}" alt="${p.name}" loading="lazy"></div><span class="supp-product-timing">${p.timing}</span><div class="supp-product-name">${p.name}</div><div class="supp-product-desc">${p.description}</div><a class="supp-product-link" href="${p.url}" target="_blank" rel="noopener" onclick="event.stopPropagation()">Shop Now →</a></div>`).join('')}</div>`;
   const upsellHtml=`<div class="supp-upsell-section"><div class="section-heading" style="font-size:22px;margin-bottom:6px">Recommended Additions</div><div class="section-sub">Complementary support for your practice — coming soon.</div></div>`;
   document.getElementById('supplementList').innerHTML=cardsHtml+upsellHtml;
 }
