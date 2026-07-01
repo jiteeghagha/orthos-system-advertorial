@@ -443,16 +443,20 @@ async function loadData() {
     exStreak=d.exStreak||0; suppStreak=d.suppStreak||0;
     programStartDate=d.programStartDate||TODAY;
   }
-  // Missed-day detection — only if user is past day 1
-  if (programDay > 1) {
-    const prevDayKey=String(programDay-1);
-    const ydcSnap=await getDoc(doc(db,'users',uid,'daily_completions',prevDayKey));
-    if (!ydcSnap.exists() || !ydcSnap.data().practiceComplete) {
-      await setDoc(doc(db,'users',uid,'daily_completions',prevDayKey),{missed:true},{merge:true});
+  // Calendar-based missed-day detection: advance past any days whose date has passed without completion
+  let profileDirty=false;
+  while (programDay<21 && TODAY>dateForDay(programDay)) {
+    const dayKey=String(programDay);
+    const missedSnap=await getDoc(doc(db,'users',uid,'daily_completions',dayKey));
+    if (!missedSnap.exists()||!missedSnap.data().practiceComplete) {
+      await setDoc(doc(db,'users',uid,'daily_completions',dayKey),{missed:true},{merge:true});
       practiceStreak=0;
-      await updateDoc(doc(db,'users',uid),{practiceStreak:0,updatedAt:serverTimestamp()});
     }
-    // Load past daily-completion docs for journey grid missed-state rendering
+    programDay++; profileDirty=true;
+  }
+  if (profileDirty) await saveProfile();
+  // Load past daily-completion docs for journey grid missed-state rendering
+  if (programDay>1) {
     completionCache={};
     const pastKeys=Array.from({length:programDay-1},(_,i)=>String(i+1));
     const pastSnaps=await Promise.all(pastKeys.map(k=>getDoc(doc(db,'users',uid,'daily_completions',k))));
