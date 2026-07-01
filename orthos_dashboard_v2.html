@@ -749,7 +749,7 @@ function renderExercises() {
   const startIdx=programDay%BACK_VIDEOS.length;
   const videos=Array.from({length:5},(_,i)=>BACK_VIDEOS[(startIdx+i)%BACK_VIDEOS.length]);
   const protocolHtml=`<div class="protocol-ref-card"><div class="protocol-ref-title">Today's Protocol</div>${EXERCISES.map(e=>`<div class="protocol-ref-item"><span class="protocol-ref-name">${e.name}</span><span class="protocol-ref-detail">${e.detail}</span></div>`).join('')}</div>`;
-  const videosHtml=videos.map((v,i)=>`<div class="video-card"><span class="video-counter">Video ${i+1} of 5</span><div class="video-aspect"><iframe src="https://www.tiktok.com/embed/v2/${v.id}" allowfullscreen loading="lazy" onerror="this.style.display='none';this.nextElementSibling.style.display='block'"></iframe><div class="video-unavailable">This video is unavailable.</div></div><p class="video-caption">Watch the movement demonstrated, then perform it for your prescribed sets and reps. Rest, then continue to the next video.</p></div>`).join('');
+  const videosHtml=videos.map((v,i)=>`<div class="video-card"><span class="video-counter">Video ${i+1} of 5</span><div class="video-aspect"><iframe src="https://www.tiktok.com/embed/v2/${v.id}?autoplay=0&rel=0" allowfullscreen loading="lazy" onerror="this.style.display='none';this.nextElementSibling.style.display='block'"></iframe><div class="video-unavailable">This video is unavailable.</div></div><p class="video-caption">Watch the movement demonstrated, then perform it for your prescribed sets and reps. Rest, then continue to the next video.</p></div>`).join('');
   document.getElementById('exerciseList').innerHTML=protocolHtml+videosHtml;
 }
 
