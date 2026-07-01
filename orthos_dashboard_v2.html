@@ -162,6 +162,20 @@ button{font-family:var(--sans);cursor:pointer;border:none;background:none}
 .supp-btn{padding:9px 20px;font-size:11px;letter-spacing:0.1em;text-transform:uppercase;font-family:var(--sans);font-weight:500;border:1px solid var(--border-md);color:var(--ink-soft);background:var(--cream);transition:all .2s;cursor:pointer}
 .supp-btn:hover:not(.checked){border-color:var(--gold);color:var(--gold)}.supp-btn.checked{background:var(--green);border-color:var(--green);color:var(--white)}
 
+/* EXERCISE TAB — VIDEO SESSION */
+.protocol-ref-card{background:var(--white);border-top:3px solid var(--forest);padding:28px;margin-bottom:28px}
+.protocol-ref-title{font-family:var(--serif);font-size:18px;font-weight:400;color:var(--forest);margin-bottom:16px}
+.protocol-ref-item{padding:10px 0;border-bottom:1px solid var(--border)}
+.protocol-ref-item:last-child{border-bottom:none}
+.protocol-ref-name{font-family:var(--serif);font-size:15px;color:var(--forest);display:block;margin-bottom:2px}
+.protocol-ref-detail{font-size:12px;color:var(--ink-muted)}
+.video-card{background:var(--white);border-top:2px solid var(--border);padding:24px;margin-bottom:16px}
+.video-counter{font-size:10px;letter-spacing:0.18em;text-transform:uppercase;color:var(--gold);margin-bottom:14px;display:block}
+.video-aspect{width:100%;max-width:360px;margin:0 auto;aspect-ratio:9/16;position:relative}
+.video-aspect iframe{width:100%;height:100%;border:none;display:block}
+.video-unavailable{display:none;padding:32px 20px;text-align:center;color:var(--ink-faint);font-family:var(--serif);font-style:italic;font-size:15px}
+.video-caption{font-size:12px;color:var(--ink-muted);margin-top:16px;line-height:1.6;text-align:center;max-width:360px;margin-left:auto;margin-right:auto}
+
 /* DEVICE */
 .score-hero{background:var(--forest);padding:40px;margin-bottom:24px;text-align:center;position:relative;overflow:hidden}
 .score-hero::before{content:'';position:absolute;inset:0;background:radial-gradient(ellipse at 50% 100%,rgba(156,122,60,0.12) 0%,transparent 60%)}
@@ -240,8 +254,7 @@ button{font-family:var(--sans);cursor:pointer;border:none;background:none}
     <div class="panel" id="panel-journey"></div>
     <div class="panel" id="panel-exercises">
       <div class="tab-header">
-        <div><div class="section-heading">Daily Movement</div><div class="section-sub">Posterior chain reactivation — 5 to 10 minutes</div></div>
-        <div class="streak-badge">🔥 <span id="exStreakVal">0</span> day streak</div>
+        <div><div class="section-heading">Daily Movement</div><div class="section-sub">Back training — watch each video, then perform the movement shown for your prescribed sets and reps before moving to the next.</div></div>
       </div>
       <div id="exerciseList"></div>
     </div>
@@ -389,6 +402,35 @@ const SUPPLEMENTS = [
   {id:'supp1',name:'Collagen Peptides',desc:'Rebuilds the connective tissue matrix — tendons, ligaments, and the fascial network that chronic forward posture degrades.',times:['Morning']},
   {id:'supp2',name:'Magnesium Glycinate',desc:'Supports neuromuscular signaling — the communication between nervous system and muscles that postural correction depends on.',times:['Evening']},
   {id:'supp3',name:'Vitamin K2 + D3',desc:'Directs calcium into bone matrix. Supports the skeletal density that upright posture requires at its deepest level.',times:['Morning']}
+];
+const BACK_VIDEOS = [
+  {id:'7644411982858226957',duration:6},
+  {id:'7635875509720698126',duration:11},
+  {id:'7617318293237468430',duration:13},
+  {id:'7602867451415514382',duration:12},
+  {id:'7407432348133772549',duration:40},
+  {id:'7566457977150917902',duration:88},
+  {id:'7548383095070657847',duration:21},
+  {id:'7587095148316626198',duration:8},
+  {id:'7652404835924430102',duration:12},
+  {id:'7639064976623291670',duration:19},
+  {id:'7636466959651179799',duration:15},
+  {id:'7635741689050598678',duration:24},
+  {id:'7634604969991146774',duration:18},
+  {id:'7631654029529025814',duration:21},
+  {id:'7629426203446807830',duration:68},
+  {id:'7626079813471636758',duration:14},
+  {id:'7624194027298131223',duration:22},
+  {id:'7623481197708053782',duration:14},
+  {id:'7604189026559724822',duration:7},
+  {id:'7601518679800450326',duration:14},
+  {id:'7596002696402865430',duration:14},
+  {id:'7592310656813010198',duration:14},
+  {id:'7536260622028197175',duration:19},
+  {id:'7578225676050877710',duration:81},
+  {id:'7516426932666469639',duration:19},
+  {id:'7323710612243270958',duration:15},
+  {id:'7577790494449716494',duration:15},
 ];
 
 // ── STATE ─────────────────────────────────────────────────────────────
@@ -704,15 +746,12 @@ window.jumpTo = async d => {
 
 // ── EXERCISES TAB ─────────────────────────────────────────────────────
 function renderExercises() {
-  document.getElementById('exStreakVal').textContent=exStreak;
-  document.getElementById('exerciseList').innerHTML=EXERCISES.map(e=>{const done=!!S.exercises[e.id];return`<div class="exercise-card ${done?'done-ex':''}"><div class="ex-card-top"><div class="ex-name">${e.name}</div><span class="ex-tag">${e.tag}</span></div><div class="ex-detail">${e.detail}</div><button class="ex-btn ${done?'done':''}" onclick="markEx('${e.id}',this)" ${done?'disabled':''}>${done?'✓ Complete':'Mark Complete'}</button></div>`;}).join('');
+  const startIdx=programDay%BACK_VIDEOS.length;
+  const videos=Array.from({length:5},(_,i)=>BACK_VIDEOS[(startIdx+i)%BACK_VIDEOS.length]);
+  const protocolHtml=`<div class="protocol-ref-card"><div class="protocol-ref-title">Today's Protocol</div>${EXERCISES.map(e=>`<div class="protocol-ref-item"><span class="protocol-ref-name">${e.name}</span><span class="protocol-ref-detail">${e.detail}</span></div>`).join('')}</div>`;
+  const videosHtml=videos.map((v,i)=>`<div class="video-card"><span class="video-counter">Video ${i+1} of 5</span><div class="video-aspect"><iframe src="https://www.tiktok.com/embed/v2/${v.id}" allowfullscreen loading="lazy" onerror="this.style.display='none';this.nextElementSibling.style.display='block'"></iframe><div class="video-unavailable">This video is unavailable.</div></div><p class="video-caption">Watch the movement demonstrated, then perform it for your prescribed sets and reps. Rest, then continue to the next video.</p></div>`).join('');
+  document.getElementById('exerciseList').innerHTML=protocolHtml+videosHtml;
 }
-window.markEx = async (id,btn) => {
-  S.exercises[id]=true; btn.classList.add('done'); btn.textContent='✓ Complete'; btn.disabled=true;
-  btn.closest('.exercise-card').classList.add('done-ex');
-  if(EXERCISES.every(e=>S.exercises[e.id])){exStreak++;await saveProfile();document.getElementById('exStreakVal').textContent=exStreak;}
-  await saveEx(); renderTodayPanel();
-};
 
 // ── SUPPLEMENTS TAB ───────────────────────────────────────────────────
 function renderSupplements() {
