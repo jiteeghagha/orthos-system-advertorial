@@ -162,6 +162,18 @@ button{font-family:var(--sans);cursor:pointer;border:none;background:none}
 .supp-btn{padding:9px 20px;font-size:11px;letter-spacing:0.1em;text-transform:uppercase;font-family:var(--sans);font-weight:500;border:1px solid var(--border-md);color:var(--ink-soft);background:var(--cream);transition:all .2s;cursor:pointer}
 .supp-btn:hover:not(.checked){border-color:var(--gold);color:var(--gold)}.supp-btn.checked{background:var(--green);border-color:var(--green);color:var(--white)}
 
+/* SUPPLEMENTS TAB — PRODUCT CARDS */
+.supp-product-card{background:var(--white);border-top:3px solid var(--gold);padding:24px;margin-bottom:20px;cursor:pointer;transition:box-shadow .2s}
+.supp-product-card:hover{box-shadow:0 4px 20px rgba(0,0,0,0.08)}
+.supp-product-img-wrap{aspect-ratio:1/1;background:var(--white);margin-bottom:16px;overflow:hidden;display:flex;align-items:center;justify-content:center}
+.supp-product-img{width:100%;height:100%;object-fit:contain;display:block}
+.supp-product-timing{font-size:10px;letter-spacing:0.18em;text-transform:uppercase;color:var(--gold);display:block;margin-bottom:10px}
+.supp-product-name{font-family:var(--serif);font-size:20px;font-weight:400;color:var(--forest);margin-bottom:12px}
+.supp-product-desc{font-size:14px;color:var(--ink-soft);line-height:1.7;margin-bottom:16px}
+.supp-product-link{font-size:12px;letter-spacing:0.1em;color:var(--gold);text-decoration:none;font-family:var(--sans);font-weight:500}
+.supp-product-link:hover{color:var(--forest)}
+.supp-upsell-section{padding:32px 0 16px}
+
 /* EXERCISE TAB — VIDEO SESSION */
 .protocol-ref-card{background:var(--white);border-top:3px solid var(--forest);padding:28px;margin-bottom:28px}
 .protocol-ref-title{font-family:var(--serif);font-size:18px;font-weight:400;color:var(--forest);margin-bottom:16px}
@@ -260,8 +272,7 @@ button{font-family:var(--sans);cursor:pointer;border:none;background:none}
     </div>
     <div class="panel" id="panel-supplements">
       <div class="tab-header">
-        <div><div class="section-heading">Daily Supplements</div><div class="section-sub">The structural foundation — taken consistently</div></div>
-        <div class="streak-badge">🔥 <span id="suppStreakVal">0</span> day streak</div>
+        <div><div class="section-heading">Daily Supplements</div><div class="section-sub">The structural foundation of the Orthos System — taken consistently, every day.</div></div>
       </div>
       <div id="supplementList"></div>
     </div>
@@ -431,6 +442,29 @@ const BACK_VIDEOS = [
   {id:'7516426932666469639',duration:19},
   {id:'7323710612243270958',duration:15},
   {id:'7577790494449716494',duration:15},
+];
+const SUPPLEMENT_PRODUCTS = [
+  {
+    name:'Collagen Peptides',
+    image:'https://www.orthossystems.com/cdn/shop/files/COLLAGEN_label_mockup.jpg?v=1782921135&width=300',
+    url:'https://www.orthossystems.com/products/collagen',
+    timing:'Morning',
+    description:'Rebuilds the connective tissue matrix — the tendons, ligaments, and fascial network that chronic forward posture degrades over time. Collagen is the structural protein your spine and shoulders rely on to hold alignment between sessions. Taken in the morning, it works throughout the day.'
+  },
+  {
+    name:'Magnesium Glycinate',
+    image:'https://www.orthossystems.com/cdn/shop/files/magnesium_label_Mockup.jpg?v=1782921418&width=300',
+    url:'https://www.orthossystems.com/products/magnesium',
+    timing:'Evening',
+    description:'Supports the neuromuscular signaling that postural correction depends on — the communication between your nervous system and the muscles being reactivated through the daily protocol. Magnesium Glycinate is the most bioavailable form, and taken in the evening it also supports the deep sleep your body needs to consolidate the physical changes happening during this program.'
+  },
+  {
+    name:'Vitamin K2 + D3',
+    image:'https://www.orthossystems.com/cdn/shop/files/K2_D3_Label_Mockup.jpg?v=1782921311&width=300',
+    url:'https://www.orthossystems.com/products/d3-k2',
+    timing:'Morning',
+    description:'Directs calcium into the bone matrix rather than soft tissue — supporting the skeletal density that upright posture requires at its deepest structural level. D3 drives calcium absorption. K2 ensures it goes where it belongs. Together they build the foundation beneath everything else the Orthos System is doing.'
+  }
 ];
 
 // ── STATE ─────────────────────────────────────────────────────────────
@@ -755,8 +789,9 @@ function renderExercises() {
 
 // ── SUPPLEMENTS TAB ───────────────────────────────────────────────────
 function renderSupplements() {
-  document.getElementById('suppStreakVal').textContent=suppStreak;
-  document.getElementById('supplementList').innerHTML=SUPPLEMENTS.map(s=>{const allDone=s.times.every(t=>S.supplements[`${s.id}_${t}`]);return`<div class="supp-card ${allDone?'all-done':''}"><div class="supp-name">${s.name}</div><div class="supp-desc">${s.desc}</div><div class="supp-times">${s.times.map(t=>{const k=`${s.id}_${t}`,chk=!!S.supplements[k];return`<button class="supp-btn ${chk?'checked':''}" onclick="markSupp('${s.id}','${t}',this)">${chk?'✓ ':''} ${t} Dose</button>`;}).join('')}</div></div>`;}).join('');
+  const cardsHtml=SUPPLEMENT_PRODUCTS.map(p=>`<div class="supp-product-card" onclick="window.open('${p.url}','_blank')"><div class="supp-product-img-wrap"><img class="supp-product-img" src="${p.image}" alt="${p.name}" loading="lazy"></div><span class="supp-product-timing">${p.timing}</span><div class="supp-product-name">${p.name}</div><div class="supp-product-desc">${p.description}</div><a class="supp-product-link" href="${p.url}" target="_blank" rel="noopener" onclick="event.stopPropagation()">Shop Now →</a></div>`).join('');
+  const upsellHtml=`<div class="supp-upsell-section"><div class="section-heading" style="font-size:22px;margin-bottom:6px">Recommended Additions</div><div class="section-sub">Complementary support for your practice — coming soon.</div></div>`;
+  document.getElementById('supplementList').innerHTML=cardsHtml+upsellHtml;
 }
 window.markSupp = async (id,time,btn) => {
   const k=`${id}_${time}`,was=S.supplements[k]; S.supplements[k]=!was;
