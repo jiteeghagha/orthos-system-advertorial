@@ -189,27 +189,42 @@ button{font-family:var(--sans);cursor:pointer;border:none;background:none}
 .video-unavailable{display:none;padding:32px 20px;text-align:center;color:var(--ink-faint);font-family:var(--serif);font-style:italic;font-size:15px}
 .video-caption{font-size:12px;color:var(--ink-muted);margin-top:16px;line-height:1.6;text-align:center;max-width:360px;margin-left:auto;margin-right:auto}
 
-/* DEVICE */
-.score-hero{background:var(--forest);padding:40px;margin-bottom:24px;text-align:center;position:relative;overflow:hidden}
-.score-hero::before{content:'';position:absolute;inset:0;background:radial-gradient(ellipse at 50% 100%,rgba(156,122,60,0.12) 0%,transparent 60%)}
-.score-number{font-family:var(--serif);font-size:88px;font-weight:300;color:var(--white);line-height:1;position:relative}
-.score-label{font-size:11px;letter-spacing:0.18em;text-transform:uppercase;color:var(--gold-light);margin-top:8px;position:relative}
-.stat-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:2px;margin-bottom:24px}
-.stat-card{background:var(--white);padding:20px;text-align:center}
-.stat-value{font-family:var(--serif);font-size:30px;font-weight:300;color:var(--forest);line-height:1}
-.stat-label{font-size:10px;letter-spacing:0.14em;text-transform:uppercase;color:var(--ink-muted);margin-top:6px}
-.chart-wrap{background:var(--white);padding:28px;margin-bottom:24px}
-.chart-title{font-family:var(--serif);font-size:18px;font-weight:400;color:var(--forest);margin-bottom:20px}
-.chart-bars{display:flex;align-items:flex-end;gap:4px;height:120px}
-.chart-bar-col{flex:1;display:flex;flex-direction:column;align-items:center;gap:4px}
-.chart-bar{width:100%;background:var(--gold-pale);min-height:4px}
-.chart-bar.today-bar{background:var(--gold)}
-.chart-val{font-size:9px;color:var(--ink-muted)}.chart-day{font-size:9px;color:var(--ink-faint)}
+/* DEVICE / DRIFT */
+.drift-intro-card{background:var(--forest);padding:32px 28px;margin-bottom:24px;text-align:left}
+.drift-intro-quote{font-family:var(--serif);font-size:20px;font-weight:300;line-height:1.55;color:var(--gold-light);margin-bottom:12px}
+.drift-intro-sub{font-size:11px;letter-spacing:0.16em;text-transform:uppercase;color:rgba(255,255,255,0.45)}
+.drift-form-card{background:var(--white);padding:28px;margin-bottom:24px}
+.drift-form-title{font-family:var(--serif);font-size:18px;font-weight:400;color:var(--forest);margin-bottom:6px}
+.drift-form-step-label{font-size:11px;letter-spacing:0.14em;text-transform:uppercase;color:var(--ink-muted);margin-bottom:16px}
+.drift-options{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:4px}
+.drift-opt-btn{padding:8px 14px;border:1.5px solid var(--forest);background:var(--cream);color:var(--forest);font-size:13px;cursor:pointer;border-radius:2px;transition:background 0.15s,color 0.15s,border-color 0.15s}
+.drift-opt-btn.selected{background:var(--gold);border-color:var(--gold);color:var(--white)}
+.drift-custom-wrap{margin-top:20px}
+.drift-custom-label{font-size:11px;letter-spacing:0.12em;text-transform:uppercase;color:var(--ink-muted);margin-bottom:8px}
+.drift-custom-area{width:100%;box-sizing:border-box;border:1.5px solid var(--ink-faint);padding:12px;font-size:14px;font-family:var(--sans);color:var(--ink);resize:vertical;min-height:80px;border-radius:2px;outline:none}
+.drift-custom-area:focus{border-color:var(--forest)}
+.drift-submit-btn{width:100%;padding:14px;background:var(--forest);color:var(--white);border:none;font-size:12px;letter-spacing:0.14em;text-transform:uppercase;cursor:pointer;margin-top:16px}
+.drift-submit-btn:disabled{opacity:0.4;cursor:not-allowed}
+.drift-submitting{text-align:center;padding:28px;color:var(--ink-muted);font-size:14px;font-style:italic}
+.drift-entries-card{background:var(--white);padding:28px;margin-bottom:24px}
+.drift-entries-title{font-family:var(--serif);font-size:18px;font-weight:400;color:var(--forest);margin-bottom:16px}
+.drift-entry{padding:16px 0;border-bottom:1px solid var(--ink-faint)}
+.drift-entry:last-child{border-bottom:none;padding-bottom:0}
+.drift-entry-meta{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:8px}
+.drift-entry-tag{font-size:10px;letter-spacing:0.1em;text-transform:uppercase;background:var(--cream);color:var(--forest);padding:3px 8px;border-radius:2px}
+.drift-entry-custom{font-size:13px;color:var(--ink-muted);margin-bottom:8px;font-style:italic}
+.drift-ai-response{border-left:3px solid var(--gold);padding-left:14px;margin-top:10px}
+.drift-ai-label{font-size:10px;letter-spacing:0.14em;text-transform:uppercase;color:var(--gold);margin-bottom:6px}
+.drift-ai-text{font-family:var(--serif);font-size:15px;color:var(--forest);line-height:1.65;font-style:italic}
+.drift-empty{color:var(--ink-muted);font-size:14px;text-align:center;padding:24px 0;line-height:1.6}
+.drift-insights-card{background:var(--white);padding:28px;margin-bottom:24px}
+.drift-insights-title{font-family:var(--serif);font-size:18px;font-weight:400;color:var(--forest);margin-bottom:16px}
+.drift-insights-text{font-family:var(--serif);font-size:15px;color:var(--forest);line-height:1.7;font-style:italic;border-left:3px solid var(--gold);padding-left:14px}
 
 @media(max-width:600px){
   .content{padding:20px 16px}.topbar{padding:0 16px}.program-banner{padding:10px 16px}
   .tabs-bar{padding:0 16px}.practice-hero{padding:28px 20px}.module-card{padding:28px 20px}
-  .stat-grid{grid-template-columns:1fr 1fr}.user-name{display:none}.login-card{padding:40px 28px}
+  .user-name{display:none}.login-card{padding:40px 28px}
 }
 </style>
 </head>
@@ -278,19 +293,7 @@ button{font-family:var(--sans);cursor:pointer;border:none;background:none}
       <div id="supplementList"></div>
     </div>
     <div class="panel" id="panel-device">
-      <div class="score-hero">
-        <div class="score-number" id="postureScore">--</div>
-        <div class="score-label">Today's Posture Score</div>
-      </div>
-      <div class="stat-grid">
-        <div class="stat-card"><div class="stat-value" id="wearTime">--</div><div class="stat-label">Hours Worn</div></div>
-        <div class="stat-card"><div class="stat-value" id="goodPct">--%</div><div class="stat-label">Good Posture</div></div>
-        <div class="stat-card"><div class="stat-value" id="alertCount">--</div><div class="stat-label">Returns Today</div></div>
-      </div>
-      <div class="chart-wrap">
-        <div class="chart-title">14-Day Score History</div>
-        <div class="chart-bars" id="scoreChart"></div>
-      </div>
+      <div id="device-content"></div>
     </div>
   </div>
 </div>
@@ -298,7 +301,7 @@ button{font-family:var(--sans);cursor:pointer;border:none;background:none}
 <script type="module">
 import { initializeApp } from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js';
 import { getAuth, GoogleAuthProvider, signInWithPopup, signOut, onAuthStateChanged } from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js';
-import { getFirestore, doc, getDoc, setDoc, updateDoc, serverTimestamp } from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js';
+import { getFirestore, doc, getDoc, setDoc, updateDoc, serverTimestamp, addDoc, collection, query, where, orderBy, getDocs } from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js';
 
 const firebaseConfig = {
   apiKey: "AIzaSyCPY9pPnrqPzoPGauogswffsEbU2XxInxE",
@@ -560,6 +563,79 @@ const saveDC   = () => {
 const saveRefl = () => setDoc(doc(db,'users',currentUser.uid,'daily_completions',String(programDay)),{reflectionText:S.reflectionText,updatedAt:serverTimestamp()},{merge:true});
 const saveProfile = () => updateDoc(doc(db,'users',currentUser.uid),{programDay,practiceStreak,exStreak,suppStreak,updatedAt:serverTimestamp()});
 
+// ── DRIFT LOGGING ─────────────────────────────────────────────────────
+const WORKER_URL = 'https://orthos-ai-proxy.jiteeghagha.workers.dev';
+
+async function saveDriftLog(entry) {
+  const uid = currentUser.uid;
+  const ref = await addDoc(collection(db, 'users', uid, 'drift_logs'), {
+    programDay,
+    timestamp: serverTimestamp(),
+    temporal: entry.temporal,
+    content: entry.content,
+    constraint: entry.constraint,
+    valence: entry.valence,
+    custom: entry.custom || '',
+    aiResponse: '',
+  });
+  return ref.id;
+}
+
+async function updateDriftResponse(docId, aiResponse) {
+  const uid = currentUser.uid;
+  await setDoc(
+    doc(db, 'users', uid, 'drift_logs', docId),
+    { aiResponse },
+    { merge: true }
+  );
+}
+
+async function callWorker(entry, todayEntries) {
+  const systemPrompt = `You are a presence guide speaking in the voice and philosophy of Eckhart Tolle. The user is on Day ${programDay} of a 21-day presence and postural awareness practice called the Orthos System. They have just caught their mind wandering and logged what their mind was doing. Your role is to offer a brief, profound insight — 2 to 4 sentences — that meets them exactly where they are. Do not be generic. Respond directly to the specific combination of drift dimensions they reported. Use Tolle's language: presence, the Now, the ego, the pain body, the watcher, the inner body, consciousness. Never use clinical or psychological language. Never use bullet points. Speak as if you are addressing them in this exact moment, from within the present moment itself. Today they have logged ${todayEntries.length} drift(s) before this one.`;
+
+  const userMessage = `I just caught my mind wandering. Here is what it was doing:
+- Temporal orientation: ${entry.temporal}
+- Content focus: ${entry.content}
+- How the thought behaved: ${entry.constraint}
+- Emotional tone: ${entry.valence}
+${entry.custom ? `- Additional note: ${entry.custom}` : ''}
+Offer me a brief Tolle-voiced insight about this drift.`;
+
+  const response = await fetch(WORKER_URL, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({
+      model: 'claude-sonnet-4-6',
+      max_tokens: 200,
+      system: systemPrompt,
+      messages: [{ role: 'user', content: userMessage }]
+    })
+  });
+  const data = await response.json();
+  return data.content?.[0]?.text || 'The present moment is always here. Return to it.';
+}
+
+async function loadTodayDrifts() {
+  const uid = currentUser.uid;
+  const q = query(
+    collection(db, 'users', uid, 'drift_logs'),
+    where('programDay', '==', programDay),
+    orderBy('timestamp', 'desc')
+  );
+  const snap = await getDocs(q);
+  return snap.docs.map(d => ({ id: d.id, ...d.data() }));
+}
+
+async function loadAllDrifts() {
+  const uid = currentUser.uid;
+  const q = query(
+    collection(db, 'users', uid, 'drift_logs'),
+    orderBy('timestamp', 'desc')
+  );
+  const snap = await getDocs(q);
+  return snap.docs.map(d => ({ id: d.id, ...d.data() }));
+}
+
 // ── SHOW/HIDE ─────────────────────────────────────────────────────────
 async function showApp() {
   document.getElementById('loading-screen').style.display='none';
@@ -570,7 +646,7 @@ async function showApp() {
   else av.textContent=(currentUser.displayName||currentUser.email||'U')[0].toUpperCase();
   document.getElementById('userName').textContent = currentUser.displayName||'';
   updateBanner();
-  renderTodayPanel(); await renderJourneyGrid(); renderExercises(); renderSupplements(); renderDevice();
+  renderTodayPanel(); await renderJourneyGrid(); renderExercises(); renderSupplements();
 }
 function showLogin() {
   document.getElementById('loading-screen').style.display='none';
@@ -803,16 +879,130 @@ window.markSupp = async (id,time,btn) => {
   await saveSupp(); renderTodayPanel();
 };
 
-// ── DEVICE TAB ────────────────────────────────────────────────────────
-function renderDevice() {
-  document.getElementById('postureScore').textContent=S.postureScore||'--';
-  document.getElementById('wearTime').textContent=S.wearTime?S.wearTime+'h':'--';
-  document.getElementById('goodPct').textContent=S.goodPct?S.goodPct+'%':'--%';
-  document.getElementById('alertCount').textContent=S.alertCount||'--';
-  const scores=[62,65,60,68,66,71,69,72,70,74,73,76,74,S.postureScore||74];
-  const maxS=Math.max(...scores);
-  const days=['M','T','W','T','F','S','S','M','T','W','T','F','S','T'];
-  document.getElementById('scoreChart').innerHTML=scores.map((s,i)=>`<div class="chart-bar-col"><div class="chart-val">${s}</div><div class="chart-bar ${i===scores.length-1?'today-bar':''}" style="height:${Math.round((s/maxS)*100)}%"></div><div class="chart-day">${days[i]}</div></div>`).join('');
+// ── DEVICE / DRIFT TAB ───────────────────────────────────────────────
+let driftEntry = { temporal: null, content: null, constraint: null, valence: null, custom: '' };
+let driftStep = 0;
+let driftSubmitting = false;
+let _patternCache = { text: null, count: 0 };
+
+const DRIFT_STEPS = [
+  { key: 'temporal',   label: 'Step 1 of 4 — When did your mind go?',        options: ['Past', 'Future', 'Looping present'] },
+  { key: 'content',    label: 'Step 2 of 4 — What was it doing?',             options: ['Planning', 'Worrying', 'Fantasizing', 'Judging', 'Remembering'] },
+  { key: 'constraint', label: 'Step 3 of 4 — How was the thought moving?',    options: ['Obsessive', 'Recurring', 'Scattered', 'Focused but absent'] },
+  { key: 'valence',    label: 'Step 4 of 4 — What was the feeling tone?',     options: ['Anxious', 'Calm', 'Excited', 'Sad', 'Neutral'] }
+];
+
+function _driftFormHTML() {
+  if (driftSubmitting) {
+    return `<div class="drift-form-card"><div class="drift-submitting">Receiving insight from the present moment…</div></div>`;
+  }
+  const step = DRIFT_STEPS[driftStep];
+  const optsHTML = step.options.map(opt =>
+    `<button class="drift-opt-btn${driftEntry[step.key]===opt?' selected':''}" onclick="window._driftSelect('${step.key}','${opt.replace(/'/g,"\\'")}')"> ${opt}</button>`
+  ).join('');
+  const showCustom = driftStep === DRIFT_STEPS.length - 1 && driftEntry.valence !== null;
+  const customHTML = showCustom ? `<div class="drift-custom-wrap">
+    <div class="drift-custom-label">Optional — what were you specifically thinking about?</div>
+    <textarea class="drift-custom-area" id="driftCustom" placeholder="Add any context…">${driftEntry.custom}</textarea>
+    <button class="drift-submit-btn" onclick="window._driftSubmit()">Log This Drift</button>
+  </div>` : '';
+  return `<div class="drift-form-card">
+    <div class="drift-form-title">Log a Drift</div>
+    <div class="drift-form-step-label">${step.label}</div>
+    <div class="drift-options">${optsHTML}</div>
+    ${customHTML}
+  </div>`;
+}
+
+window._driftSelect = function(key, value) {
+  driftEntry[key] = value;
+  if (key !== 'valence') driftStep = Math.min(driftStep + 1, DRIFT_STEPS.length - 1);
+  const slot = document.getElementById('drift-form-slot');
+  if (slot) slot.innerHTML = _driftFormHTML();
+};
+
+window._driftSubmit = async function() {
+  const ta = document.getElementById('driftCustom');
+  if (ta) driftEntry.custom = ta.value.trim();
+  driftSubmitting = true;
+  const slot = document.getElementById('drift-form-slot');
+  if (slot) slot.innerHTML = _driftFormHTML();
+  try {
+    const priorEntries = await loadTodayDrifts();
+    const docId = await saveDriftLog(driftEntry);
+    const aiResponse = await callWorker(driftEntry, priorEntries);
+    await updateDriftResponse(docId, aiResponse);
+    _patternCache = { text: null, count: 0 };
+  } catch(e) { console.error('Drift submit:', e); }
+  setTimeout(async () => {
+    driftEntry = { temporal: null, content: null, constraint: null, valence: null, custom: '' };
+    driftStep = 0;
+    driftSubmitting = false;
+    await renderDevice();
+  }, 3000);
+};
+
+async function renderDevice() {
+  const container = document.getElementById('device-content');
+  if (!container) return;
+
+  const todayEntries = await loadTodayDrifts();
+
+  const entriesHTML = todayEntries.length === 0
+    ? `<div class="drift-empty">No drifts logged today.<br>When you notice your mind has wandered, log it here.</div>`
+    : todayEntries.map(e => {
+        const tags = [e.temporal, e.content, e.constraint, e.valence].filter(Boolean)
+          .map(t => `<span class="drift-entry-tag">${t}</span>`).join('');
+        const custom = e.custom ? `<div class="drift-entry-custom">"${e.custom}"</div>` : '';
+        const ai = e.aiResponse ? `<div class="drift-ai-response"><div class="drift-ai-label">Present Moment Insight</div><div class="drift-ai-text">${e.aiResponse}</div></div>` : '';
+        return `<div class="drift-entry"><div class="drift-entry-meta">${tags}</div>${custom}${ai}</div>`;
+      }).join('');
+
+  container.innerHTML = `
+    <div class="drift-intro-card">
+      <div class="drift-intro-quote">"You are not your thoughts. You are the awareness behind the thoughts."</div>
+      <div class="drift-intro-sub">The Watcher — Day ${programDay} of 21</div>
+    </div>
+    <div id="drift-form-slot">${_driftFormHTML()}</div>
+    <div class="drift-entries-card">
+      <div class="drift-entries-title">Today's Entries</div>
+      ${entriesHTML}
+    </div>
+  `;
+
+  if (programDay >= 7) {
+    const allDrifts = await loadAllDrifts();
+    if (allDrifts.length > 0) {
+      let insightText = _patternCache.count === allDrifts.length && _patternCache.text
+        ? _patternCache.text
+        : null;
+      if (!insightText) {
+        const freq = {};
+        ['temporal','content','constraint','valence'].forEach(k => { freq[k] = {}; });
+        allDrifts.forEach(e => {
+          ['temporal','content','constraint','valence'].forEach(k => {
+            if (e[k]) freq[k][e[k]] = (freq[k][e[k]] || 0) + 1;
+          });
+        });
+        const top = k => Object.entries(freq[k]).sort((a,b)=>b[1]-a[1])[0]?.[0] || 'unknown';
+        const patternEntry = {
+          temporal: top('temporal'), content: top('content'),
+          constraint: top('constraint'), valence: top('valence'),
+          custom: `Across ${allDrifts.length} drift logs over ${programDay} days, these are the recurring patterns.`
+        };
+        try {
+          insightText = await callWorker(patternEntry, allDrifts);
+          _patternCache = { text: insightText, count: allDrifts.length };
+        } catch(e) { insightText = null; }
+      }
+      if (insightText) {
+        container.insertAdjacentHTML('beforeend', `<div class="drift-insights-card">
+          <div class="drift-insights-title">Pattern Insights</div>
+          <div class="drift-insights-text">${insightText}</div>
+        </div>`);
+      }
+    }
+  }
 }
 
 // ── TABS ──────────────────────────────────────────────────────────────
@@ -821,6 +1011,7 @@ window.switchTab = tab => {
   document.querySelectorAll('.tab-btn').forEach((b,i)=>b.classList.toggle('active',Object.keys(TAB_MAP)[i]===tab));
   document.querySelectorAll('.panel').forEach(p=>p.classList.remove('active'));
   document.getElementById(TAB_MAP[tab]).classList.add('active');
+  if (tab === 'device') renderDevice();
 };
 
 </script>
