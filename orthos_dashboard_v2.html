@@ -220,6 +220,11 @@ button{font-family:var(--sans);cursor:pointer;border:none;background:none}
 .drift-insights-card{background:var(--white);padding:28px;margin-bottom:24px}
 .drift-insights-title{font-family:var(--serif);font-size:18px;font-weight:400;color:var(--forest);margin-bottom:16px}
 .drift-insights-text{font-family:var(--serif);font-size:15px;color:var(--forest);line-height:1.7;font-style:italic;border-left:3px solid var(--gold);padding-left:14px}
+.drift-explain-card{background:var(--white);border-top:3px solid var(--gold);padding:40px;margin-bottom:24px}
+.drift-explain-title{font-family:var(--serif);color:var(--forest);font-size:clamp(22px,3vw,28px);font-weight:300;margin-bottom:20px}
+.drift-explain-body{font-family:var(--serif);color:var(--forest);font-size:clamp(16px,2vw,19px);font-weight:300;line-height:1.85}
+.drift-explain-body p{margin:0 0 20px}
+.drift-explain-body p:last-child{margin-bottom:0}
 
 @media(max-width:600px){
   .content{padding:20px 16px}.topbar{padding:0 16px}.program-banner{padding:10px 16px}
@@ -962,6 +967,20 @@ async function renderDevice() {
     <div class="drift-intro-card">
       <div class="drift-intro-quote">"You are not your thoughts. You are the awareness behind the thoughts."</div>
       <div class="drift-intro-sub">The Watcher — Day ${programDay} of 21</div>
+    </div>
+    <div class="drift-explain-card">
+      <div class="drift-explain-title">The Mind That Watches Itself</div>
+      <div class="drift-explain-body">
+        <p><em>You have just returned. Something pulled your awareness away — a thought, a feeling, a mental drift into another time or place — and then, somehow, you noticed. That noticing is everything.</em></p>
+        <p>Most people spend between thirty and fifty percent of their waking lives inside their own heads, absent from the moment they are physically occupying. The body is here. The coffee is here. The conversation is here. But awareness has gone somewhere else — into tomorrow's meeting, last week's argument, a fantasy, a worry, a plan that may never happen. This is not a character flaw. It is the default condition of the unobserved mind.</p>
+        <p>What changes with practice is not the wandering — the mind will always wander. What changes is the return. The gap between drifting and noticing shortens. The watcher becomes more alert. And something Tolle describes as one of the most significant shifts available to a human being begins to occur: you stop being your thoughts, and you become the one who notices them.</p>
+        <p><em>But noticing alone is not enough. Recognition deepens when it is named.</em></p>
+        <p>When you catch a drift and simply return — without pausing to see what the mind was doing — the pattern stays invisible. The ego has preferred escapes. Particular directions it reliably travels. Specific emotional tones it carries. If you do not look at these patterns, you cannot meet them earlier. The drift continues at its full length, pulling you under for minutes at a time before the return happens.</p>
+        <p>This is what this space is for. Each time you return to the present moment — whether the device prompted you or your own awareness caught it — pause here for thirty seconds. Answer four simple questions about what your mind was doing in the drift. Was it in the past or the future? Was it about you or someone else? Was the thought sticky and looping, or freely moving? Did it feel pleasant, unpleasant, or neutral?</p>
+        <p><em>These four questions are not a survey. They are a mirror.</em></p>
+        <p>Over days and weeks, a map of your mind's preferred wandering routes will emerge. You will begin to see the pattern before the drift completes itself. The watcher will recognize the familiar pull — the future-oriented anxiety, the replayed conversation, the self-critical loop — and catch it earlier each time. Not by fighting the thought. By seeing it. Presence does not require force. It requires only recognition.</p>
+        <p><em>Each entry is a return. Each return strengthens the watcher. The practice is already working.</em></p>
+      </div>
     </div>
     <div id="drift-form-slot">${_driftFormHTML()}</div>
     <div class="drift-entries-card">
