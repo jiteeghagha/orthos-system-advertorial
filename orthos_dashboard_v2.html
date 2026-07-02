@@ -513,7 +513,7 @@ window.signInWithGoogle = async () => {
 window.doSignOut = () => signOut(auth);
 
 onAuthStateChanged(auth, async user => {
-  if (user) { currentUser = user; await loadData(); await showApp(); }
+  if (user) { currentUser = user; await loadData(); selectedDriftDay = programDay; await showApp(); }
   else       { currentUser = null; showLogin(); }
 });
 
@@ -662,6 +662,7 @@ async function showApp() {
   document.getElementById('userName').textContent = currentUser.displayName||'';
   updateBanner();
   renderTodayPanel(); await renderJourneyGrid(); renderExercises(); renderSupplements();
+  switchTab('today');
 }
 function showLogin() {
   document.getElementById('loading-screen').style.display='none';
@@ -1072,7 +1073,7 @@ window.switchTab = tab => {
   document.querySelectorAll('.tab-btn').forEach((b,i)=>b.classList.toggle('active',Object.keys(TAB_MAP)[i]===tab));
   document.querySelectorAll('.panel').forEach(p=>p.classList.remove('active'));
   document.getElementById(TAB_MAP[tab]).classList.add('active');
-  if (tab === 'device') renderDevice();
+  if (tab === 'device') { selectedDriftDay = programDay; renderDevice(); }
 };
 
 </script>
