@@ -519,6 +519,7 @@ onAuthStateChanged(auth, async user => {
 
 // ── FIRESTORE LOAD ────────────────────────────────────────────────────
 async function loadData() {
+  S.driftCount = 0;
   const uid = currentUser.uid;
   const profileSnap = await getDoc(doc(db,'users',uid));
   if (!profileSnap.exists()) {
@@ -561,6 +562,9 @@ async function loadData() {
   if (dcSnap.exists()) { S.practiceComplete=dcSnap.data().practiceComplete||false; S.reflectionText=dcSnap.data().reflectionText||''; }
   const psSnap   = await getDoc(doc(db,'users',uid,'posture_scores',TODAY));
   if (psSnap.exists()) { const p=psSnap.data(); S.postureScore=p.score||0; S.wearTime=p.wear_time||0; S.goodPct=p.good_pct||0; S.alertCount=p.alerts||0; }
+  const driftSnap = await getDocs(query(collection(db,'users',uid,'drift_logs'),where('programDay','==',programDay)));
+  S.driftCount = driftSnap.size;
+  selectedDriftDay = programDay;
 }
 
 // ── FIRESTORE SAVE ────────────────────────────────────────────────────
