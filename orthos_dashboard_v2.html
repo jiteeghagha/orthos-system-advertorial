@@ -520,6 +520,7 @@ onAuthStateChanged(auth, async user => {
 // ── FIRESTORE LOAD ────────────────────────────────────────────────────
 async function loadData() {
   S.driftCount = 0;
+  selectedDriftDay = 1;
   const uid = currentUser.uid;
   const profileSnap = await getDoc(doc(db,'users',uid));
   if (!profileSnap.exists()) {
