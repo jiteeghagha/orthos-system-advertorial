@@ -760,7 +760,7 @@ function renderTodayPanel() {
       </div>
       <div class="checklist-group">
         <span class="checklist-group-label">Device</span>
-        <div class="check-item done"><div class="check-box"></div><div class="check-item-text">Haptic Device — Worn throughout the day</div></div>
+        ${(()=>{const deviceDone=(viewS.driftCount||0)>0;return`<div class="check-item${deviceDone?' done':''}"><div class="check-box"></div><div class="check-item-text">Haptic Device — Worn throughout the day${!deviceDone?'<span style="font-size:11px;color:var(--ink-faint);margin-left:8px;">Log a drift on the Device tab to complete</span>':''}</div></div>`;})()}
       </div>
     </div>
     ${completeBtnHtml}`;
