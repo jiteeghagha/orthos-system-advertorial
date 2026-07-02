@@ -996,8 +996,7 @@ async function renderDevice() {
   const container = document.getElementById('device-content');
   if (!container) return;
 
-  // Ensure selectedDriftDay is valid
-  if (selectedDriftDay < 1 || selectedDriftDay > programDay) selectedDriftDay = programDay;
+  selectedDriftDay = programDay;
 
   const daySelectorHTML = programDay > 1 ? `<div class="drift-day-selector">
     <div class="drift-day-selector-label">View Drift Entries</div>
