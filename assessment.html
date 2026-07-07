@@ -1,0 +1,414 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Orthos System — Your Assessment</title>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;1,300;1,400&family=Jost:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --cream: #F5F3EE;
+    --cream-dark: #E8E3D8;
+    --gold: #A8782A;
+    --gold-light: #D09840;
+    --gold-pale: #F0E5C0;
+    --forest: #1E3028;
+    --forest-light: #2A4438;
+    --charcoal: #191C1A;
+    --warm-gray: #6E6860;
+    --sage-mist: #D2DAD4;
+    --white: #FFFFFF;
+    --serif: 'Cormorant Garamond', Georgia, serif;
+    --sans: 'Jost', sans-serif;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    background: var(--forest);
+    color: var(--cream);
+    font-family: var(--sans);
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 24px;
+  }
+
+  .quiz-shell {
+    max-width: 640px;
+    width: 100%;
+  }
+
+  .quiz-mark {
+    text-align: center;
+    font-family: var(--serif);
+    font-style: italic;
+    font-size: 20px;
+    color: rgba(245,243,238,0.4);
+    margin-bottom: 32px;
+    letter-spacing: 0.04em;
+  }
+
+  .progress-track {
+    width: 100%;
+    height: 3px;
+    background: rgba(245,243,238,0.12);
+    border-radius: 2px;
+    margin-bottom: 40px;
+    overflow: hidden;
+  }
+
+  .progress-fill {
+    height: 100%;
+    background: var(--gold);
+    border-radius: 2px;
+    transition: width 0.4s ease;
+    width: 20%;
+  }
+
+  .progress-label {
+    text-align: center;
+    font-size: 11px;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: rgba(245,243,238,0.4);
+    margin-top: -30px;
+    margin-bottom: 40px;
+  }
+
+  .q-card {
+    animation: fadeIn 0.5s ease;
+  }
+
+  @keyframes fadeIn {
+    from { opacity: 0; transform: translateY(8px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  .q-eyebrow {
+    font-size: 12px;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--gold-light);
+    margin-bottom: 14px;
+    text-align: center;
+  }
+
+  .q-text {
+    font-family: var(--serif);
+    font-size: clamp(24px, 4vw, 32px);
+    font-weight: 400;
+    line-height: 1.35;
+    text-align: center;
+    margin-bottom: 40px;
+    color: var(--cream);
+  }
+
+  .options {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+  }
+
+  .option-btn {
+    background: rgba(245,243,238,0.04);
+    border: 1px solid rgba(245,243,238,0.16);
+    color: var(--cream);
+    font-family: var(--sans);
+    font-size: 15px;
+    text-align: left;
+    padding: 18px 22px;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: all 0.25s ease;
+  }
+
+  .option-btn:hover {
+    border-color: var(--gold);
+    background: rgba(168,120,42,0.1);
+  }
+
+  .option-btn.selected {
+    border-color: var(--gold);
+    background: rgba(168,120,42,0.18);
+  }
+
+  .nav-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: 36px;
+  }
+
+  .back-link {
+    color: rgba(245,243,238,0.4);
+    font-size: 13px;
+    text-decoration: none;
+    cursor: pointer;
+    background: none;
+    border: none;
+    font-family: var(--sans);
+  }
+
+  .back-link:hover { color: rgba(245,243,238,0.7); }
+  .back-link:disabled { opacity: 0; cursor: default; }
+
+  .next-btn {
+    background: var(--gold);
+    color: var(--charcoal);
+    border: none;
+    font-family: var(--sans);
+    font-size: 14px;
+    font-weight: 500;
+    letter-spacing: 0.04em;
+    padding: 14px 32px;
+    border-radius: 3px;
+    cursor: pointer;
+    transition: background 0.25s ease;
+  }
+
+  .next-btn:hover { background: var(--gold-light); }
+  .next-btn:disabled {
+    background: rgba(245,243,238,0.1);
+    color: rgba(245,243,238,0.3);
+    cursor: not-allowed;
+  }
+
+  .multi-hint {
+    text-align: center;
+    font-size: 12px;
+    color: rgba(245,243,238,0.35);
+    margin-top: -24px;
+    margin-bottom: 24px;
+  }
+
+  .loading-state, .error-state {
+    text-align: center;
+    padding: 60px 20px;
+  }
+
+  .loading-state p, .error-state p {
+    font-family: var(--serif);
+    font-size: 18px;
+    color: rgba(245,243,238,0.6);
+  }
+
+  .hidden { display: none !important; }
+
+  @media (max-width: 480px) {
+    .option-btn { font-size: 14px; padding: 15px 18px; }
+    .next-btn { padding: 13px 26px; }
+  }
+</style>
+</head>
+<body>
+
+<div class="quiz-shell">
+  <div class="quiz-mark">Orthos<em>™</em></div>
+  <div class="progress-track"><div class="progress-fill" id="progressFill"></div></div>
+  <div class="progress-label" id="progressLabel">Question 1 of 5</div>
+
+  <div id="quizContainer"></div>
+
+  <div class="loading-state hidden" id="loadingState">
+    <p>Calibrating your results…</p>
+  </div>
+
+  <div class="error-state hidden" id="errorState">
+    <p>Something went wrong saving your assessment. Please try again.</p>
+  </div>
+</div>
+
+<script type="module">
+  import { initializeApp } from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js';
+  import { getFirestore, doc, setDoc, serverTimestamp } from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js';
+
+  const firebaseConfig = {
+    apiKey: "AIzaSyCPY9pPnrqPzoPGauogswffsEbU2XxInxE",
+    authDomain: "orthos-systems-fbdb1.firebaseapp.com",
+    projectId: "orthos-systems-fbdb1",
+    storageBucket: "orthos-systems-fbdb1.firebasestorage.app",
+    messagingSenderId: "87027449226",
+    appId: "1:87027449226:web:d465d57416ead73d9c9c73"
+  };
+
+  const app = initializeApp(firebaseConfig);
+  const db  = getFirestore(app);
+
+  // ── QUESTIONS ────────────────────────────────────────────────
+  const QUESTIONS = [
+    {
+      key: 'mirrorTest',
+      eyebrow: 'The Mirror Test',
+      text: 'When you catch your profile in a mirror or a window reflection, what is your primary concern?',
+      multi: false,
+      options: [
+        { value: 'forward_head_protrusion', label: 'An anterior neck tilt / forward head protrusion' },
+        { value: 'rounded_shoulders', label: 'Rounded shoulders curving inward' },
+        { value: 'postural_hump', label: 'A noticeable "postural hump" forming at the base of the neck' },
+        { value: 'compressed_slouch', label: 'A compressed, slouched trunk / protruding stomach' }
+      ]
+    },
+    {
+      key: 'environment',
+      eyebrow: 'The Environment Check',
+      text: 'Which of these environmental configurations represents your primary daily work habitat?',
+      multi: false,
+      options: [
+        { value: 'single_screen', label: 'Standard desk with single screen / laptop' },
+        { value: 'multi_monitor', label: 'Multi-monitor array (frequent side-to-side head rotation)' },
+        { value: 'non_ergonomic', label: 'Remote work from non-ergonomic surfaces' },
+        { value: 'mobile_heavy', label: 'On-the-go / high mobile device usage' }
+      ]
+    },
+    {
+      key: 'tensionMap',
+      eyebrow: 'The Tension Map',
+      text: "Select all areas where you experience chronic muscle stiffness or deep tension at the end of the day.",
+      multi: true,
+      options: [
+        { value: 'suboccipital', label: 'Base of skull / suboccipital muscles' },
+        { value: 'upper_trapezius', label: 'Upper shoulders / upper trapezius' },
+        { value: 'rhomboids', label: 'Between shoulder blades / rhomboids' },
+        { value: 'pectorals', label: 'Front of chest / pectorals' },
+        { value: 'lower_back', label: 'Lower back / pelvis' }
+      ]
+    },
+    {
+      key: 'somaticLink',
+      eyebrow: 'The Somatic Link',
+      text: "Under high cognitive load or focus-heavy tasks, what is your body's unconscious default?",
+      multi: false,
+      options: [
+        { value: 'somatic_collapse', label: 'I slouch forward, restricting breathing' },
+        { value: 'adrenaline_clench', label: 'I pull my shoulders up toward my ears' },
+        { value: 'screen_reach', label: 'I crane my chin forward, losing awareness of my body entirely' }
+      ]
+    },
+    {
+      key: 'philosophy',
+      eyebrow: 'The Alignment Philosophy',
+      text: 'Physical alignment is an active, trainable skill — not something achieved by passively strapping into a rigid brace. How do you see your role in this?',
+      multi: false,
+      options: [
+        { value: 'passive_device', label: 'I want a passive device that physically forces my shoulders back' },
+        { value: 'active_cueing', label: 'I want an active cueing system that helps my own muscles learn to hold me there' }
+      ]
+    }
+  ];
+
+  let currentIndex = 0;
+  const answers = {};
+
+  const quizContainer = document.getElementById('quizContainer');
+  const progressFill = document.getElementById('progressFill');
+  const progressLabel = document.getElementById('progressLabel');
+  const loadingState = document.getElementById('loadingState');
+  const errorState = document.getElementById('errorState');
+
+  function getLeadId() {
+    const params = new URLSearchParams(window.location.search);
+    let lead = params.get('lead');
+    if (!lead) {
+      lead = crypto.randomUUID();
+    }
+    return lead;
+  }
+
+  const leadId = getLeadId();
+
+  function renderQuestion() {
+    const q = QUESTIONS[currentIndex];
+    const isLast = currentIndex === QUESTIONS.length - 1;
+    const selected = answers[q.key];
+    const hasSelection = q.multi ? Array.isArray(selected) && selected.length > 0 : !!selected;
+
+    progressFill.style.width = `${((currentIndex + 1) / QUESTIONS.length) * 100}%`;
+    progressLabel.textContent = `Question ${currentIndex + 1} of ${QUESTIONS.length}`;
+
+    const optionsHtml = q.options.map(opt => {
+      const isSelected = q.multi
+        ? Array.isArray(selected) && selected.includes(opt.value)
+        : selected === opt.value;
+      return `<button class="option-btn${isSelected ? ' selected' : ''}" data-value="${opt.value}">${opt.label}</button>`;
+    }).join('');
+
+    quizContainer.innerHTML = `
+      <div class="q-card">
+        <div class="q-eyebrow">${q.eyebrow}</div>
+        <div class="q-text">${q.text}</div>
+        ${q.multi ? '<div class="multi-hint">Select all that apply</div>' : ''}
+        <div class="options">${optionsHtml}</div>
+        <div class="nav-row">
+          <button class="back-link" id="backBtn" ${currentIndex === 0 ? 'disabled' : ''}>← Back</button>
+          <button class="next-btn" id="nextBtn" ${hasSelection ? '' : 'disabled'}>${isLast ? 'See My Results' : 'Next'}</button>
+        </div>
+      </div>
+    `;
+
+    quizContainer.querySelectorAll('.option-btn').forEach(btn => {
+      btn.addEventListener('click', () => handleSelect(q, btn.dataset.value));
+    });
+
+    document.getElementById('backBtn').addEventListener('click', () => {
+      if (currentIndex > 0) {
+        currentIndex--;
+        renderQuestion();
+      }
+    });
+
+    document.getElementById('nextBtn').addEventListener('click', () => {
+      if (isLast) {
+        submitAssessment();
+      } else {
+        currentIndex++;
+        renderQuestion();
+      }
+    });
+  }
+
+  function handleSelect(q, value) {
+    if (q.multi) {
+      const current = Array.isArray(answers[q.key]) ? answers[q.key] : [];
+      if (current.includes(value)) {
+        answers[q.key] = current.filter(v => v !== value);
+      } else {
+        answers[q.key] = [...current, value];
+      }
+    } else {
+      answers[q.key] = value;
+    }
+    renderQuestion();
+  }
+
+  async function submitAssessment() {
+    quizContainer.classList.add('hidden');
+    loadingState.classList.remove('hidden');
+
+    const now = new Date();
+    const expireDate = new Date(now.getTime() + 30 * 24 * 60 * 60 * 1000); // 30 days
+
+    try {
+      await setDoc(doc(db, 'leads', leadId), {
+        leadId: leadId,
+        createdAt: serverTimestamp(),
+        expireAt: expireDate,
+        quizAnswers: answers,
+        status: 'quiz_completed',
+        source: 'advertorial_v3'
+      });
+
+      window.location.href = `/results?lead=${leadId}`;
+    } catch (err) {
+      console.error('Error saving assessment:', err);
+      loadingState.classList.add('hidden');
+      errorState.classList.remove('hidden');
+    }
+  }
+
+  renderQuestion();
+</script>
+
+</body>
+</html>

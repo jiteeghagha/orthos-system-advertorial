@@ -1,0 +1,450 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Orthos System — Your Results</title>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;1,300;1,400&family=Jost:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --cream: #F5F3EE;
+    --cream-dark: #E8E3D8;
+    --gold: #A8782A;
+    --gold-light: #D09840;
+    --gold-pale: #F0E5C0;
+    --forest: #1E3028;
+    --forest-light: #2A4438;
+    --charcoal: #191C1A;
+    --warm-gray: #6E6860;
+    --sage-mist: #D2DAD4;
+    --white: #FFFFFF;
+    --serif: 'Cormorant Garamond', Georgia, serif;
+    --sans: 'Jost', sans-serif;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  html { scroll-behavior: smooth; }
+
+  body {
+    background: var(--forest);
+    color: var(--cream);
+    font-family: var(--sans);
+    min-height: 100vh;
+  }
+
+  .wrap {
+    max-width: 720px;
+    margin: 0 auto;
+    padding: 60px 24px 100px;
+  }
+
+  .mark {
+    text-align: center;
+    font-family: var(--serif);
+    font-style: italic;
+    font-size: 20px;
+    color: rgba(245,243,238,0.4);
+    margin-bottom: 56px;
+    letter-spacing: 0.04em;
+  }
+
+  .eyebrow {
+    font-size: 12px;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--gold-light);
+    text-align: center;
+    margin-bottom: 16px;
+  }
+
+  h1 {
+    font-family: var(--serif);
+    font-weight: 400;
+    font-size: clamp(28px, 5vw, 40px);
+    text-align: center;
+    line-height: 1.3;
+    margin-bottom: 28px;
+  }
+
+  h1 em { color: var(--gold-light); font-style: italic; }
+
+  .reveal-card {
+    background: rgba(245,243,238,0.04);
+    border: 1px solid rgba(196,160,90,0.25);
+    border-radius: 6px;
+    padding: 32px;
+    margin-bottom: 20px;
+  }
+
+  .reveal-card p {
+    font-size: 16px;
+    line-height: 1.7;
+    color: rgba(245,243,238,0.85);
+  }
+
+  .reveal-card p + p { margin-top: 14px; }
+
+  .divider {
+    width: 60px;
+    height: 1px;
+    background: var(--gold);
+    margin: 48px auto;
+  }
+
+  .bridge-text {
+    text-align: center;
+    font-family: var(--serif);
+    font-size: 20px;
+    line-height: 1.5;
+    color: rgba(245,243,238,0.9);
+    margin-bottom: 48px;
+  }
+
+  .system-includes {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    margin-bottom: 48px;
+  }
+
+  .include-row {
+    display: flex;
+    gap: 16px;
+    align-items: flex-start;
+    padding: 18px 20px;
+    background: rgba(245,243,238,0.03);
+    border-left: 2px solid var(--gold);
+  }
+
+  .include-row .label {
+    font-size: 11px;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--gold-light);
+    min-width: 90px;
+    padding-top: 2px;
+  }
+
+  .include-row .desc {
+    font-size: 14px;
+    line-height: 1.6;
+    color: rgba(245,243,238,0.75);
+  }
+
+  .pricing-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 16px;
+    margin-bottom: 20px;
+  }
+
+  @media (max-width: 560px) {
+    .pricing-grid { grid-template-columns: 1fr; }
+  }
+
+  .pricing-card {
+    background: rgba(245,243,238,0.03);
+    border: 1px solid rgba(245,243,238,0.14);
+    border-radius: 6px;
+    padding: 28px 24px;
+    text-align: center;
+  }
+
+  .pricing-card.featured {
+    border-color: var(--gold);
+    background: rgba(168,120,42,0.08);
+  }
+
+  .pricing-label {
+    font-size: 11px;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: rgba(245,243,238,0.5);
+    display: block;
+    margin-bottom: 12px;
+  }
+
+  .pricing-amount {
+    font-family: var(--serif);
+    font-size: 36px;
+    color: var(--cream);
+  }
+
+  .pricing-per {
+    font-size: 12px;
+    color: rgba(245,243,238,0.4);
+    margin-bottom: 20px;
+  }
+
+  .btn-primary, .btn-ghost {
+    display: block;
+    text-align: center;
+    font-family: var(--sans);
+    font-size: 14px;
+    font-weight: 500;
+    letter-spacing: 0.03em;
+    padding: 14px;
+    border-radius: 3px;
+    text-decoration: none;
+    cursor: pointer;
+    border: none;
+  }
+
+  .btn-primary {
+    background: var(--gold);
+    color: var(--charcoal);
+  }
+
+  .btn-primary:hover { background: var(--gold-light); }
+
+  .btn-ghost {
+    background: transparent;
+    border: 1px solid rgba(245,243,238,0.25);
+    color: var(--cream);
+  }
+
+  .btn-ghost:hover { border-color: var(--gold); }
+
+  .guarantee-text {
+    text-align: center;
+    font-size: 12px;
+    letter-spacing: 0.06em;
+    color: rgba(245,243,238,0.4);
+    margin-bottom: 56px;
+  }
+
+  .quote-block {
+    padding: 32px;
+    border: 1px solid rgba(196,160,90,0.2);
+    max-width: 560px;
+    margin: 0 auto;
+    text-align: center;
+  }
+
+  .quote-block p.q {
+    font-family: var(--serif);
+    font-style: italic;
+    font-size: 20px;
+    color: var(--gold-light);
+    margin-bottom: 14px;
+  }
+
+  .quote-block p.sub {
+    font-size: 14px;
+    line-height: 1.7;
+    color: rgba(245,243,238,0.65);
+  }
+
+  .fine-print {
+    max-width: 560px;
+    margin: 40px auto 0;
+    font-size: 11px;
+    line-height: 1.7;
+    color: rgba(245,243,238,0.3);
+    text-align: center;
+  }
+
+  .loading-state, .error-state {
+    text-align: center;
+    padding: 100px 20px;
+  }
+
+  .loading-state p, .error-state p {
+    font-family: var(--serif);
+    font-size: 18px;
+    color: rgba(245,243,238,0.6);
+  }
+
+  .hidden { display: none !important; }
+</style>
+</head>
+<body>
+
+<div class="wrap">
+  <div class="mark">Orthos<em>™</em></div>
+
+  <div class="loading-state" id="loadingState">
+    <p>Calibrating your results…</p>
+  </div>
+
+  <div class="error-state hidden" id="errorState">
+    <p>We couldn't find your assessment. <a href="/assessment" style="color: var(--gold-light);">Retake the assessment →</a></p>
+  </div>
+
+  <div id="resultsContent" class="hidden">
+    <div class="eyebrow">Your Assessment</div>
+    <h1 id="revealHeadline"></h1>
+
+    <div class="reveal-card" id="revealBody"></div>
+
+    <div class="divider"></div>
+
+    <p class="bridge-text">We've calibrated a 21-day intervention to target these specific patterns and rebuild your physical baseline.</p>
+
+    <div class="system-includes">
+      <div class="include-row">
+        <span class="label">Hardware</span>
+        <span class="desc">The Axiom Sensor — a wearable cueing device calibrated to your daily patterns.</span>
+      </div>
+      <div class="include-row">
+        <span class="label">Chemistry</span>
+        <span class="desc">The Skeletal Matrix supplement stack — Collagen Peptides, Magnesium Glycinate, and Vitamin K2+D3 — to support the physical frame you're rebuilding.</span>
+      </div>
+      <div class="include-row">
+        <span class="label">Software</span>
+        <span class="desc">Dashboard access to your 21-day movement and presence practice, seeded from what you just told us.</span>
+      </div>
+    </div>
+
+    <div class="pricing-grid">
+      <div class="pricing-card">
+        <span class="pricing-label">Single Payment</span>
+        <div class="pricing-amount">$[XX]</div>
+        <div class="pricing-per">one time</div>
+        <a href="#" class="btn-ghost" id="checkoutSingle">Start My Protocol</a>
+      </div>
+      <div class="pricing-card featured">
+        <span class="pricing-label">Payment Plan</span>
+        <div class="pricing-amount">$[XX]</div>
+        <div class="pricing-per">per month · [X] months</div>
+        <a href="#" class="btn-primary" id="checkoutPlan">Start My Protocol</a>
+      </div>
+    </div>
+
+    <p class="guarantee-text">21-day money-back guarantee &nbsp;·&nbsp; Secure checkout &nbsp;·&nbsp; Dashboard access included</p>
+
+    <div class="quote-block">
+      <p class="q">"You Are Not a Patient."</p>
+      <p class="sub">You are someone who has been absent from their body longer than they knew — and who is ready to return. The Orthos System is not a treatment. It is a practice. And like all practices, it begins with a single step.</p>
+    </div>
+
+    <p class="fine-print">These statements have not been evaluated by the Food and Drug Administration. This product is not intended to diagnose, treat, cure, or prevent any disease. Individual results may vary. The 21-day money-back guarantee applies to first-time purchases only.</p>
+  </div>
+</div>
+
+<script type="module">
+  import { initializeApp } from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js';
+  import { getFirestore, doc, getDoc, updateDoc, serverTimestamp } from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js';
+
+  const firebaseConfig = {
+    apiKey: "AIzaSyCPY9pPnrqPzoPGauogswffsEbU2XxInxE",
+    authDomain: "orthos-systems-fbdb1.firebaseapp.com",
+    projectId: "orthos-systems-fbdb1",
+    storageBucket: "orthos-systems-fbdb1.firebasestorage.app",
+    messagingSenderId: "87027449226",
+    appId: "1:87027449226:web:d465d57416ead73d9c9c73"
+  };
+
+  const app = initializeApp(firebaseConfig);
+  const db  = getFirestore(app);
+
+  const params = new URLSearchParams(window.location.search);
+  const leadId = params.get('lead');
+
+  const loadingState = document.getElementById('loadingState');
+  const errorState = document.getElementById('errorState');
+  const resultsContent = document.getElementById('resultsContent');
+
+  // ── PATTERN-BASED REVEAL COPY ────────────────────────────────
+  // Rule-based, non-diagnostic language — describes reported habits and
+  // patterns rather than making clinical claims about anatomy or injury.
+  const SOMATIC_COPY = {
+    somatic_collapse: {
+      headline: 'A Pattern of <em>Somatic Collapse</em>',
+      body: "You've told us that under pressure, your body's default is to fold inward — shoulders rounding forward, breath shortening. This is a common, learned response to sustained focus, and it tends to compound the longer a workday runs."
+    },
+    adrenaline_clench: {
+      headline: 'A Pattern of <em>Adrenaline Clench</em>',
+      body: "You've told us that under pressure, your body's default is to brace upward — shoulders lifting toward the ears, tension gathering at the base of the skull and across the upper back. This bracing response is common during high-focus, high-stakes work."
+    },
+    screen_reach: {
+      headline: 'A Pattern of <em>Forward Reach</em>',
+      body: "You've told us that under pressure, your chin creeps toward the screen and awareness of your body fades entirely. This kind of attentional narrowing is exactly where posture and presence intersect."
+    }
+  };
+
+  const TENSION_LABELS = {
+    suboccipital: 'the base of the skull',
+    upper_trapezius: 'the upper shoulders',
+    rhomboids: 'between the shoulder blades',
+    pectorals: 'the front of the chest',
+    lower_back: 'the lower back'
+  };
+
+  function buildReveal(answers) {
+    const somatic = SOMATIC_COPY[answers.somaticLink] || SOMATIC_COPY.somatic_collapse;
+    const tensionAreas = Array.isArray(answers.tensionMap) ? answers.tensionMap : [];
+    const tensionText = tensionAreas.map(t => TENSION_LABELS[t]).filter(Boolean);
+
+    let tensionSentence = '';
+    if (tensionText.length === 1) {
+      tensionSentence = `You also flagged recurring tension around ${tensionText[0]} — a common companion to this pattern.`;
+    } else if (tensionText.length > 1) {
+      const last = tensionText[tensionText.length - 1];
+      const rest = tensionText.slice(0, -1).join(', ');
+      tensionSentence = `You also flagged recurring tension across ${rest} and ${last} — a common cluster that tends to travel together.`;
+    }
+
+    return {
+      headline: somatic.headline,
+      bodyHtml: `<p>${somatic.body}</p>${tensionSentence ? `<p>${tensionSentence}</p>` : ''}<p>None of this is a life sentence — it's a pattern, and patterns are trainable. That's the entire premise of an active system over a passive one.</p>`
+    };
+  }
+
+  async function loadResults() {
+    if (!leadId) {
+      showError();
+      return;
+    }
+
+    try {
+      const leadRef = doc(db, 'leads', leadId);
+      const snap = await getDoc(leadRef);
+
+      if (!snap.exists()) {
+        showError();
+        return;
+      }
+
+      const data = snap.data();
+      const answers = data.quizAnswers || {};
+      const reveal = buildReveal(answers);
+
+      document.getElementById('revealHeadline').innerHTML = reveal.headline;
+      document.getElementById('revealBody').innerHTML = reveal.bodyHtml;
+
+      loadingState.classList.add('hidden');
+      resultsContent.classList.remove('hidden');
+
+      // Wire checkout buttons — update lead status, then hand off to checkout.
+      // Replace '#' hrefs below with real Shopify/checkout URLs when ready.
+      const markCheckoutStarted = async () => {
+        try {
+          await updateDoc(leadRef, {
+            status: 'checkout_started',
+            checkoutStartedAt: serverTimestamp()
+          });
+        } catch (err) {
+          console.error('Could not update checkout status:', err);
+        }
+      };
+
+      document.getElementById('checkoutSingle').addEventListener('click', markCheckoutStarted);
+      document.getElementById('checkoutPlan').addEventListener('click', markCheckoutStarted);
+
+    } catch (err) {
+      console.error('Error loading results:', err);
+      showError();
+    }
+  }
+
+  function showError() {
+    loadingState.classList.add('hidden');
+    errorState.classList.remove('hidden');
+  }
+
+  loadResults();
+</script>
+
+</body>
+</html>
