@@ -372,7 +372,33 @@
   };
 
   function buildReveal(answers) {
-    const somatic = SOMATIC_COPY[answers.somaticLink] || SOMATIC_COPY.somatic_collapse;
+    // Normalise somaticLink to a valid key array — handles array, legacy string, or missing
+    let somaticKeys;
+    if (Array.isArray(answers.somaticLink)) {
+      somaticKeys = answers.somaticLink.filter(k => SOMATIC_COPY[k]);
+      if (somaticKeys.length === 0) somaticKeys = ['somatic_collapse'];
+    } else if (typeof answers.somaticLink === 'string' && SOMATIC_COPY[answers.somaticLink]) {
+      somaticKeys = [answers.somaticLink];
+    } else {
+      somaticKeys = ['somatic_collapse'];
+    }
+
+    let somatic;
+    if (somaticKeys.length === 1) {
+      somatic = SOMATIC_COPY[somaticKeys[0]];
+    } else {
+      const SHORT = {
+        somatic_collapse: 'folding inward — shoulders rounding forward, breath shortening',
+        adrenaline_clench: 'bracing upward — shoulders lifting toward the ears, tension building at the base of the skull',
+        screen_reach: 'reaching forward — chin creeping toward the screen as awareness of the body fades'
+      };
+      const descriptions = somaticKeys.map(k => SHORT[k] || k).join('; and ');
+      somatic = {
+        headline: 'A Blend of <em>Patterns</em>',
+        body: `You've described more than one pattern under pressure: ${descriptions}. When these tendencies layer on top of one another, they compound — which is why an active, multi-axis practice tends to be more effective than addressing any single pattern in isolation.`
+      };
+    }
+
     const tensionAreas = Array.isArray(answers.tensionMap) ? answers.tensionMap : [];
     const tensionText = tensionAreas.map(t => TENSION_LABELS[t]).filter(Boolean);
 
