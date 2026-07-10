@@ -131,6 +131,27 @@
     color: rgba(245,243,238,0.75);
   }
 
+  .anchor-row {
+    display: flex;
+    justify-content: center;
+    align-items: baseline;
+    gap: 12px;
+    margin-bottom: 16px;
+  }
+
+  .anchor-was {
+    text-decoration: line-through;
+    color: rgba(245,243,238,0.4);
+    font-size: 15px;
+  }
+
+  .anchor-now {
+    font-family: var(--serif);
+    font-style: italic;
+    font-size: 18px;
+    color: var(--gold-light);
+  }
+
   .pricing-card {
     max-width: 320px;
     margin: 0 auto 20px;
@@ -282,21 +303,26 @@
       </div>
     </div>
 
+    <div class="anchor-row">
+      <span class="anchor-was">$199</span>
+      <span class="anchor-now">Today: $149</span>
+    </div>
+
     <div class="pricing-card">
       <span class="pricing-label">Complete System</span>
-      <div class="pricing-amount">$[PRICE]</div>
-      <div class="pricing-per">one time</div>
+      <div class="pricing-amount">$149</div>
+      <div class="pricing-per">one time · full system</div>
       <a href="[SHOPIFY_URL]" class="btn-primary" id="checkoutBtn">Start My Protocol</a>
     </div>
 
-    <p class="guarantee-text">21-day money-back guarantee &nbsp;·&nbsp; Secure checkout &nbsp;·&nbsp; Dashboard access included</p>
+    <p class="guarantee-text">30-day money-back guarantee &nbsp;·&nbsp; Secure checkout &nbsp;·&nbsp; Dashboard access included</p>
 
     <div class="quote-block">
       <p class="q">"You Are Not a Patient."</p>
       <p class="sub">You are someone who has been absent from their body longer than they knew — and who is ready to return. The Orthos System is not a treatment. It is a practice. And like all practices, it begins with a single step.</p>
     </div>
 
-    <p class="fine-print">These statements have not been evaluated by the Food and Drug Administration. This product is not intended to diagnose, treat, cure, or prevent any disease. Individual results may vary. The 21-day money-back guarantee applies to first-time purchases only.</p>
+    <p class="fine-print">These statements have not been evaluated by the Food and Drug Administration. This product is not intended to diagnose, treat, cure, or prevent any disease. Individual results may vary. The 30-day money-back guarantee applies to first-time purchases only.</p>
   </div>
 </div>
 
