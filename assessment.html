@@ -239,6 +239,16 @@
   // ── QUESTIONS ────────────────────────────────────────────────
   const QUESTIONS = [
     {
+      key: 'hasDevice',
+      eyebrow: 'Before We Begin',
+      text: 'Do you already have a posture correction device from a previous purchase?',
+      multi: false,
+      options: [
+        { value: 'yes', label: "Yes, I already have one" },
+        { value: 'no', label: "No, I'll need one included" }
+      ]
+    },
+    {
       key: 'mirrorTest',
       eyebrow: 'The Mirror Test',
       text: 'When you catch your profile in a mirror or a window reflection, what concerns you?',

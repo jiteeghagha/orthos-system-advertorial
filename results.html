@@ -131,28 +131,14 @@
     color: rgba(245,243,238,0.75);
   }
 
-  .pricing-grid {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 16px;
-    margin-bottom: 20px;
-  }
-
-  @media (max-width: 560px) {
-    .pricing-grid { grid-template-columns: 1fr; }
-  }
-
   .pricing-card {
-    background: rgba(245,243,238,0.03);
-    border: 1px solid rgba(245,243,238,0.14);
+    max-width: 320px;
+    margin: 0 auto 20px;
+    background: rgba(168,120,42,0.08);
+    border: 1px solid var(--gold);
     border-radius: 6px;
     padding: 28px 24px;
     text-align: center;
-  }
-
-  .pricing-card.featured {
-    border-color: var(--gold);
-    background: rgba(168,120,42,0.08);
   }
 
   .pricing-label {
@@ -296,19 +282,11 @@
       </div>
     </div>
 
-    <div class="pricing-grid">
-      <div class="pricing-card">
-        <span class="pricing-label">Single Payment</span>
-        <div class="pricing-amount">$[XX]</div>
-        <div class="pricing-per">one time</div>
-        <a href="#" class="btn-ghost" id="checkoutSingle">Start My Protocol</a>
-      </div>
-      <div class="pricing-card featured">
-        <span class="pricing-label">Payment Plan</span>
-        <div class="pricing-amount">$[XX]</div>
-        <div class="pricing-per">per month · [X] months</div>
-        <a href="#" class="btn-primary" id="checkoutPlan">Start My Protocol</a>
-      </div>
+    <div class="pricing-card">
+      <span class="pricing-label">Complete System</span>
+      <div class="pricing-amount">$[PRICE]</div>
+      <div class="pricing-per">one time</div>
+      <a href="[SHOPIFY_URL]" class="btn-primary" id="checkoutBtn">Start My Protocol</a>
     </div>
 
     <p class="guarantee-text">21-day money-back guarantee &nbsp;·&nbsp; Secure checkout &nbsp;·&nbsp; Dashboard access included</p>
@@ -411,9 +389,16 @@
       tensionSentence = `You also flagged recurring tension across ${rest} and ${last} — a common cluster that tends to travel together.`;
     }
 
+    let deviceSentence = '';
+    if (answers.hasDevice === 'no') {
+      deviceSentence = "Since you don't yet have a device, the Axiom Sensor is included as part of your purchase.";
+    } else if (answers.hasDevice === 'yes') {
+      deviceSentence = 'Since you already have a posture device, the Orthos System will show you how to get significantly more value out of the one you already own.';
+    }
+
     return {
       headline: somatic.headline,
-      bodyHtml: `<p>${somatic.body}</p>${tensionSentence ? `<p>${tensionSentence}</p>` : ''}<p>None of this is a life sentence — it's a pattern, and patterns are trainable. That's the entire premise of an active system over a passive one.</p>`
+      bodyHtml: `<p>${somatic.body}</p>${tensionSentence ? `<p>${tensionSentence}</p>` : ''}<p>None of this is a life sentence — it's a pattern, and patterns are trainable. That's the entire premise of an active system over a passive one.</p>${deviceSentence ? `<p>${deviceSentence}</p>` : ''}`
     };
   }
 
@@ -442,9 +427,10 @@
       loadingState.classList.add('hidden');
       resultsContent.classList.remove('hidden');
 
-      // Wire checkout buttons — update lead status, then hand off to checkout.
-      // Replace '#' hrefs below with real Shopify/checkout URLs when ready.
-      const markCheckoutStarted = async () => {
+      // Wire checkout button — update lead status, then hand off to Shopify checkout.
+      const checkoutBtn = document.getElementById('checkoutBtn');
+      checkoutBtn.addEventListener('click', async (e) => {
+        e.preventDefault();
         try {
           await updateDoc(leadRef, {
             status: 'checkout_started',
@@ -453,10 +439,8 @@
         } catch (err) {
           console.error('Could not update checkout status:', err);
         }
-      };
-
-      document.getElementById('checkoutSingle').addEventListener('click', markCheckoutStarted);
-      document.getElementById('checkoutPlan').addEventListener('click', markCheckoutStarted);
+        window.location.href = checkoutBtn.getAttribute('href');
+      });
 
     } catch (err) {
       console.error('Error loading results:', err);
