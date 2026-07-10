@@ -312,7 +312,7 @@
       <span class="pricing-label">Complete System</span>
       <div class="pricing-amount">$149</div>
       <div class="pricing-per">one time · full system</div>
-      <a href="[SHOPIFY_URL]" class="btn-primary" id="checkoutBtn">Start My Protocol</a>
+      <a href="https://www.orthossystems.com/products/orthos-stack" class="btn-primary" id="checkoutBtn">Start My Protocol</a>
     </div>
 
     <p class="guarantee-text">30-day money-back guarantee &nbsp;·&nbsp; Secure checkout &nbsp;·&nbsp; Dashboard access included</p>
@@ -342,7 +342,7 @@
   const app = initializeApp(firebaseConfig);
   const db  = getFirestore(app);
 
-  const SHOW_ANCHOR_PRICE = true; // toggle to false to hide the $199 → $149 anchor framing
+  const SHOW_ANCHOR_PRICE = true; // toggle to false + redeploy to hide the $199 → $149 anchor framing
 
   const params = new URLSearchParams(window.location.search);
   const leadId = params.get('lead');
