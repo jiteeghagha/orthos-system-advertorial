@@ -860,12 +860,14 @@ window.jumpTo = async d => {
     getDoc(doc(db,'users',uid,'daily_completions',String(d))),
   ]);
   const dc=dcSnap.exists()?dcSnap.data():{};
+  const driftSnap = await getDocs(query(collection(db,'users',uid,'drift_logs'), where('programDay','==',d)));
   previewState={
     exercises:        exSnap.exists()?(exSnap.data().completions||{}):{},
     supplements:      suppSnap.exists()?(suppSnap.data().completions||{}):{},
     practiceComplete: dc.practiceComplete||false,
     reflectionText:   dc.reflectionText||'',
     missed:           dc.missed||false,
+    driftCount:       driftSnap.size,
   };
   previewDay=d;
   updateBanner(); renderTodayPanel(); await renderJourneyGrid();
@@ -950,6 +952,7 @@ window._driftSubmit = async function() {
     const docId = await saveDriftLog(driftEntry);
     const aiResponse = await callWorker(driftEntry, priorEntries);
     await updateDriftResponse(docId, aiResponse);
+    S.driftCount = (S.driftCount || 0) + 1;
     _patternCache = { text: null, count: 0 };
   } catch(e) { console.error('Drift submit:', e); }
   setTimeout(async () => {
@@ -958,6 +961,7 @@ window._driftSubmit = async function() {
     driftSubmitting = false;
     selectedDriftDay = programDay;
     await renderDevice();
+    renderTodayPanel();
   }, 3000);
 };
 
