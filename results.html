@@ -289,7 +289,7 @@
     <p class="bridge-text">We've calibrated a 21-day intervention to target these specific patterns and rebuild your physical baseline.</p>
 
     <div class="system-includes">
-      <div class="include-row">
+      <div class="include-row" id="hardwareRow">
         <span class="label">Hardware</span>
         <span class="desc">The Axiom Sensor — a wearable cueing device calibrated to your daily patterns.</span>
       </div>
@@ -304,13 +304,13 @@
     </div>
 
     <div class="anchor-row" id="anchorRow">
-      <span class="anchor-was">$199 value</span>
-      <span class="anchor-now">Today: $149</span>
+      <span class="anchor-was" id="anchorWas">$199 value</span>
+      <span class="anchor-now" id="anchorNow">Today: $149</span>
     </div>
 
     <div class="pricing-card">
-      <span class="pricing-label">Complete System</span>
-      <div class="pricing-amount">$149</div>
+      <span class="pricing-label" id="pricingLabel">Complete System</span>
+      <div class="pricing-amount" id="pricingAmount">$149</div>
       <div class="pricing-per">one time · full system</div>
       <a href="https://www.orthossystems.com/products/complete-system" class="btn-primary" id="checkoutBtn">Start My Protocol</a>
     </div>
@@ -343,6 +343,11 @@
   const db  = getFirestore(app);
 
   const SHOW_ANCHOR_PRICE = true; // toggle to false + redeploy to hide the $199 → $149 anchor framing
+
+  const PRICING = {
+    no:  { label: 'Complete System', amount: '$149', anchorWas: '$199 value', anchorNow: 'Today: $149', href: 'https://www.orthossystems.com/products/complete-system' },
+    yes: { label: 'Orthos Stack',    amount: '$89',  anchorWas: '$97 value',  anchorNow: 'Today: $89',  href: 'https://www.orthossystems.com/products/orthos-stack' }
+  };
 
   const params = new URLSearchParams(window.location.search);
   const leadId = params.get('lead');
@@ -451,6 +456,17 @@
 
       document.getElementById('revealHeadline').innerHTML = reveal.headline;
       document.getElementById('revealBody').innerHTML = reveal.bodyHtml;
+
+      const pricing = PRICING[answers.hasDevice] || PRICING.no;
+      document.getElementById('pricingLabel').textContent = pricing.label;
+      document.getElementById('pricingAmount').textContent = pricing.amount;
+      document.getElementById('anchorWas').textContent = pricing.anchorWas;
+      document.getElementById('anchorNow').textContent = pricing.anchorNow;
+      document.getElementById('checkoutBtn').setAttribute('href', pricing.href);
+
+      if (answers.hasDevice === 'yes') {
+        document.getElementById('hardwareRow').classList.add('hidden');
+      }
 
       loadingState.classList.add('hidden');
       resultsContent.classList.remove('hidden');
