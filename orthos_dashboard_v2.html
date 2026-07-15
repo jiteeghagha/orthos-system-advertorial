@@ -145,6 +145,9 @@ button{font-family:var(--sans);cursor:pointer;border:none;background:none}
 .tab-header{display:flex;align-items:flex-start;justify-content:space-between;margin-bottom:28px;gap:16px;flex-wrap:wrap}
 .section-heading{font-family:var(--serif);font-size:28px;font-weight:400;color:var(--forest);margin-bottom:4px}
 .section-sub{font-size:13px;color:var(--ink-muted)}
+.journey-complete-banner{background:#1E3028;border-left:3px solid #A8782A;padding:20px 28px;margin-bottom:32px}
+.journey-complete-label{font-size:12px;letter-spacing:0.2em;text-transform:uppercase;color:#A8782A;font-family:var(--sans);display:block;margin-bottom:6px}
+.journey-complete-text{font-family:var(--serif);font-size:17px;font-style:italic;color:#F5F3EE}
 .streak-badge{background:var(--gold-faint);border:1px solid var(--gold-pale);padding:8px 16px;font-size:12px;color:var(--gold);display:flex;align-items:center;gap:6px;white-space:nowrap}
 .exercise-card{background:var(--white);padding:28px;margin-bottom:16px;border-top:2px solid var(--border);transition:border-color .2s}
 .exercise-card.done-ex{border-top-color:var(--green)}
@@ -674,7 +677,7 @@ function showLogin() {
 }
 function updateBanner() {
   const mod=getModule(programDay);
-  document.getElementById('bannerDay').textContent=`Day ${programDay} of 21 — ${mod?mod.title:'Practice Complete'}`;
+  document.getElementById('bannerDay').textContent=mod?`Day ${programDay} of 21 — ${mod.title}`:'Practice Complete';
   document.getElementById('bannerStreak').textContent=`${practiceStreak} day${practiceStreak!==1?'s':''} streak`;
 }
 
@@ -820,7 +823,11 @@ async function renderJourneyGrid() {
   );
   const dcMap={};
   completedMods.forEach((m,i)=>{dcMap[m.day]=dcSnaps[i].exists()?dcSnaps[i].data():null;});
+  const isProgramComplete=getModule(programDay)===null;
   let html=`<div class="section-heading" style="margin-bottom:4px">Your 21-Day Journey</div><div class="section-sub" style="margin-bottom:32px">Each day unlocks as you complete the previous. Tap any completed day to revisit its module.</div>`;
+  if(isProgramComplete){
+    html+=`<div class="journey-complete-banner"><span class="journey-complete-label">Journey Complete</span><div class="journey-complete-text">21-Day Practice Complete — You Have Come Home.</div></div>`;
+  }
   let cw=0;
   MODULES.forEach(mod=>{
     if(mod.week!==cw){if(cw>0)html+=`</div></div>`;cw=mod.week;html+=`<div class="week-section"><div class="week-header-row"><div class="week-num">${mod.week}</div><div class="week-meta"><div class="week-name">${getWeekName(mod.week)}</div><div class="week-theme-text">${getWeekTheme(mod.week)}</div></div><div class="week-rule"></div></div><div class="journey-grid">`;}
