@@ -131,6 +131,13 @@
     color: rgba(245,243,238,0.75);
   }
 
+  .include-row .desc-sub {
+    display: block;
+    margin-top: 4px;
+    font-size: 12px;
+    color: rgba(245,243,238,0.5);
+  }
+
   .anchor-row {
     display: flex;
     justify-content: center;
@@ -301,6 +308,10 @@
         <span class="label">Software</span>
         <span class="desc">Dashboard access to your 21-day movement and presence practice, seeded from what you just told us.</span>
       </div>
+      <div class="include-row hidden" id="bandsRow">
+        <span class="label">Hardware</span>
+        <span class="desc">Resistance band kit for the mobility and load work built into your daily practice.<span class="desc-sub">(Bands only — your device is already active)</span></span>
+      </div>
     </div>
 
     <div class="anchor-row" id="anchorRow">
@@ -466,6 +477,7 @@
 
       if (answers.hasDevice === 'yes') {
         document.getElementById('hardwareRow').classList.add('hidden');
+        document.getElementById('bandsRow').classList.remove('hidden');
       }
 
       loadingState.classList.add('hidden');
