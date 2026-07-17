@@ -783,7 +783,7 @@ async function doCompleteDay() {
   S.practiceComplete=true;
   await saveDC();
   practiceStreak++;
-  if(programDay<21) programDay++;
+  programDay = Math.min(programDay + 1, 22);
   await saveProfile();
   S.exercises={}; S.supplements={}; S.practiceComplete=false; S.reflectionText='';
   previewDay=null; previewState=null;
