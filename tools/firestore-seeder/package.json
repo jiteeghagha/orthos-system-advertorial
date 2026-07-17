@@ -1,0 +1,13 @@
+{
+  "name": "orthos-firestore-seeder",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Repeatable Firestore seed utility for Orthos Systems dashboard v2",
+  "scripts": {
+    "validate": "node scripts/seed-user-history.js --email jiteeghaghadropship@gmail.com --file seed-data/jiteeghaghadropship-20-days.json --reset --dry-run",
+    "seed": "node scripts/seed-user-history.js --email jiteeghaghadropship@gmail.com --file seed-data/jiteeghaghadropship-20-days.json --reset"
+  },
+  "dependencies": {
+    "firebase-admin": "^13.0.0"
+  }
+}

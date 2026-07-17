@@ -1,0 +1,1035 @@
+{
+  "schemaVersion": 1,
+  "sourceDashboard": "orthos_dashboard_v2.html",
+  "targetEmail": "jiteeghaghadropship@gmail.com",
+  "profile": {
+    "programStartDate": "2026-06-26",
+    "programDay": 21,
+    "practiceStreak": 20,
+    "exStreak": 3,
+    "suppStreak": 3
+  },
+  "days": [
+    {
+      "programDay": 1,
+      "date": "2026-06-26",
+      "exercises": {
+        "ex1": true,
+        "ex2": true,
+        "ex3": true,
+        "ex4": true,
+        "ex5": true
+      },
+      "supplements": {
+        "supp1_Morning": true,
+        "supp2_Evening": true,
+        "supp3_Morning": true
+      },
+      "dailyCompletion": {
+        "practiceComplete": true,
+        "reflectionText": "I noticed how quickly my attention leaves the body when I begin planning the day. Returning to my breathing made the room feel quieter.",
+        "moduleRead": true,
+        "dayFullyComplete": true,
+        "exercisesComplete": true,
+        "supplementsComplete": true,
+        "missed": false,
+        "completedAt": "2026-06-26T20:30:00Z",
+        "updatedAt": "2026-06-26T20:30:00Z"
+      },
+      "drifts": [
+        {
+          "timestamp": "2026-06-26T10:13:00Z",
+          "temporal": "Future",
+          "content": "Planning",
+          "constraint": "Focused but absent",
+          "valence": "Neutral",
+          "custom": "Planning the next several tasks while answering email.",
+          "aiResponse": "Notice that the thought was occurring in awareness; awareness itself was not troubled by it. Let the body soften and return to what is here."
+        },
+        {
+          "timestamp": "2026-06-26T14:24:00Z",
+          "temporal": "Future",
+          "content": "Worrying",
+          "constraint": "Recurring",
+          "valence": "Anxious",
+          "custom": "Thinking about whether I will finish everything on time.",
+          "aiResponse": "The mind moved away, and then presence noticed the movement. That noticing is already the return."
+        }
+      ]
+    },
+    {
+      "programDay": 2,
+      "date": "2026-06-27",
+      "exercises": {
+        "ex1": true,
+        "ex2": true,
+        "ex3": true,
+        "ex4": true,
+        "ex5": true
+      },
+      "supplements": {
+        "supp1_Morning": true,
+        "supp2_Evening": true,
+        "supp3_Morning": true
+      },
+      "dailyCompletion": {
+        "practiceComplete": true,
+        "reflectionText": "My shoulders were tense before I consciously noticed any worry. The body seemed to recognize the thought before I did.",
+        "moduleRead": true,
+        "dayFullyComplete": true,
+        "exercisesComplete": true,
+        "supplementsComplete": true,
+        "missed": false,
+        "completedAt": "2026-06-27T20:30:00Z",
+        "updatedAt": "2026-06-27T20:30:00Z"
+      },
+      "drifts": [
+        {
+          "timestamp": "2026-06-27T11:20:00Z",
+          "temporal": "Past",
+          "content": "Remembering",
+          "constraint": "Recurring",
+          "valence": "Sad",
+          "custom": "Replaying a conversation that did not go the way I wanted.",
+          "aiResponse": "Notice that the thought was occurring in awareness; awareness itself was not troubled by it. Let the body soften and return to what is here."
+        },
+        {
+          "timestamp": "2026-06-27T15:31:00Z",
+          "temporal": "Looping present",
+          "content": "Judging",
+          "constraint": "Obsessive",
+          "valence": "Anxious",
+          "custom": "Criticizing how slowly I was working.",
+          "aiResponse": "The mind moved away, and then presence noticed the movement. That noticing is already the return."
+        }
+      ]
+    },
+    {
+      "programDay": 3,
+      "date": "2026-06-28",
+      "exercises": {
+        "ex1": true,
+        "ex2": true,
+        "ex3": true,
+        "ex4": true,
+        "ex5": true
+      },
+      "supplements": {
+        "supp1_Morning": true,
+        "supp2_Evening": true,
+        "supp3_Morning": true
+      },
+      "dailyCompletion": {
+        "practiceComplete": true,
+        "reflectionText": "I caught myself replaying an old conversation. When I returned to the present, the urgency of the memory weakened.",
+        "moduleRead": true,
+        "dayFullyComplete": true,
+        "exercisesComplete": true,
+        "supplementsComplete": true,
+        "missed": false,
+        "completedAt": "2026-06-28T20:30:00Z",
+        "updatedAt": "2026-06-28T20:30:00Z"
+      },
+      "drifts": [
+        {
+          "timestamp": "2026-06-28T10:27:00Z",
+          "temporal": "Future",
+          "content": "Fantasizing",
+          "constraint": "Scattered",
+          "valence": "Excited",
+          "custom": "Imagining how the business could look after a successful launch.",
+          "aiResponse": "Notice that the thought was occurring in awareness; awareness itself was not troubled by it. Let the body soften and return to what is here."
+        },
+        {
+          "timestamp": "2026-06-28T14:38:00Z",
+          "temporal": "Looping present",
+          "content": "Planning",
+          "constraint": "Scattered",
+          "valence": "Neutral",
+          "custom": "Jumping between several small tasks without completing one.",
+          "aiResponse": "The mind moved away, and then presence noticed the movement. That noticing is already the return."
+        }
+      ]
+    },
+    {
+      "programDay": 4,
+      "date": "2026-06-29",
+      "exercises": {
+        "ex1": true,
+        "ex2": true,
+        "ex3": true,
+        "ex4": true,
+        "ex5": true
+      },
+      "supplements": {
+        "supp1_Morning": true,
+        "supp2_Evening": true,
+        "supp3_Morning": true
+      },
+      "dailyCompletion": {
+        "practiceComplete": true,
+        "reflectionText": "Today the device interruptions felt less annoying and more like invitations. I returned faster each time.",
+        "moduleRead": true,
+        "dayFullyComplete": true,
+        "exercisesComplete": true,
+        "supplementsComplete": true,
+        "missed": false,
+        "completedAt": "2026-06-29T20:30:00Z",
+        "updatedAt": "2026-06-29T20:30:00Z"
+      },
+      "drifts": [
+        {
+          "timestamp": "2026-06-29T11:34:00Z",
+          "temporal": "Past",
+          "content": "Judging",
+          "constraint": "Recurring",
+          "valence": "Neutral",
+          "custom": "Reviewing a mistake and mentally rewriting what I should have done.",
+          "aiResponse": "Notice that the thought was occurring in awareness; awareness itself was not troubled by it. Let the body soften and return to what is here."
+        },
+        {
+          "timestamp": "2026-06-29T15:45:00Z",
+          "temporal": "Future",
+          "content": "Worrying",
+          "constraint": "Obsessive",
+          "valence": "Anxious",
+          "custom": "Thinking repeatedly about an unresolved expense.",
+          "aiResponse": "The mind moved away, and then presence noticed the movement. That noticing is already the return."
+        }
+      ]
+    },
+    {
+      "programDay": 5,
+      "date": "2026-06-30",
+      "exercises": {
+        "ex1": true,
+        "ex2": true,
+        "ex3": true,
+        "ex4": true,
+        "ex5": true
+      },
+      "supplements": {
+        "supp1_Morning": true,
+        "supp2_Evening": true,
+        "supp3_Morning": true
+      },
+      "dailyCompletion": {
+        "practiceComplete": true,
+        "reflectionText": "I noticed that I lean forward when I am trying to solve something quickly. Slowing down changed both my posture and my thinking.",
+        "moduleRead": true,
+        "dayFullyComplete": true,
+        "exercisesComplete": true,
+        "supplementsComplete": true,
+        "missed": false,
+        "completedAt": "2026-06-30T20:30:00Z",
+        "updatedAt": "2026-06-30T20:30:00Z"
+      },
+      "drifts": [
+        {
+          "timestamp": "2026-06-30T10:41:00Z",
+          "temporal": "Looping present",
+          "content": "Remembering",
+          "constraint": "Focused but absent",
+          "valence": "Calm",
+          "custom": "Remembering part of a song while staring at the screen.",
+          "aiResponse": "Notice that the thought was occurring in awareness; awareness itself was not troubled by it. Let the body soften and return to what is here."
+        },
+        {
+          "timestamp": "2026-06-30T14:52:00Z",
+          "temporal": "Future",
+          "content": "Planning",
+          "constraint": "Recurring",
+          "valence": "Excited",
+          "custom": "Thinking through improvements I want to make to the dashboard.",
+          "aiResponse": "The mind moved away, and then presence noticed the movement. That noticing is already the return."
+        }
+      ]
+    },
+    {
+      "programDay": 6,
+      "date": "2026-07-01",
+      "exercises": {
+        "ex1": true,
+        "ex2": true,
+        "ex3": true,
+        "ex4": true,
+        "ex5": false
+      },
+      "supplements": {
+        "supp1_Morning": true,
+        "supp2_Evening": true,
+        "supp3_Morning": true
+      },
+      "dailyCompletion": {
+        "practiceComplete": true,
+        "reflectionText": "The strongest drift came from imagining future problems. Naming it as future-thinking created some distance from it.",
+        "moduleRead": true,
+        "dayFullyComplete": true,
+        "exercisesComplete": false,
+        "supplementsComplete": true,
+        "missed": false,
+        "completedAt": "2026-07-01T20:30:00Z",
+        "updatedAt": "2026-07-01T20:30:00Z"
+      },
+      "drifts": [
+        {
+          "timestamp": "2026-07-01T11:48:00Z",
+          "temporal": "Past",
+          "content": "Fantasizing",
+          "constraint": "Focused but absent",
+          "valence": "Calm",
+          "custom": "Imagining a different outcome to an earlier decision.",
+          "aiResponse": "Notice that the thought was occurring in awareness; awareness itself was not troubled by it. Let the body soften and return to what is here."
+        },
+        {
+          "timestamp": "2026-07-01T15:59:00Z",
+          "temporal": "Looping present",
+          "content": "Judging",
+          "constraint": "Scattered",
+          "valence": "Neutral",
+          "custom": "Comparing my progress with what I expected to complete today.",
+          "aiResponse": "The mind moved away, and then presence noticed the movement. That noticing is already the return."
+        },
+        {
+          "timestamp": "2026-07-01T19:10:00Z",
+          "temporal": "Future",
+          "content": "Planning",
+          "constraint": "Focused but absent",
+          "valence": "Neutral",
+          "custom": "Planning the next several tasks while answering email.",
+          "aiResponse": "You do not need to complete the thought in order to leave it. Feel the breath and allow this moment to be enough."
+        }
+      ]
+    },
+    {
+      "programDay": 7,
+      "date": "2026-07-02",
+      "exercises": {
+        "ex1": true,
+        "ex2": true,
+        "ex3": true,
+        "ex4": true,
+        "ex5": true
+      },
+      "supplements": {
+        "supp1_Morning": true,
+        "supp2_Evening": true,
+        "supp3_Morning": true
+      },
+      "dailyCompletion": {
+        "practiceComplete": true,
+        "reflectionText": "I was distracted often, but I did not judge myself as harshly. Returning repeatedly became the practice.",
+        "moduleRead": true,
+        "dayFullyComplete": true,
+        "exercisesComplete": true,
+        "supplementsComplete": true,
+        "missed": false,
+        "completedAt": "2026-07-02T20:30:00Z",
+        "updatedAt": "2026-07-02T20:30:00Z"
+      },
+      "drifts": [
+        {
+          "timestamp": "2026-07-02T10:55:00Z",
+          "temporal": "Future",
+          "content": "Planning",
+          "constraint": "Focused but absent",
+          "valence": "Neutral",
+          "custom": "Planning the next several tasks while answering email.",
+          "aiResponse": "Notice that the thought was occurring in awareness; awareness itself was not troubled by it. Let the body soften and return to what is here."
+        },
+        {
+          "timestamp": "2026-07-02T14:06:00Z",
+          "temporal": "Future",
+          "content": "Worrying",
+          "constraint": "Recurring",
+          "valence": "Anxious",
+          "custom": "Thinking about whether I will finish everything on time.",
+          "aiResponse": "The mind moved away, and then presence noticed the movement. That noticing is already the return."
+        },
+        {
+          "timestamp": "2026-07-02T18:17:00Z",
+          "temporal": "Past",
+          "content": "Remembering",
+          "constraint": "Recurring",
+          "valence": "Sad",
+          "custom": "Replaying a conversation that did not go the way I wanted.",
+          "aiResponse": "You do not need to complete the thought in order to leave it. Feel the breath and allow this moment to be enough."
+        }
+      ]
+    },
+    {
+      "programDay": 8,
+      "date": "2026-07-03",
+      "exercises": {
+        "ex1": true,
+        "ex2": true,
+        "ex3": true,
+        "ex4": true,
+        "ex5": true
+      },
+      "supplements": {
+        "supp1_Morning": true,
+        "supp2_Evening": true,
+        "supp3_Morning": true
+      },
+      "dailyCompletion": {
+        "practiceComplete": true,
+        "reflectionText": "My body felt more open after the movement session. I also noticed fewer restless thoughts afterward.",
+        "moduleRead": true,
+        "dayFullyComplete": true,
+        "exercisesComplete": true,
+        "supplementsComplete": true,
+        "missed": false,
+        "completedAt": "2026-07-03T20:30:00Z",
+        "updatedAt": "2026-07-03T20:30:00Z"
+      },
+      "drifts": [
+        {
+          "timestamp": "2026-07-03T11:02:00Z",
+          "temporal": "Past",
+          "content": "Remembering",
+          "constraint": "Recurring",
+          "valence": "Sad",
+          "custom": "Replaying a conversation that did not go the way I wanted.",
+          "aiResponse": "Notice that the thought was occurring in awareness; awareness itself was not troubled by it. Let the body soften and return to what is here."
+        },
+        {
+          "timestamp": "2026-07-03T15:13:00Z",
+          "temporal": "Looping present",
+          "content": "Judging",
+          "constraint": "Obsessive",
+          "valence": "Anxious",
+          "custom": "Criticizing how slowly I was working.",
+          "aiResponse": "The mind moved away, and then presence noticed the movement. That noticing is already the return."
+        },
+        {
+          "timestamp": "2026-07-03T19:24:00Z",
+          "temporal": "Future",
+          "content": "Fantasizing",
+          "constraint": "Scattered",
+          "valence": "Excited",
+          "custom": "Imagining how the business could look after a successful launch.",
+          "aiResponse": "You do not need to complete the thought in order to leave it. Feel the breath and allow this moment to be enough."
+        }
+      ]
+    },
+    {
+      "programDay": 9,
+      "date": "2026-07-04",
+      "exercises": {
+        "ex1": true,
+        "ex2": true,
+        "ex3": true,
+        "ex4": true,
+        "ex5": true
+      },
+      "supplements": {
+        "supp1_Morning": true,
+        "supp2_Evening": false,
+        "supp3_Morning": true
+      },
+      "dailyCompletion": {
+        "practiceComplete": true,
+        "reflectionText": "I caught a recurring thought about unfinished work. It was useful to separate the actual task from the mental repetition.",
+        "moduleRead": true,
+        "dayFullyComplete": true,
+        "exercisesComplete": true,
+        "supplementsComplete": false,
+        "missed": false,
+        "completedAt": "2026-07-04T20:30:00Z",
+        "updatedAt": "2026-07-04T20:30:00Z"
+      },
+      "drifts": [
+        {
+          "timestamp": "2026-07-04T10:09:00Z",
+          "temporal": "Future",
+          "content": "Fantasizing",
+          "constraint": "Scattered",
+          "valence": "Excited",
+          "custom": "Imagining how the business could look after a successful launch.",
+          "aiResponse": "Notice that the thought was occurring in awareness; awareness itself was not troubled by it. Let the body soften and return to what is here."
+        },
+        {
+          "timestamp": "2026-07-04T14:20:00Z",
+          "temporal": "Looping present",
+          "content": "Planning",
+          "constraint": "Scattered",
+          "valence": "Neutral",
+          "custom": "Jumping between several small tasks without completing one.",
+          "aiResponse": "The mind moved away, and then presence noticed the movement. That noticing is already the return."
+        },
+        {
+          "timestamp": "2026-07-04T18:31:00Z",
+          "temporal": "Past",
+          "content": "Judging",
+          "constraint": "Recurring",
+          "valence": "Neutral",
+          "custom": "Reviewing a mistake and mentally rewriting what I should have done.",
+          "aiResponse": "You do not need to complete the thought in order to leave it. Feel the breath and allow this moment to be enough."
+        }
+      ]
+    },
+    {
+      "programDay": 10,
+      "date": "2026-07-05",
+      "exercises": {
+        "ex1": true,
+        "ex2": true,
+        "ex3": true,
+        "ex4": true,
+        "ex5": true
+      },
+      "supplements": {
+        "supp1_Morning": true,
+        "supp2_Evening": true,
+        "supp3_Morning": true
+      },
+      "dailyCompletion": {
+        "practiceComplete": true,
+        "reflectionText": "Today I experienced a few calm periods where posture and attention seemed to organize themselves without effort.",
+        "moduleRead": true,
+        "dayFullyComplete": true,
+        "exercisesComplete": true,
+        "supplementsComplete": true,
+        "missed": false,
+        "completedAt": "2026-07-05T20:30:00Z",
+        "updatedAt": "2026-07-05T20:30:00Z"
+      },
+      "drifts": [
+        {
+          "timestamp": "2026-07-05T11:16:00Z",
+          "temporal": "Past",
+          "content": "Judging",
+          "constraint": "Recurring",
+          "valence": "Neutral",
+          "custom": "Reviewing a mistake and mentally rewriting what I should have done.",
+          "aiResponse": "Notice that the thought was occurring in awareness; awareness itself was not troubled by it. Let the body soften and return to what is here."
+        },
+        {
+          "timestamp": "2026-07-05T15:27:00Z",
+          "temporal": "Future",
+          "content": "Worrying",
+          "constraint": "Obsessive",
+          "valence": "Anxious",
+          "custom": "Thinking repeatedly about an unresolved expense.",
+          "aiResponse": "The mind moved away, and then presence noticed the movement. That noticing is already the return."
+        },
+        {
+          "timestamp": "2026-07-05T19:38:00Z",
+          "temporal": "Looping present",
+          "content": "Remembering",
+          "constraint": "Focused but absent",
+          "valence": "Calm",
+          "custom": "Remembering part of a song while staring at the screen.",
+          "aiResponse": "You do not need to complete the thought in order to leave it. Feel the breath and allow this moment to be enough."
+        }
+      ]
+    },
+    {
+      "programDay": 11,
+      "date": "2026-07-06",
+      "exercises": {
+        "ex1": true,
+        "ex2": true,
+        "ex3": true,
+        "ex4": true,
+        "ex5": true
+      },
+      "supplements": {
+        "supp1_Morning": true,
+        "supp2_Evening": true,
+        "supp3_Morning": true
+      },
+      "dailyCompletion": {
+        "practiceComplete": true,
+        "reflectionText": "I noticed that fatigue makes me collapse inward physically and mentally. A short reset helped more than forcing concentration.",
+        "moduleRead": true,
+        "dayFullyComplete": true,
+        "exercisesComplete": true,
+        "supplementsComplete": true,
+        "missed": false,
+        "completedAt": "2026-07-06T20:30:00Z",
+        "updatedAt": "2026-07-06T20:30:00Z"
+      },
+      "drifts": [
+        {
+          "timestamp": "2026-07-06T10:23:00Z",
+          "temporal": "Looping present",
+          "content": "Remembering",
+          "constraint": "Focused but absent",
+          "valence": "Calm",
+          "custom": "Remembering part of a song while staring at the screen.",
+          "aiResponse": "Notice that the thought was occurring in awareness; awareness itself was not troubled by it. Let the body soften and return to what is here."
+        },
+        {
+          "timestamp": "2026-07-06T14:34:00Z",
+          "temporal": "Future",
+          "content": "Planning",
+          "constraint": "Recurring",
+          "valence": "Excited",
+          "custom": "Thinking through improvements I want to make to the dashboard.",
+          "aiResponse": "The mind moved away, and then presence noticed the movement. That noticing is already the return."
+        },
+        {
+          "timestamp": "2026-07-06T18:45:00Z",
+          "temporal": "Past",
+          "content": "Fantasizing",
+          "constraint": "Focused but absent",
+          "valence": "Calm",
+          "custom": "Imagining a different outcome to an earlier decision.",
+          "aiResponse": "You do not need to complete the thought in order to leave it. Feel the breath and allow this moment to be enough."
+        }
+      ]
+    },
+    {
+      "programDay": 12,
+      "date": "2026-07-07",
+      "exercises": {
+        "ex1": true,
+        "ex2": true,
+        "ex3": true,
+        "ex4": true,
+        "ex5": true
+      },
+      "supplements": {
+        "supp1_Morning": true,
+        "supp2_Evening": true,
+        "supp3_Morning": true
+      },
+      "dailyCompletion": {
+        "practiceComplete": true,
+        "reflectionText": "A memory triggered sadness, but I was able to feel the emotion without continuing the story around it.",
+        "moduleRead": true,
+        "dayFullyComplete": true,
+        "exercisesComplete": true,
+        "supplementsComplete": true,
+        "missed": false,
+        "completedAt": "2026-07-07T20:30:00Z",
+        "updatedAt": "2026-07-07T20:30:00Z"
+      },
+      "drifts": [
+        {
+          "timestamp": "2026-07-07T11:30:00Z",
+          "temporal": "Past",
+          "content": "Fantasizing",
+          "constraint": "Focused but absent",
+          "valence": "Calm",
+          "custom": "Imagining a different outcome to an earlier decision.",
+          "aiResponse": "Notice that the thought was occurring in awareness; awareness itself was not troubled by it. Let the body soften and return to what is here."
+        },
+        {
+          "timestamp": "2026-07-07T15:41:00Z",
+          "temporal": "Looping present",
+          "content": "Judging",
+          "constraint": "Scattered",
+          "valence": "Neutral",
+          "custom": "Comparing my progress with what I expected to complete today.",
+          "aiResponse": "The mind moved away, and then presence noticed the movement. That noticing is already the return."
+        },
+        {
+          "timestamp": "2026-07-07T19:52:00Z",
+          "temporal": "Future",
+          "content": "Planning",
+          "constraint": "Focused but absent",
+          "valence": "Neutral",
+          "custom": "Planning the next several tasks while answering email.",
+          "aiResponse": "You do not need to complete the thought in order to leave it. Feel the breath and allow this moment to be enough."
+        }
+      ]
+    },
+    {
+      "programDay": 13,
+      "date": "2026-07-08",
+      "exercises": {
+        "ex1": true,
+        "ex2": true,
+        "ex3": true,
+        "ex4": true,
+        "ex5": true
+      },
+      "supplements": {
+        "supp1_Morning": true,
+        "supp2_Evening": true,
+        "supp3_Morning": true
+      },
+      "dailyCompletion": {
+        "practiceComplete": true,
+        "reflectionText": "The device helped me see that much of my planning is repetitive rather than productive. I wrote down the next action and returned.",
+        "moduleRead": true,
+        "dayFullyComplete": true,
+        "exercisesComplete": true,
+        "supplementsComplete": true,
+        "missed": false,
+        "completedAt": "2026-07-08T20:30:00Z",
+        "updatedAt": "2026-07-08T20:30:00Z"
+      },
+      "drifts": [
+        {
+          "timestamp": "2026-07-08T10:37:00Z",
+          "temporal": "Future",
+          "content": "Planning",
+          "constraint": "Focused but absent",
+          "valence": "Neutral",
+          "custom": "Planning the next several tasks while answering email.",
+          "aiResponse": "Notice that the thought was occurring in awareness; awareness itself was not troubled by it. Let the body soften and return to what is here."
+        },
+        {
+          "timestamp": "2026-07-08T14:48:00Z",
+          "temporal": "Future",
+          "content": "Worrying",
+          "constraint": "Recurring",
+          "valence": "Anxious",
+          "custom": "Thinking about whether I will finish everything on time.",
+          "aiResponse": "The mind moved away, and then presence noticed the movement. That noticing is already the return."
+        },
+        {
+          "timestamp": "2026-07-08T18:59:00Z",
+          "temporal": "Past",
+          "content": "Remembering",
+          "constraint": "Recurring",
+          "valence": "Sad",
+          "custom": "Replaying a conversation that did not go the way I wanted.",
+          "aiResponse": "You do not need to complete the thought in order to leave it. Feel the breath and allow this moment to be enough."
+        }
+      ]
+    },
+    {
+      "programDay": 14,
+      "date": "2026-07-09",
+      "exercises": {
+        "ex1": true,
+        "ex2": true,
+        "ex3": true,
+        "ex4": true,
+        "ex5": false
+      },
+      "supplements": {
+        "supp1_Morning": true,
+        "supp2_Evening": true,
+        "supp3_Morning": true
+      },
+      "dailyCompletion": {
+        "practiceComplete": true,
+        "reflectionText": "I felt resistance to the exercises today, but completing them changed my energy. The resistance was mostly in the anticipation.",
+        "moduleRead": true,
+        "dayFullyComplete": true,
+        "exercisesComplete": false,
+        "supplementsComplete": true,
+        "missed": false,
+        "completedAt": "2026-07-09T20:30:00Z",
+        "updatedAt": "2026-07-09T20:30:00Z"
+      },
+      "drifts": [
+        {
+          "timestamp": "2026-07-09T11:44:00Z",
+          "temporal": "Past",
+          "content": "Remembering",
+          "constraint": "Recurring",
+          "valence": "Sad",
+          "custom": "Replaying a conversation that did not go the way I wanted.",
+          "aiResponse": "Notice that the thought was occurring in awareness; awareness itself was not troubled by it. Let the body soften and return to what is here."
+        },
+        {
+          "timestamp": "2026-07-09T15:55:00Z",
+          "temporal": "Looping present",
+          "content": "Judging",
+          "constraint": "Obsessive",
+          "valence": "Anxious",
+          "custom": "Criticizing how slowly I was working.",
+          "aiResponse": "The mind moved away, and then presence noticed the movement. That noticing is already the return."
+        },
+        {
+          "timestamp": "2026-07-09T19:06:00Z",
+          "temporal": "Future",
+          "content": "Fantasizing",
+          "constraint": "Scattered",
+          "valence": "Excited",
+          "custom": "Imagining how the business could look after a successful launch.",
+          "aiResponse": "You do not need to complete the thought in order to leave it. Feel the breath and allow this moment to be enough."
+        }
+      ]
+    },
+    {
+      "programDay": 15,
+      "date": "2026-07-10",
+      "exercises": {
+        "ex1": true,
+        "ex2": true,
+        "ex3": true,
+        "ex4": true,
+        "ex5": true
+      },
+      "supplements": {
+        "supp1_Morning": true,
+        "supp2_Evening": true,
+        "supp3_Morning": true
+      },
+      "dailyCompletion": {
+        "practiceComplete": true,
+        "reflectionText": "My attention wandered during a conversation. Returning to the other person also brought my head and shoulders back into alignment.",
+        "moduleRead": true,
+        "dayFullyComplete": true,
+        "exercisesComplete": true,
+        "supplementsComplete": true,
+        "missed": false,
+        "completedAt": "2026-07-10T20:30:00Z",
+        "updatedAt": "2026-07-10T20:30:00Z"
+      },
+      "drifts": [
+        {
+          "timestamp": "2026-07-10T10:51:00Z",
+          "temporal": "Future",
+          "content": "Fantasizing",
+          "constraint": "Scattered",
+          "valence": "Excited",
+          "custom": "Imagining how the business could look after a successful launch.",
+          "aiResponse": "Notice that the thought was occurring in awareness; awareness itself was not troubled by it. Let the body soften and return to what is here."
+        },
+        {
+          "timestamp": "2026-07-10T14:02:00Z",
+          "temporal": "Looping present",
+          "content": "Planning",
+          "constraint": "Scattered",
+          "valence": "Neutral",
+          "custom": "Jumping between several small tasks without completing one.",
+          "aiResponse": "The mind moved away, and then presence noticed the movement. That noticing is already the return."
+        }
+      ]
+    },
+    {
+      "programDay": 16,
+      "date": "2026-07-11",
+      "exercises": {
+        "ex1": true,
+        "ex2": true,
+        "ex3": true,
+        "ex4": true,
+        "ex5": true
+      },
+      "supplements": {
+        "supp1_Morning": true,
+        "supp2_Evening": true,
+        "supp3_Morning": true
+      },
+      "dailyCompletion": {
+        "practiceComplete": true,
+        "reflectionText": "I noticed excitement can pull me out of the present just as easily as anxiety. The feeling was pleasant, but still a drift.",
+        "moduleRead": true,
+        "dayFullyComplete": true,
+        "exercisesComplete": true,
+        "supplementsComplete": true,
+        "missed": false,
+        "completedAt": "2026-07-11T20:30:00Z",
+        "updatedAt": "2026-07-11T20:30:00Z"
+      },
+      "drifts": [
+        {
+          "timestamp": "2026-07-11T11:58:00Z",
+          "temporal": "Past",
+          "content": "Judging",
+          "constraint": "Recurring",
+          "valence": "Neutral",
+          "custom": "Reviewing a mistake and mentally rewriting what I should have done.",
+          "aiResponse": "Notice that the thought was occurring in awareness; awareness itself was not troubled by it. Let the body soften and return to what is here."
+        },
+        {
+          "timestamp": "2026-07-11T15:09:00Z",
+          "temporal": "Future",
+          "content": "Worrying",
+          "constraint": "Obsessive",
+          "valence": "Anxious",
+          "custom": "Thinking repeatedly about an unresolved expense.",
+          "aiResponse": "The mind moved away, and then presence noticed the movement. That noticing is already the return."
+        }
+      ]
+    },
+    {
+      "programDay": 17,
+      "date": "2026-07-12",
+      "exercises": {
+        "ex1": true,
+        "ex2": false,
+        "ex3": true,
+        "ex4": true,
+        "ex5": true
+      },
+      "supplements": {
+        "supp1_Morning": true,
+        "supp2_Evening": true,
+        "supp3_Morning": false
+      },
+      "dailyCompletion": {
+        "practiceComplete": true,
+        "reflectionText": "Today the gap between noticing and returning felt shorter. I did not need to analyze every thought.",
+        "moduleRead": true,
+        "dayFullyComplete": true,
+        "exercisesComplete": false,
+        "supplementsComplete": false,
+        "missed": false,
+        "completedAt": "2026-07-12T20:30:00Z",
+        "updatedAt": "2026-07-12T20:30:00Z"
+      },
+      "drifts": [
+        {
+          "timestamp": "2026-07-12T10:05:00Z",
+          "temporal": "Looping present",
+          "content": "Remembering",
+          "constraint": "Focused but absent",
+          "valence": "Calm",
+          "custom": "Remembering part of a song while staring at the screen.",
+          "aiResponse": "Notice that the thought was occurring in awareness; awareness itself was not troubled by it. Let the body soften and return to what is here."
+        },
+        {
+          "timestamp": "2026-07-12T14:16:00Z",
+          "temporal": "Future",
+          "content": "Planning",
+          "constraint": "Recurring",
+          "valence": "Excited",
+          "custom": "Thinking through improvements I want to make to the dashboard.",
+          "aiResponse": "The mind moved away, and then presence noticed the movement. That noticing is already the return."
+        }
+      ]
+    },
+    {
+      "programDay": 18,
+      "date": "2026-07-13",
+      "exercises": {
+        "ex1": true,
+        "ex2": true,
+        "ex3": true,
+        "ex4": true,
+        "ex5": true
+      },
+      "supplements": {
+        "supp1_Morning": true,
+        "supp2_Evening": true,
+        "supp3_Morning": true
+      },
+      "dailyCompletion": {
+        "practiceComplete": true,
+        "reflectionText": "I saw how judgment creates tension in my jaw, neck, and upper back. Releasing the judgment softened the body.",
+        "moduleRead": true,
+        "dayFullyComplete": true,
+        "exercisesComplete": true,
+        "supplementsComplete": true,
+        "missed": false,
+        "completedAt": "2026-07-13T20:30:00Z",
+        "updatedAt": "2026-07-13T20:30:00Z"
+      },
+      "drifts": [
+        {
+          "timestamp": "2026-07-13T11:12:00Z",
+          "temporal": "Past",
+          "content": "Fantasizing",
+          "constraint": "Focused but absent",
+          "valence": "Calm",
+          "custom": "Imagining a different outcome to an earlier decision.",
+          "aiResponse": "Notice that the thought was occurring in awareness; awareness itself was not troubled by it. Let the body soften and return to what is here."
+        },
+        {
+          "timestamp": "2026-07-13T15:23:00Z",
+          "temporal": "Looping present",
+          "content": "Judging",
+          "constraint": "Scattered",
+          "valence": "Neutral",
+          "custom": "Comparing my progress with what I expected to complete today.",
+          "aiResponse": "The mind moved away, and then presence noticed the movement. That noticing is already the return."
+        }
+      ]
+    },
+    {
+      "programDay": 19,
+      "date": "2026-07-14",
+      "exercises": {
+        "ex1": true,
+        "ex2": true,
+        "ex3": true,
+        "ex4": true,
+        "ex5": true
+      },
+      "supplements": {
+        "supp1_Morning": true,
+        "supp2_Evening": true,
+        "supp3_Morning": true
+      },
+      "dailyCompletion": {
+        "practiceComplete": true,
+        "reflectionText": "The practice is beginning to feel less like correction and more like remembering. I returned without making the drift a problem.",
+        "moduleRead": true,
+        "dayFullyComplete": true,
+        "exercisesComplete": true,
+        "supplementsComplete": true,
+        "missed": false,
+        "completedAt": "2026-07-14T20:30:00Z",
+        "updatedAt": "2026-07-14T20:30:00Z"
+      },
+      "drifts": [
+        {
+          "timestamp": "2026-07-14T10:19:00Z",
+          "temporal": "Future",
+          "content": "Planning",
+          "constraint": "Focused but absent",
+          "valence": "Neutral",
+          "custom": "Planning the next several tasks while answering email.",
+          "aiResponse": "Notice that the thought was occurring in awareness; awareness itself was not troubled by it. Let the body soften and return to what is here."
+        },
+        {
+          "timestamp": "2026-07-14T14:30:00Z",
+          "temporal": "Future",
+          "content": "Worrying",
+          "constraint": "Recurring",
+          "valence": "Anxious",
+          "custom": "Thinking about whether I will finish everything on time.",
+          "aiResponse": "The mind moved away, and then presence noticed the movement. That noticing is already the return."
+        }
+      ]
+    },
+    {
+      "programDay": 20,
+      "date": "2026-07-15",
+      "exercises": {
+        "ex1": true,
+        "ex2": true,
+        "ex3": true,
+        "ex4": true,
+        "ex5": true
+      },
+      "supplements": {
+        "supp1_Morning": true,
+        "supp2_Evening": true,
+        "supp3_Morning": true
+      },
+      "dailyCompletion": {
+        "practiceComplete": true,
+        "reflectionText": "I can now recognize several patterns quickly: future planning, repeated work concerns, and leaning toward the screen. Awareness arrives earlier.",
+        "moduleRead": true,
+        "dayFullyComplete": true,
+        "exercisesComplete": true,
+        "supplementsComplete": true,
+        "missed": false,
+        "completedAt": "2026-07-15T20:30:00Z",
+        "updatedAt": "2026-07-15T20:30:00Z"
+      },
+      "drifts": [
+        {
+          "timestamp": "2026-07-15T11:26:00Z",
+          "temporal": "Past",
+          "content": "Remembering",
+          "constraint": "Recurring",
+          "valence": "Sad",
+          "custom": "Replaying a conversation that did not go the way I wanted.",
+          "aiResponse": "Notice that the thought was occurring in awareness; awareness itself was not troubled by it. Let the body soften and return to what is here."
+        },
+        {
+          "timestamp": "2026-07-15T15:37:00Z",
+          "temporal": "Looping present",
+          "content": "Judging",
+          "constraint": "Obsessive",
+          "valence": "Anxious",
+          "custom": "Criticizing how slowly I was working.",
+          "aiResponse": "The mind moved away, and then presence noticed the movement. That noticing is already the return."
+        }
+      ]
+    }
+  ]
+}
